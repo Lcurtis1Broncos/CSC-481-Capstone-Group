@@ -17,6 +17,13 @@ that meets our professor's expectations.
 
 ### Lucas Curtis — Team Leader
 
+I am graduating this semester with a bachelor’s degree in Cybersecurity. 
+In the future, I would like to work in the field of digital forensics, 
+where I can use my cybersecurity knowledge to investigate and analyze digital evidence. 
+I look forward to gaining more hands-on experience through this project, especially learning 
+how to communicate, cooperate, and work effectively as part of a group. I hope this experience 
+will help me develop skills that I can carry into my future career.
+
 ### Jeff Perez — Team Member
 
 I am completing my bachelor's degree in Cybersecurity and hope to pursue a
