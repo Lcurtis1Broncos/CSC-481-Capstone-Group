@@ -26,10 +26,12 @@ The team selected the `7-ntfs-undel.dd` controlled NTFS practice image for
 early testing. This supports safe, repeatable development without accessing a
 personal computer's drive.
 
-### [Lucas: Add your Week 3 milestone(s)]
+### NTFS research and evidence documentation
 
-Describe the controlled test environment, image preparation, project planning,
-research, or other work completed during this week.
+Lucas documented NTFS on-disk structures and their forensic value. He also
+created a definitions page covering major NTFS fields, including the boot
+sector, MFT, and data attributes. In addition, he created an evidence-log
+template to help the team record collected evidence in a consistent format.
 
 ## Subtasks completed
 
@@ -38,7 +40,9 @@ research, or other work completed during this week.
 | Jeff Perez | NTFS fundamentals research | Studied disk sectors and clusters, MFT records, ADS, file slack, `.dd` images, and the NTFS boot sector. |
 | Jeff Perez | Boot-sector reader | Implemented the first Python reader for NTFS disk images. |
 | Jeff Perez | Reader testing | Added automated tests and tested the reader against a controlled NTFS image. |
-| Lucas Curtis | **[Lucas: add subtask]** | **[Lucas: add a brief description]** |
+| Lucas Curtis | NTFS on-disk structure research | Documented important NTFS structures and why they matter during forensic analysis. |
+| Lucas Curtis | NTFS definitions reference | Created a reference page for the boot sector, MFT, and data attributes. |
+| Lucas Curtis | Evidence-log template | Created a reusable format for recording evidence details as the project develops. |
 
 ## Test results and demo evidence
 
@@ -90,7 +94,8 @@ did not appear to be an NTFS boot sector.
   signature, 1,024-byte cluster size, and MFT start LCN.
 - **[Add Screenshot 2]** Terminal output from Test 2 showing all three
   automated tests passing.
-- **[Lucas: Add screenshot(s) and captions for your completed subtask tests.]**
+- **[Add Screenshot 3]** GitHub view of Lucas's NTFS research and evidence-log
+  template, with a short caption identifying the documents.
 
 ## Lessons learned
 
@@ -103,23 +108,25 @@ did not appear to be an NTFS boot sector.
 - The boot sector is the starting map for a parser because it supplies the
   cluster size and the MFT location.
 - Small, tested components are a practical way to build a forensic parser.
-- **[Lucas: Add lessons learned from your work.]**
+- Lucas developed a better overall understanding of the important NTFS data
+  structures the team will need to examine during the project.
 
 ## Contribution of each team member
 
 | Team member | Contribution this week |
 |---|---|
 | Jeff Perez | Completed NTFS research and lessons; implemented and tested the initial boot-sector reader; created the Week 3 individual journal; opened pull request #7 for the code contribution. |
-| Lucas Curtis | **[Lucas: describe your Week 3 contribution, commit(s), testing, and documentation.]** |
+| Lucas Curtis | Added NTFS on-disk structure research, an NTFS definitions reference, and an evidence-log template; completed his Week 3 journal; reviewed and merged the boot-sector reader pull request. |
 
 ## Progress compared with the project plan
 
-Jeff's Week 3 objective—understanding NTFS basics and producing an initial
-raw disk-image/boot-sector reader—was achieved. The code is ready for review
-and provides a foundation for locating and reading MFT records next week.
+The team achieved its Week 3 research and initial-parser objectives. Jeff's
+boot-sector reader has been merged into `main`, while Lucas completed the
+supporting NTFS research and evidence documentation.
 
-**[Lucas: State whether the team is on schedule overall. If not, describe the
-adjustment to the plan and timeline.]**
+The dedicated VirtualBox NTFS disk and clean baseline `.dd` image were moved
+to Week 4. The adjustment is to complete that controlled test environment
+early in Week 4 and use it while the team begins reading MFT records.
 
 ## Plan for Week 4
 
@@ -128,4 +135,5 @@ adjustment to the plan and timeline.]**
   `$STANDARD_INFORMATION`, `$FILE_NAME`, and `$DATA`.
 - Continue controlled-image testing and document all expected and actual
   results.
-- **[Lucas: Add the team’s agreed Week 4 task(s).]**
+- Lucas will create the dedicated VirtualBox NTFS disk, export a clean
+  baseline `.dd` image, and record its evidence details.
