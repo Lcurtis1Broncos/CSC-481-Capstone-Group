@@ -1,10 +1,7 @@
 # Week 3 Team Progress Report
 
 **Reporting period:** August 31 - September 6, 2026  
-**Team:** Lucas Curtis (team leader) and Jeff Perez
-
-> Before the team leader submits this report to Canvas, Lucas should complete
-> every item marked **[Lucas: ...]** and add the required screenshots below.
+**Team:** Lucas Curtis and Jeff Perez
 
 ## Milestones achieved
 
@@ -66,6 +63,10 @@ MFT record size:      1024 bytes
 Boot signature valid: True
 ```
 
+**Demo screenshot — controlled NTFS image test**
+
+![Terminal output showing a successful read of the controlled NTFS image.](evidence/week3/w3_ntfs_image_test.png)
+
 ### Test 2: Automated parser tests
 
 **Expected:** The parser should correctly handle different valid NTFS cluster
@@ -81,6 +82,10 @@ Ran 3 tests
 OK
 ```
 
+**Demo screenshot — automated test results**
+
+![Terminal output showing all three automated tests passing.](evidence/week3/w3_automated_tests.png)
+
 ### Test 3: Non-NTFS input warning
 
 **Expected:** A normal file should not be incorrectly presented as a valid
@@ -88,14 +93,19 @@ NTFS boot sector.
 **Result:** Passed. The program displayed a warning that the selected input
 did not appear to be an NTFS boot sector.
 
-### Required screenshots before submission
+### Documentation evidence
 
-- **[Add Screenshot 1]** Terminal output from Test 1 showing the valid NTFS
-  signature, 1,024-byte cluster size, and MFT start LCN.
-- **[Add Screenshot 2]** Terminal output from Test 2 showing all three
-  automated tests passing.
-- **[Add Screenshot 3]** GitHub view of Lucas's NTFS research and evidence-log
-  template, with a short caption identifying the documents.
+**Evidence-log template created by Lucas**
+
+![Evidence-log template with fields for recording collected evidence.](evidence/week3/w3_evidence_log_template.png)
+
+**NTFS on-disk structures research created by Lucas**
+
+![NTFS research describing forensic value of major NTFS structures.](evidence/week3/w3_ntfs_research.png)
+
+**NTFS structures and field definitions created by Lucas**
+
+![Definitions of required NTFS structures and fields.](evidence/week3/w3_ntfs_definitions.png)
 
 ## Lessons learned
 
