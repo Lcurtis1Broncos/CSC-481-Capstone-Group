@@ -13,6 +13,50 @@ Our goal is to learn how to work effectively as a team by collaborating,
 relying on each other's strengths and experiences, and delivering a project
 that meets our professor's expectations.
 
+## Project Overview
+
+This project is developing a Python-based NTFS forensic parser. The current
+tool reads the boot sector of a controlled `.dd` disk image and reports basic
+NTFS information, including cluster size and the Master File Table (MFT)
+location.
+
+## Installation
+
+1. Install Git and Python 3.9 or later.
+2. Clone the repository and open its folder:
+
+   ```powershell
+   git clone https://github.com/Lcurtis1Broncos/CSC-481-Capstone-Group.git
+   cd CSC-481-Capstone-Group
+   ```
+
+No external Python packages are required at this stage.
+
+## Run the Current Tool
+
+From the repository root, run the NTFS image reader with a controlled `.dd`
+image:
+
+```powershell
+python code/ntfs_image_reader.py "path\to\image.dd"
+```
+
+The reader opens the image in read-only mode and displays basic NTFS
+boot-sector information.
+
+## Run Tests
+
+From the repository root, run:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+## Safety Note
+
+Use only controlled practice images or images you are authorized to examine.
+Do not test the parser on another person's device or data without permission.
+
 ## Team Members
 
 ### Lucas Curtis — Team Leader
