@@ -13,6 +13,7 @@ from pathlib import Path
 
 BOOT_SECTOR_SIZE = 512
 BYTES_PER_LINE = 16
+MFT_RECORD_SIGNATURE = b"FILE"
 
 
 def format_hex(data: bytes) -> str:
@@ -71,6 +72,43 @@ def parse_ntfs_boot_sector(sector: bytes) -> dict[str, int | str | bool]:
     }
 
 
+def calculate_mft_byte_offset(boot_sector: dict[str, int | str | bool]) -> int:
+    """Return the first MFT record's byte offset for a volume image."""
+    return int(boot_sector["mft_start_lcn"]) * int(boot_sector["bytes_per_cluster"])
+
+
+def read_mft_record(image_path: Path, byte_offset: int, record_size: int) -> bytes:
+    """Read one MFT record without modifying the image."""
+    with image_path.open("rb") as image_file:
+        image_file.seek(byte_offset)
+        record = image_file.read(record_size)
+
+    if len(record) != record_size:
+        raise ValueError(
+            "The image does not contain a complete MFT record at "
+            f"byte offset {byte_offset}."
+        )
+
+    return record
+
+
+def parse_mft_record_header(record: bytes) -> dict[str, int | str | bool]:
+    """Extract a few introductory fields from an MFT record header."""
+    if len(record) < 24:
+        raise ValueError("An MFT record header must contain at least 24 bytes.")
+
+    flags = int.from_bytes(record[0x16:0x18], byteorder="little")
+    return {
+        "signature": record[0x00:0x04].decode("ascii", errors="replace"),
+        "signature_valid": record[0x00:0x04] == MFT_RECORD_SIGNATURE,
+        "first_attribute_offset": int.from_bytes(
+            record[0x14:0x16], byteorder="little"
+        ),
+        "in_use": bool(flags & 0x0001),
+        "is_directory": bool(flags & 0x0002),
+    }
+
+
 def print_boot_sector_summary(boot_sector: dict[str, int | str | bool]) -> None:
     """Print a beginner-friendly summary of selected NTFS boot-sector fields."""
     print("Boot-sector summary")
@@ -84,6 +122,21 @@ def print_boot_sector_summary(boot_sector: dict[str, int | str | bool]) -> None:
     print(f"  MFT mirror LCN:       {boot_sector['mft_mirror_lcn']}")
     print(f"  MFT record size:      {boot_sector['mft_record_size']} bytes")
     print(f"  Boot signature valid: {boot_sector['boot_signature_valid']}")
+
+
+def print_mft_record_summary(
+    byte_offset: int, record_size: int, record_header: dict[str, int | str | bool]
+) -> None:
+    """Print a beginner-friendly summary of the first MFT record."""
+    print("First MFT record summary")
+    print("  Record number:        0 ($Mft)")
+    print(f"  Byte offset:          {byte_offset}")
+    print(f"  Record size:          {record_size} bytes")
+    print(f"  Record signature:     {record_header['signature']}")
+    print(f"  FILE signature valid: {record_header['signature_valid']}")
+    print(f"  First attribute:      byte {record_header['first_attribute_offset']}")
+    print(f"  Record in use:        {record_header['in_use']}")
+    print(f"  Is directory:         {record_header['is_directory']}")
 
 
 def main() -> None:
@@ -114,6 +167,27 @@ def main() -> None:
 
     print_boot_sector_summary(boot_sector)
     print()
+
+    if boot_sector["ntfs_signature_valid"]:
+        mft_byte_offset = calculate_mft_byte_offset(boot_sector)
+        try:
+            first_mft_record = read_mft_record(
+                args.image,
+                mft_byte_offset,
+                int(boot_sector["mft_record_size"]),
+            )
+        except OSError as error:
+            parser.error(f"could not read the MFT record: {error}")
+        except ValueError as error:
+            parser.error(str(error))
+
+        print_mft_record_summary(
+            mft_byte_offset,
+            int(boot_sector["mft_record_size"]),
+            parse_mft_record_header(first_mft_record),
+        )
+        print()
+
     print("Offset  Hex bytes                                        ASCII")
     print(format_hex(first_sector))
 
