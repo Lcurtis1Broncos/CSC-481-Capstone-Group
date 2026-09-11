@@ -9,7 +9,7 @@ Evidence Log Format Template
 
 Each evidence item should also have a detailed section when necessary:
 
-## E-001
+## Baseline
 
 - **Evidence ID: NTFS Baseline **
 - **Date/Time Acquired: 2026-09-11 6:54 PM **
