@@ -11,7 +11,14 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPOSITORY_ROOT / "code"))
 
-from ntfs_image_reader import BOOT_SECTOR_SIZE, parse_ntfs_boot_sector, read_first_sector
+from ntfs_image_reader import (
+    BOOT_SECTOR_SIZE,
+    calculate_mft_byte_offset,
+    parse_mft_record_header,
+    parse_ntfs_boot_sector,
+    read_first_sector,
+    read_mft_record,
+)
 
 
 def make_boot_sector(
@@ -28,6 +35,15 @@ def make_boot_sector(
     sector[0x40] = 1
     sector[0x1FE:0x200] = b"\x55\xAA"
     return bytes(sector)
+
+
+def make_mft_record(*, record_size: int, flags: int = 0x0001) -> bytes:
+    """Create a minimal MFT-shaped record for reader testing."""
+    record = bytearray(record_size)
+    record[0x00:0x04] = b"FILE"
+    record[0x14:0x16] = (56).to_bytes(2, byteorder="little")
+    record[0x16:0x18] = flags.to_bytes(2, byteorder="little")
+    return bytes(record)
 
 
 class NtfsImageReaderTests(unittest.TestCase):
@@ -61,6 +77,35 @@ class NtfsImageReaderTests(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 read_first_sector(short_image)
+
+    def test_calculates_first_mft_record_offset(self) -> None:
+        boot_sector = parse_ntfs_boot_sector(
+            make_boot_sector(
+                bytes_per_sector=512, sectors_per_cluster=2, mft_lcn=2005
+            )
+        )
+
+        self.assertEqual(calculate_mft_byte_offset(boot_sector), 2_053_120)
+
+    def test_reads_and_parses_a_valid_mft_record(self) -> None:
+        record = make_mft_record(record_size=1024)
+
+        with tempfile.TemporaryDirectory() as directory:
+            image_path = Path(directory) / "test.dd"
+            image_path.write_bytes(b"\x00" * 64 + record)
+
+            result = read_mft_record(image_path, 64, 1024)
+            header = parse_mft_record_header(result)
+
+        self.assertTrue(header["signature_valid"])
+        self.assertEqual(header["first_attribute_offset"], 56)
+        self.assertTrue(header["in_use"])
+        self.assertFalse(header["is_directory"])
+
+    def test_identifies_an_invalid_mft_signature(self) -> None:
+        header = parse_mft_record_header(b"NOPE" + b"\x00" * 20)
+
+        self.assertFalse(header["signature_valid"])
 
 
 if __name__ == "__main__":
