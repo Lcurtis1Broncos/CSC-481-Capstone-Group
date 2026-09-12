@@ -1,27 +1,24 @@
-Evidence Log Format Template
+# Evidence Log
 
+| Evidence ID | Date/Time | Description | Source | Hash | Collected by | Location | Notes |
+|---|---|---|---|---|---|---|---|
+| E-001 | 2026-09-11 to 2026-09-12 | Hash-verified raw baseline disk image | Dedicated VirtualBox baseline disk | SHA-256 recorded below | Lucas Curtis; verified by Jeff Perez | Team file-transfer link; not stored in GitHub | Full-disk image; partition layout requires parser validation |
 
-| Evidence ID   | Date/Time          | Description      | Source                                      | Hash    | Collected By | Location          | Notes                  |
-| ------------- | ------------------ | ---------------- | ------------------------------------------- | ------- | ------------ | ----------------- | ---------------------- |
-| NTFS Baseline | 2026-09-11 6:54 PM | Baseline NTFS DD | VDI/ Windows 11 VirtualBox Clean Partition  | SHA-256 | Lucas Curtis | Desktop/ Github   | None                   |
+## E-001 — Baseline raw image
 
-
-
-Each evidence item should also have a detailed section when necessary:
-
-## Baseline
-
-- **Evidence ID: NTFS Baseline **
-- **Date/Time Acquired: 2026-09-11 6:54 PM **
-- **Description: Baseline NTFS DD ** 
-- **Source: VDI/ Windows 11 VirtualBox Clean Partition **
-- **Device/Media: .dd of a clean NTFS VirtualBox VDI **
-- **File/Image Name: NTFS_Forensic_Baseline .dd **
-- **SHA-256: DA0B044DD170CC4F99FD81E28A29B0C2C79807D88672E0314F65E734313847EC **
-- **Collected By: Lucas Curtis **
-- **Acquisition Method: Created a .dd of a VirtualBox NTFS partition **
-- **Storage Location: Lucas Desktop/ Github **
-- **Access History: 2026/09/11 **
-- **Analysis Performed: Baseline Acquisition **
-- **Findings: None **
-- **Notes: None **
+- **Evidence ID:** E-001
+- **Date/Time acquired:** September 11-12, 2026
+- **Description:** Full raw baseline disk image for controlled parser testing
+- **Source:** Dedicated VirtualBox baseline disk
+- **Device/media:** 8 GiB virtual disk; MBR partition style
+- **File/image name:** `NTFS_Forensic_Baseline_RAW.dd`
+- **SHA-256:** `3815401D2D948B474D1EC104E2C5277ADD1D8DBFAAC4861388319A37EF235814`
+- **Collected by:** Lucas Curtis
+- **Integrity verified by:** Jeff Perez
+- **Acquisition method:** VirtualBox medium cloned to RAW format
+- **Storage location:** Shared team file-transfer link; hash recorded in repository
+- **Access history:** Downloaded and hash-verified by Jeff Perez on September 12, 2026
+- **Analysis performed:** Baseline acquisition and integrity verification
+- **Findings:** The image is a full-disk image with an MBR at byte offset 0. The
+  target partition must be located before NTFS boot-sector fields are parsed.
+- **Notes:** The large image file is intentionally not stored in GitHub.
