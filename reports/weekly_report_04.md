@@ -28,7 +28,8 @@ It reads the 1,024-byte MFT record at that offset and checks its `FILE` signatur
 | Jeff Perez | MFT record reader | Extended the NTFS reader to calculate the MFT location from the boot sector and read record 0 (`$Mft`) without modifying the image. |
 | Jeff Perez | MFT header validation | Added parsing for the `FILE` record signature, first attribute offset, in-use flag, and directory flag. |
 | Jeff Perez | Automated tests | Added three MFT-reader tests; the full test suite now has six passing tests. |
-| Lucas Curtis | **[Lucas: subtask]** | **[Lucas: brief description]** |
+| Lucas Curtis | Created a Baseline NTFS Image. | Used VirtualBox to create a clean NTFS partition and then pulled that and made it a .dd file. |
+| Lucas Curtis | Recorded and logged the baseline | Found and recorded the hash for the .dd file and recorded all baseline information. |
 
 ## Test results and demo evidence
 
@@ -97,7 +98,7 @@ OK
 | Team member | Contribution this week |
 |---|---|
 | Jeff Perez | Implemented and tested the first-MFT-record reader; ran it against the controlled NTFS image; captured program and test-result screenshots; completed a Week 4 individual journal. |
-| Lucas Curtis | **[Lucas: Add your completed Week 4 contributions, including any review or merge work.]** |
+| Lucas Curtis | Created Baseling image and a clean .dd file for a baseline and testing purposes; recorded all ionforation about the .dd file; recorded the SHA256 hash; completed weeek 4 journal and meged all work to the main branch. |
 
 ## Progress compared with the project plan
 
