@@ -1,22 +1,31 @@
 # Weekly Journal - Lucas Curtis
 
 **Week:** 4  
-**Reporting period:** August 31 - September 6, 2026
+**Reporting period:** September 7 - September 13, 2026
 
 ## Work completed
 
-Created a baseline NTFS image and recorded the baseline details and the SHA-256 hash.
+- Created a dedicated VirtualBox baseline disk for the project.
+- Recorded the disk configuration and initial evidence details.
+- Created and shared a full raw disk image for team testing, then recorded its
+  SHA-256 hash.
 
 ## What I learned
 
-Learned how to create Disk partitions for VirtualBox and pull a .dd file from that partition.
+Learned how to create and document a dedicated VirtualBox disk and partition,
+and how to export a disk image for forensic testing.
 
 ## Problems encountered
 
-Getting a clean .dd file of the correct size proved more difficult than it should have been.
-With Jeff's help, we figured it out.
+Creating a raw image in the correct format and size required additional
+validation. The team verified that the downloaded raw image matched the
+recorded SHA-256 hash. The next step is to confirm the image's partition and
+NTFS-volume layout with the parser.
 
 ## Plan for next week
 
-Prepare a known-file validation set and review parser results against the image.
-Create a validation manifest and parser-review notes.
+- Prepare a known-file validation set and review parser results against the
+  image.
+- Create a validation manifest and parser-review notes.
+- Document the baseline image's partition layout and support the next parser
+  test cycle.
