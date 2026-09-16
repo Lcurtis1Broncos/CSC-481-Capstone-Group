@@ -1,8 +1,7 @@
-"""Read and display the first sector of a disk image.
+"""Read introductory NTFS information from a volume or full-disk image.
 
-This is the first building block for the CSC-481 NTFS forensic parser.  It
-opens an image only for reading and shows the first 512 bytes, where the boot
-sector is found when the image begins directly with an NTFS volume.
+The reader is intentionally read-only.  It supports images that begin with an
+NTFS boot sector and full-disk images that begin with an MBR partition table.
 """
 
 from __future__ import annotations
@@ -14,6 +13,11 @@ from pathlib import Path
 BOOT_SECTOR_SIZE = 512
 BYTES_PER_LINE = 16
 MFT_RECORD_SIGNATURE = b"FILE"
+MBR_PARTITION_TABLE_OFFSET = 0x1BE
+MBR_PARTITION_ENTRY_SIZE = 16
+MBR_PARTITION_COUNT = 4
+MBR_SIGNATURE = b"\x55\xAA"
+WINDOWS_DATA_PARTITION_TYPE = 0x07
 
 
 def format_hex(data: bytes) -> str:
@@ -33,16 +37,69 @@ def format_hex(data: bytes) -> str:
 
 def read_first_sector(image_path: Path) -> bytes:
     """Read exactly one 512-byte sector from an image without modifying it."""
+    return read_sector_at_offset(image_path, 0)
+
+
+def read_sector_at_offset(image_path: Path, byte_offset: int) -> bytes:
+    """Read one 512-byte sector at *byte_offset* without modifying an image."""
     with image_path.open("rb") as image_file:
+        image_file.seek(byte_offset)
         sector = image_file.read(BOOT_SECTOR_SIZE)
 
     if len(sector) != BOOT_SECTOR_SIZE:
         raise ValueError(
-            f"The image is only {len(sector)} bytes long; "
-            f"it must contain at least {BOOT_SECTOR_SIZE} bytes."
+            "The image does not contain a complete 512-byte sector at "
+            f"byte offset {byte_offset}."
         )
 
     return sector
+
+
+def parse_mbr_partitions(sector: bytes) -> list[dict[str, int | bool]]:
+    """Return the populated entries from a standard MBR partition table."""
+    if len(sector) != BOOT_SECTOR_SIZE:
+        raise ValueError("An MBR sector must contain exactly 512 bytes.")
+
+    partitions: list[dict[str, int | bool]] = []
+    for index in range(MBR_PARTITION_COUNT):
+        entry_offset = MBR_PARTITION_TABLE_OFFSET + index * MBR_PARTITION_ENTRY_SIZE
+        entry = sector[entry_offset : entry_offset + MBR_PARTITION_ENTRY_SIZE]
+        partition_type = entry[0x04]
+        total_sectors = int.from_bytes(entry[0x0C:0x10], byteorder="little")
+        if partition_type == 0 or total_sectors == 0:
+            continue
+
+        start_lba = int.from_bytes(entry[0x08:0x0C], byteorder="little")
+        partitions.append(
+            {
+                "number": index + 1,
+                "bootable": entry[0x00] == 0x80,
+                "partition_type": partition_type,
+                "start_lba": start_lba,
+                "total_sectors": total_sectors,
+                "byte_offset": start_lba * BOOT_SECTOR_SIZE,
+            }
+        )
+
+    return partitions
+
+
+def find_windows_data_partition(
+    partitions: list[dict[str, int | bool]],
+) -> dict[str, int | bool] | None:
+    """Return the first MBR type 0x07 partition, if present.
+
+    Type 0x07 is a Windows data-partition hint.  The caller still verifies the
+    NTFS boot-sector signature before treating it as an NTFS volume.
+    """
+    return next(
+        (
+            partition
+            for partition in partitions
+            if partition["partition_type"] == WINDOWS_DATA_PARTITION_TYPE
+        ),
+        None,
+    )
 
 
 def parse_ntfs_boot_sector(sector: bytes) -> dict[str, int | str | bool]:
@@ -75,6 +132,13 @@ def parse_ntfs_boot_sector(sector: bytes) -> dict[str, int | str | bool]:
 def calculate_mft_byte_offset(boot_sector: dict[str, int | str | bool]) -> int:
     """Return the first MFT record's byte offset for a volume image."""
     return int(boot_sector["mft_start_lcn"]) * int(boot_sector["bytes_per_cluster"])
+
+
+def calculate_absolute_mft_byte_offset(
+    boot_sector: dict[str, int | str | bool], ntfs_partition_offset: int
+) -> int:
+    """Return the first MFT record offset in a full-disk image."""
+    return ntfs_partition_offset + calculate_mft_byte_offset(boot_sector)
 
 
 def read_mft_record(image_path: Path, byte_offset: int, record_size: int) -> bytes:
@@ -124,6 +188,16 @@ def print_boot_sector_summary(boot_sector: dict[str, int | str | bool]) -> None:
     print(f"  Boot signature valid: {boot_sector['boot_signature_valid']}")
 
 
+def print_partition_summary(partition: dict[str, int | bool]) -> None:
+    """Print the MBR values used to locate the candidate NTFS volume."""
+    print("MBR partition summary")
+    print(f"  Partition number:     {partition['number']}")
+    print(f"  Bootable:             {partition['bootable']}")
+    print(f"  Partition type:       0x{int(partition['partition_type']):02X}")
+    print(f"  Start LBA:            {partition['start_lba']}")
+    print(f"  NTFS boot offset:     {partition['byte_offset']}")
+
+
 def print_mft_record_summary(
     byte_offset: int, record_size: int, record_header: dict[str, int | str | bool]
 ) -> None:
@@ -141,7 +215,7 @@ def print_mft_record_summary(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Display the first 512 bytes of a disk image."
+        description="Display introductory NTFS information from a disk image."
     )
     parser.add_argument("image", type=Path, help="path to a .dd disk image")
     args = parser.parse_args()
@@ -156,20 +230,42 @@ def main() -> None:
     except ValueError as error:
         parser.error(str(error))
 
+    ntfs_boot_offset = 0
+    partition: dict[str, int | bool] | None = None
+    boot_sector = parse_ntfs_boot_sector(first_sector)
+
+    if not boot_sector["ntfs_signature_valid"]:
+        try:
+            partition = find_windows_data_partition(parse_mbr_partitions(first_sector))
+            if partition is not None:
+                ntfs_boot_offset = int(partition["byte_offset"])
+                boot_sector_sector = read_sector_at_offset(args.image, ntfs_boot_offset)
+                boot_sector = parse_ntfs_boot_sector(boot_sector_sector)
+        except OSError as error:
+            parser.error(f"could not read the partition boot sector: {error}")
+        except ValueError as error:
+            parser.error(str(error))
+
     print(f"Image: {args.image}")
     print(f"Read: {BOOT_SECTOR_SIZE} bytes (first sector)")
     print()
-    boot_sector = parse_ntfs_boot_sector(first_sector)
+
+    if partition is not None:
+        print_partition_summary(partition)
+        print()
+
     if not boot_sector["ntfs_signature_valid"]:
-        print("Warning: this does not appear to be an NTFS boot sector.")
-        print("The raw hex view is shown below, but NTFS values may not be meaningful.")
+        print("Warning: no verified NTFS boot sector was found.")
+        print("The raw hex view of the first sector is shown below.")
         print()
 
     print_boot_sector_summary(boot_sector)
     print()
 
     if boot_sector["ntfs_signature_valid"]:
-        mft_byte_offset = calculate_mft_byte_offset(boot_sector)
+        mft_byte_offset = calculate_absolute_mft_byte_offset(
+            boot_sector, ntfs_boot_offset
+        )
         try:
             first_mft_record = read_mft_record(
                 args.image,
