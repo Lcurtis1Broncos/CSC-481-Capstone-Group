@@ -27,7 +27,11 @@ from ntfs_image_reader import (
 
 
 def make_boot_sector(
-    *, bytes_per_sector: int, sectors_per_cluster: int, mft_lcn: int
+    *,
+    bytes_per_sector: int,
+    sectors_per_cluster: int,
+    mft_lcn: int,
+    volume_serial: bytes = b"\x01\x02\x03\x04\x05\x06\x07\x08",
 ) -> bytes:
     """Create a minimal, harmless NTFS-shaped sector for parser testing."""
     sector = bytearray(BOOT_SECTOR_SIZE)
@@ -38,6 +42,7 @@ def make_boot_sector(
     sector[0x30:0x38] = mft_lcn.to_bytes(8, byteorder="little")
     sector[0x38:0x40] = (4).to_bytes(8, byteorder="little")
     sector[0x40] = 1
+    sector[0x48:0x50] = volume_serial
     sector[0x1FE:0x200] = b"\x55\xAA"
     return bytes(sector)
 
@@ -87,6 +92,18 @@ class NtfsImageReaderTests(unittest.TestCase):
         self.assertEqual(result["bytes_per_cluster"], 4096)
         self.assertEqual(result["mft_start_lcn"], 786_432)
         self.assertEqual(result["mft_record_size"], 4096)
+
+    def test_parses_the_volume_serial_number(self) -> None:
+        sector = make_boot_sector(
+            bytes_per_sector=512,
+            sectors_per_cluster=8,
+            mft_lcn=786_432,
+            volume_serial=b"\x12\x34\x56\x78\x9A\xBC\xDE\xF0",
+        )
+
+        result = parse_ntfs_boot_sector(sector)
+
+        self.assertEqual(result["volume_serial"], "F0DEBC9A78563412")
 
     def test_rejects_an_image_shorter_than_one_sector(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

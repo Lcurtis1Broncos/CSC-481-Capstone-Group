@@ -33,6 +33,7 @@ verified the NTFS boot sector and successfully read MFT record 0 (`$Mft`).
 | MFT start LCN | 786,432 |
 | Absolute MFT record 0 offset | 3,222,274,048 bytes |
 | MFT record signature | `FILE` (valid) |
+| NTFS volume serial number | `461C98171C9803D9` |
 
 ## Earlier image and remediation
 

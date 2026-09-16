@@ -33,4 +33,5 @@
   (`0x07`, start LBA 2,048), verified the NTFS boot sector at byte offset
   1,048,576, calculated the absolute `$Mft` offset, and read MFT record 0.
 - **Findings:** NTFS boot signature valid; 4,096-byte clusters; MFT record 0 at
-  byte offset 3,222,274,048; valid `FILE` record signature.
+  byte offset 3,222,274,048; valid `FILE` record signature; volume serial
+  number `461C98171C9803D9`.

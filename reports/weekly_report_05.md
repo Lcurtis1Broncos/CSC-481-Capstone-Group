@@ -31,7 +31,7 @@ rather than an image that begins directly with an NTFS volume.
 | Jeff Perez | MBR partition parser | Added parsing for populated MBR partition entries and selection of the first `0x07` Windows data partition. |
 | Jeff Perez | Offset-based sector reader | Added a read-only function that reads a sector at a specified byte offset. |
 | Jeff Perez | Full-disk MFT calculation | Added the NTFS partition offset to the MFT’s volume-relative location before reading MFT record 0. |
-| Jeff Perez | Automated tests | Added tests for MBR partition parsing, reading at a byte offset, and calculating an absolute MFT offset. The suite has nine passing tests. |
+| Jeff Perez | Automated tests | Added tests for MBR partition parsing, reading at a byte offset, calculating an absolute MFT offset, and decoding the volume serial number. The suite has 10 passing tests. |
 | Lucas Curtis | Baseline-image remediation | **[Lucas: confirm the image-creation steps and add your specific contribution.]** |
 | Lucas Curtis | Image transfer and integrity information | **[Lucas: confirm the transfer method and any creation/verification details you performed.]** |
 
@@ -74,6 +74,7 @@ Bytes per cluster:    4096
 MFT start LCN:        786432
 Byte offset:          3222274048
 FILE signature valid: True
+Volume serial:        461C98171C9803D9
 ```
 
 **Demo screenshot — successful full-disk MFT reader run**
@@ -84,8 +85,9 @@ FILE signature valid: True
 
 **Expected:** The reader should continue to parse volume-only images, reject an
 incomplete sector, validate MFT headers, parse an MBR partition, read a sector
-at an offset, and calculate the absolute MFT offset in a full-disk image.  
-**Result:** Passed; 9 of 9 tests passed.
+at an offset, calculate the absolute MFT offset in a full-disk image, and
+decode an NTFS volume serial number.  
+**Result:** Passed; 10 of 10 tests passed.
 
 ```text
 test_calculates_first_mft_record_offset ... ok
@@ -94,17 +96,18 @@ test_identifies_an_invalid_mft_signature ... ok
 test_parses_1024_byte_clusters ... ok
 test_parses_4096_byte_clusters ... ok
 test_parses_and_selects_a_windows_data_partition ... ok
+test_parses_the_volume_serial_number ... ok
 test_reads_a_sector_at_a_specific_offset ... ok
 test_reads_and_parses_a_valid_mft_record ... ok
 test_rejects_an_image_shorter_than_one_sector ... ok
 
-Ran 9 tests
+Ran 10 tests
 OK
 ```
 
 **Demo screenshot — automated test results**
 
-![VS Code terminal showing the nine NTFS-reader tests passing.](evidence/week5/w5_automated_tests.png)
+![VS Code terminal showing the 10 NTFS-reader tests passing.](evidence/week5/w5_automated_tests.png)
 
 ### Test 4: SHA-256 integrity verification
 

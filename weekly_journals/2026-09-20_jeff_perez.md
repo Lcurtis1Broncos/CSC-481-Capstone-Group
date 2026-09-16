@@ -16,10 +16,12 @@
 - Extended the read-only Python parser so it can identify an MBR partition,
   read the NTFS boot sector at the correct offset, and calculate an absolute
   MFT record location in a full-disk image.
-- Added three automated tests for the full-disk support. The test suite now has
-  nine passing tests.
+- Added three automated tests for the full-disk support and one test for NTFS
+  volume-serial decoding. The test suite now has 10 passing tests.
 - Ran the updated program on the unencrypted image. It located MFT record 0
   (`$Mft`) at byte offset 3,222,274,048 and validated its `FILE` signature.
+- Extended the boot-sector output to report the NTFS volume serial number:
+  `461C98171C9803D9`.
 
 ## What I learned
 

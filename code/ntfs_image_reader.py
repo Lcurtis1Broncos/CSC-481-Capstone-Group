@@ -125,6 +125,7 @@ def parse_ntfs_boot_sector(sector: bytes) -> dict[str, int | str | bool]:
         "mft_start_lcn": int.from_bytes(sector[0x30:0x38], byteorder="little"),
         "mft_mirror_lcn": int.from_bytes(sector[0x38:0x40], byteorder="little"),
         "mft_record_size": mft_record_size,
+        "volume_serial": f"{int.from_bytes(sector[0x48:0x50], byteorder='little'):016X}",
         "boot_signature_valid": sector[0x1FE:0x200] == b"\x55\xAA",
     }
 
@@ -185,6 +186,7 @@ def print_boot_sector_summary(boot_sector: dict[str, int | str | bool]) -> None:
     print(f"  MFT start LCN:        {boot_sector['mft_start_lcn']}")
     print(f"  MFT mirror LCN:       {boot_sector['mft_mirror_lcn']}")
     print(f"  MFT record size:      {boot_sector['mft_record_size']} bytes")
+    print(f"  Volume serial:        {boot_sector['volume_serial']}")
     print(f"  Boot signature valid: {boot_sector['boot_signature_valid']}")
 
 
