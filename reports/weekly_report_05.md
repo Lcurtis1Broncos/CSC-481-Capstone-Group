@@ -122,6 +122,28 @@ EFA4CA3DFA0127F7634EE71D59629A565DCEABB93B23A4A135C5B7AB84AE5E91
 The evidence log distinguishes this validated unencrypted image from the
 earlier BitLocker-protected image.
 
+### Test 5: Compare parser output with Windows NTFS information
+
+**Input:** Windows `fsutil fsinfo ntfsinfo D:` run inside the VirtualBox guest
+that contains the baseline NTFS volume.
+**Expected:** The independent Windows output should match the reader on the
+NTFS volume serial number, bytes per sector, bytes per cluster, file-record
+size, MFT start LCN, and MFT mirror LCN.
+**Result:** Passed.
+
+| Field | Reader | Windows `fsutil` | Result |
+|---|---:|---:|---|
+| Volume serial number | `461C98171C9803D9` | `461C98171C9803D9` | Match |
+| Bytes per sector | 512 | 512 | Match |
+| Bytes per cluster | 4,096 | 4,096 | Match |
+| MFT record size | 1,024 bytes | 1,024 bytes | Match |
+| MFT start LCN | 786,432 | `0xC0000` (786,432) | Match |
+| MFT mirror LCN | 2 | `0x2` (2) | Match |
+
+**Demo screenshot — independent Windows comparison**
+
+![Administrator PowerShell in the VirtualBox guest showing Windows fsutil NTFS information for the baseline volume.](evidence/week5/w5_fsutil_ntfsinfo_comparison.png)
+
 ## Lessons learned
 
 - A full-disk image begins with partition information, not necessarily an NTFS
@@ -132,6 +154,8 @@ earlier BitLocker-protected image.
   full-disk parser must add the partition’s starting offset.
 - Hash verification proves that two copies match, while filesystem validation
   establishes whether the image can support the intended analysis.
+- The parser’s boot-sector values should be compared with an independent,
+  trusted NTFS inspection tool before they are treated as validated results.
 
 ## Contribution of each team member
 

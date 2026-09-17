@@ -9,5 +9,6 @@ Week 5 tests. Each screenshot includes the relevant command and final result.
 | `w5_ntfs_boot_sector_fields.png` | Manual PowerShell check showing 512-byte sectors, 8 sectors per cluster, 4,096-byte clusters, MFT start LCN 786,432, and a valid boot signature. |
 | `w5_full_disk_mft_reader.png` | The `python code/ntfs_image_reader.py ...Unencrypted_RAW.dd` command and the MBR partition summary, valid NTFS boot-sector summary, and valid `FILE` MFT record result. |
 | `w5_automated_tests.png` | The `python -m unittest discover -s tests -v` command and all 10 tests passing. |
+| `w5_fsutil_ntfsinfo_comparison.png` | Windows `fsutil fsinfo ntfsinfo D:` run inside the VirtualBox guest, showing values that match the reader. |
 
-All four listed Week 5 screenshots have been added.
+All five listed Week 5 screenshots have been added.

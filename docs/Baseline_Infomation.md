@@ -34,6 +34,7 @@ verified the NTFS boot sector and successfully read MFT record 0 (`$Mft`).
 | Absolute MFT record 0 offset | 3,222,274,048 bytes |
 | MFT record signature | `FILE` (valid) |
 | NTFS volume serial number | `461C98171C9803D9` |
+| Independent comparison | Windows `fsutil fsinfo ntfsinfo D:` in the VirtualBox guest matched the parser output on September 16, 2026 |
 
 ## Earlier image and remediation
 

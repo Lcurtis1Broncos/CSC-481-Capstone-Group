@@ -22,6 +22,9 @@
   (`$Mft`) at byte offset 3,222,274,048 and validated its `FILE` signature.
 - Extended the boot-sector output to report the NTFS volume serial number:
   `461C98171C9803D9`.
+- Compared the reader’s boot-sector values with Windows `fsutil fsinfo
+  ntfsinfo D:` from the VirtualBox guest. The volume serial number, sector and
+  cluster sizes, MFT record size, MFT start LCN, and MFT mirror LCN matched.
 
 ## What I learned
 

@@ -32,6 +32,10 @@
 - **Analysis performed:** The parser read the MBR, identified partition 1
   (`0x07`, start LBA 2,048), verified the NTFS boot sector at byte offset
   1,048,576, calculated the absolute `$Mft` offset, and read MFT record 0.
+- **Independent comparison:** Windows `fsutil fsinfo ntfsinfo D:` was run in
+  the VirtualBox guest. It matched the parser on the volume serial number,
+  bytes per sector, bytes per cluster, file-record size, MFT start LCN, and
+  MFT mirror LCN.
 - **Findings:** NTFS boot signature valid; 4,096-byte clusters; MFT record 0 at
   byte offset 3,222,274,048; valid `FILE` record signature; volume serial
   number `461C98171C9803D9`.
