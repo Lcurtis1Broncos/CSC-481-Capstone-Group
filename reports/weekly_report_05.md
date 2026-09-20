@@ -32,8 +32,8 @@ rather than an image that begins directly with an NTFS volume.
 | Jeff Perez | Offset-based sector reader | Added a read-only function that reads a sector at a specified byte offset. |
 | Jeff Perez | Full-disk MFT calculation | Added the NTFS partition offset to the MFT’s volume-relative location before reading MFT record 0. |
 | Jeff Perez | Automated tests | Added tests for MBR partition parsing, reading at a byte offset, calculating an absolute MFT offset, and decoding the volume serial number. The suite has 10 passing tests. |
-| Lucas Curtis | Baseline-image remediation | **[Lucas: confirm the image-creation steps and add your specific contribution.]** |
-| Lucas Curtis | Image transfer and integrity information | **[Lucas: confirm the transfer method and any creation/verification details you performed.]** |
+| Lucas Curtis | Baseline-image remediation | I confirmed that BitLocker was enabled, then disabled it and decrypted the drive using PowerShell. |
+| Lucas Curtis | Image transfer and integrity information | I remade the image without BitLocker and confirmed that the image was what Jeff needed | |
 
 ## Test results and demo evidence
 
@@ -162,7 +162,7 @@ size, MFT start LCN, and MFT mirror LCN.
 | Team member | Contribution this week |
 |---|---|
 | Jeff Perez | Implemented and tested the MBR/partition-aware reader; verified the unencrypted image’s MBR, NTFS boot sector, and MFT record 0; independently verified the SHA-256 hash; prepared evidence and report material. |
-| Lucas Curtis | **[Lucas: add completed image-remediation, documentation, testing, and review work after the Friday meeting.]** |
+| Lucas Curtis | To fix the baselining and avoid BitLocker encryption, I ran a few commands to confirm BitLocker was enabled, then ran another to decrypt the drive. Once decrypted, I sent it to Jeff to verify the fix. |
 
 ## Progress compared with the project plan
 
