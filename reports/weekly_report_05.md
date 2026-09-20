@@ -2,8 +2,7 @@
 
 **Reporting period:** September 14 - September 20, 2026  
 **Team:** Lucas Curtis and Jeff Perez  
-**Status:** Draft; complete the Friday meeting summary and Lucas’s contribution
-before submission.
+**Status:** Complete
 
 ## Milestones achieved
 
@@ -32,8 +31,8 @@ rather than an image that begins directly with an NTFS volume.
 | Jeff Perez | Offset-based sector reader | Added a read-only function that reads a sector at a specified byte offset. |
 | Jeff Perez | Full-disk MFT calculation | Added the NTFS partition offset to the MFT’s volume-relative location before reading MFT record 0. |
 | Jeff Perez | Automated tests | Added tests for MBR partition parsing, reading at a byte offset, calculating an absolute MFT offset, and decoding the volume serial number. The suite has 10 passing tests. |
-| Lucas Curtis | Baseline-image remediation | I confirmed that BitLocker was enabled, then disabled it and decrypted the drive using PowerShell. |
-| Lucas Curtis | Image transfer and integrity information | I remade the image without BitLocker and confirmed that the image was what Jeff needed | |
+| Lucas Curtis | Baseline-image remediation | Confirmed that BitLocker was active on the initial baseline, then disabled it and verified decryption. |
+| Lucas Curtis | Image transfer and integrity information | Exported and shared the replacement unencrypted RAW image and supplied its SHA-256 hash for team validation. |
 
 ## Test results and demo evidence
 
@@ -162,7 +161,7 @@ size, MFT start LCN, and MFT mirror LCN.
 | Team member | Contribution this week |
 |---|---|
 | Jeff Perez | Implemented and tested the MBR/partition-aware reader; verified the unencrypted image’s MBR, NTFS boot sector, and MFT record 0; independently verified the SHA-256 hash; prepared evidence and report material. |
-| Lucas Curtis | To fix the baselining and avoid BitLocker encryption, I ran a few commands to confirm BitLocker was enabled, then ran another to decrypt the drive. Once decrypted, I sent it to Jeff to verify the fix. |
+| Lucas Curtis | Confirmed that BitLocker was active on the initial baseline, disabled BitLocker, verified decryption, exported and shared the replacement unencrypted RAW image, and supplied its SHA-256 hash for team validation. |
 
 ## Progress compared with the project plan
 
