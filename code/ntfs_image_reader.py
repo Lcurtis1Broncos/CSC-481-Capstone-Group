@@ -18,6 +18,8 @@ MBR_PARTITION_ENTRY_SIZE = 16
 MBR_PARTITION_COUNT = 4
 MBR_SIGNATURE = b"\x55\xAA"
 WINDOWS_DATA_PARTITION_TYPE = 0x07
+ATTRIBUTE_TYPE_FILE_NAME = 0x30
+ATTRIBUTE_TYPE_END = 0xFFFFFFFF
 
 
 def format_hex(data: bytes) -> str:
@@ -174,6 +176,135 @@ def parse_mft_record_header(record: bytes) -> dict[str, int | str | bool]:
     }
 
 
+def parse_mft_attributes(record: bytes) -> list[dict[str, int | bytes | bool]]:
+    """Return the valid attributes stored in an MFT record.
+
+    Each attribute begins with a type and a length.  The length lets the reader
+    move safely to the next attribute instead of assuming a fixed layout.
+    """
+    header = parse_mft_record_header(record)
+    if not header["signature_valid"]:
+        return []
+
+    attribute_offset = int(header["first_attribute_offset"])
+    attributes: list[dict[str, int | bytes | bool]] = []
+
+    while attribute_offset + 8 <= len(record):
+        attribute_type = int.from_bytes(
+            record[attribute_offset : attribute_offset + 4], byteorder="little"
+        )
+        if attribute_type == ATTRIBUTE_TYPE_END:
+            break
+
+        attribute_length = int.from_bytes(
+            record[attribute_offset + 4 : attribute_offset + 8],
+            byteorder="little",
+        )
+        if attribute_length < 16 or attribute_offset + attribute_length > len(record):
+            raise ValueError("MFT attribute has an invalid length.")
+
+        non_resident = bool(record[attribute_offset + 8])
+        attribute: dict[str, int | bytes | bool] = {
+            "type": attribute_type,
+            "length": attribute_length,
+            "offset": attribute_offset,
+            "non_resident": non_resident,
+        }
+
+        if not non_resident:
+            value_length = int.from_bytes(
+                record[attribute_offset + 0x10 : attribute_offset + 0x14],
+                byteorder="little",
+            )
+            value_offset = int.from_bytes(
+                record[attribute_offset + 0x14 : attribute_offset + 0x16],
+                byteorder="little",
+            )
+            value_start = attribute_offset + value_offset
+            value_end = value_start + value_length
+            if (
+                value_offset < 0x18
+                or value_end > attribute_offset + attribute_length
+            ):
+                raise ValueError("Resident MFT attribute has an invalid value range.")
+            attribute["value"] = record[value_start:value_end]
+
+        attributes.append(attribute)
+        attribute_offset += attribute_length
+
+    return attributes
+
+
+def parse_file_name_attribute(attribute: dict[str, int | bytes | bool]) -> dict[str, int | str]:
+    """Decode the resident contents of an NTFS ``$FILE_NAME`` attribute."""
+    if attribute["type"] != ATTRIBUTE_TYPE_FILE_NAME:
+        raise ValueError("The supplied attribute is not a $FILE_NAME attribute.")
+    if attribute["non_resident"]:
+        raise ValueError("A $FILE_NAME attribute must be resident in its MFT record.")
+
+    value = attribute.get("value")
+    if not isinstance(value, bytes) or len(value) < 0x42:
+        raise ValueError("$FILE_NAME attribute is too short.")
+
+    name_length = value[0x40]
+    name_start = 0x42
+    name_end = name_start + name_length * 2
+    if name_end > len(value):
+        raise ValueError("$FILE_NAME attribute has an invalid name length.")
+
+    return {
+        "name": value[name_start:name_end].decode("utf-16-le", errors="replace"),
+        "name_length": name_length,
+        "namespace": value[0x41],
+        "allocated_size": int.from_bytes(value[0x28:0x30], byteorder="little"),
+        "real_size": int.from_bytes(value[0x30:0x38], byteorder="little"),
+    }
+
+
+def list_mft_file_names(
+    image_path: Path,
+    mft_byte_offset: int,
+    record_size: int,
+    maximum_records: int,
+) -> list[dict[str, int | str | bool]]:
+    """Read up to *maximum_records* MFT records and return their file names."""
+    results: list[dict[str, int | str | bool]] = []
+
+    with image_path.open("rb") as image_file:
+        image_file.seek(mft_byte_offset)
+        for record_number in range(maximum_records):
+            record = image_file.read(record_size)
+            if len(record) != record_size:
+                break
+
+            header = parse_mft_record_header(record)
+            if not header["signature_valid"] or not header["in_use"]:
+                continue
+
+            try:
+                attributes = parse_mft_attributes(record)
+            except ValueError:
+                continue
+
+            for attribute in attributes:
+                if attribute["type"] != ATTRIBUTE_TYPE_FILE_NAME:
+                    continue
+                try:
+                    file_name = parse_file_name_attribute(attribute)
+                except ValueError:
+                    continue
+                results.append(
+                    {
+                        "record_number": record_number,
+                        "name": str(file_name["name"]),
+                        "namespace": int(file_name["namespace"]),
+                        "is_directory": bool(header["is_directory"]),
+                    }
+                )
+
+    return results
+
+
 def print_boot_sector_summary(boot_sector: dict[str, int | str | bool]) -> None:
     """Print a beginner-friendly summary of selected NTFS boot-sector fields."""
     print("Boot-sector summary")
@@ -215,11 +346,32 @@ def print_mft_record_summary(
     print(f"  Is directory:         {record_header['is_directory']}")
 
 
+def print_file_name_listing(file_names: list[dict[str, int | str | bool]]) -> None:
+    """Print the file names decoded from a selected range of MFT records."""
+    print("MFT file-name listing")
+    if not file_names:
+        print("  No in-use $FILE_NAME attributes were decoded in this range.")
+        return
+
+    for file_name in file_names:
+        item_type = "directory" if file_name["is_directory"] else "file"
+        print(
+            f"  Record {file_name['record_number']}: {file_name['name']} "
+            f"({item_type}, namespace {file_name['namespace']})"
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Display introductory NTFS information from a disk image."
     )
     parser.add_argument("image", type=Path, help="path to a .dd disk image")
+    parser.add_argument(
+        "--list-files",
+        type=int,
+        metavar="RECORDS",
+        help="scan this many MFT records and display decoded file names",
+    )
     args = parser.parse_args()
 
     if not args.image.is_file():
@@ -285,6 +437,21 @@ def main() -> None:
             parse_mft_record_header(first_mft_record),
         )
         print()
+
+        if args.list_files is not None:
+            if args.list_files < 1:
+                parser.error("--list-files must be at least 1")
+            try:
+                file_names = list_mft_file_names(
+                    args.image,
+                    mft_byte_offset,
+                    int(boot_sector["mft_record_size"]),
+                    args.list_files,
+                )
+            except OSError as error:
+                parser.error(f"could not scan MFT records: {error}")
+            print_file_name_listing(file_names)
+            print()
 
     print("Offset  Hex bytes                                        ASCII")
     print(format_hex(first_sector))

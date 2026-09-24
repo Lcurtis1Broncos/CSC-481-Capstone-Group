@@ -17,6 +17,9 @@ from ntfs_image_reader import (
     calculate_absolute_mft_byte_offset,
     calculate_mft_byte_offset,
     find_windows_data_partition,
+    list_mft_file_names,
+    parse_file_name_attribute,
+    parse_mft_attributes,
     parse_mft_record_header,
     parse_mbr_partitions,
     parse_ntfs_boot_sector,
@@ -53,6 +56,30 @@ def make_mft_record(*, record_size: int, flags: int = 0x0001) -> bytes:
     record[0x00:0x04] = b"FILE"
     record[0x14:0x16] = (56).to_bytes(2, byteorder="little")
     record[0x16:0x18] = flags.to_bytes(2, byteorder="little")
+    return bytes(record)
+
+
+def make_file_name_record(name: str, *, record_size: int = 1024) -> bytes:
+    """Create an in-use MFT record with one resident $FILE_NAME attribute."""
+    name_bytes = name.encode("utf-16-le")
+    value = bytearray(0x42 + len(name_bytes))
+    value[0x28:0x30] = (4096).to_bytes(8, byteorder="little")
+    value[0x30:0x38] = (123).to_bytes(8, byteorder="little")
+    value[0x40] = len(name)
+    value[0x41] = 1
+    value[0x42:] = name_bytes
+
+    attribute_length = 0x18 + len(value)
+    attribute = bytearray(attribute_length)
+    attribute[0x00:0x04] = (0x30).to_bytes(4, byteorder="little")
+    attribute[0x04:0x08] = attribute_length.to_bytes(4, byteorder="little")
+    attribute[0x10:0x14] = len(value).to_bytes(4, byteorder="little")
+    attribute[0x14:0x16] = (0x18).to_bytes(2, byteorder="little")
+    attribute[0x18:] = value
+
+    record = bytearray(make_mft_record(record_size=record_size))
+    record[56 : 56 + attribute_length] = attribute
+    record[56 + attribute_length : 60 + attribute_length] = b"\xFF" * 4
     return bytes(record)
 
 
@@ -176,6 +203,29 @@ class NtfsImageReaderTests(unittest.TestCase):
         header = parse_mft_record_header(b"NOPE" + b"\x00" * 20)
 
         self.assertFalse(header["signature_valid"])
+
+    def test_decodes_a_resident_file_name_attribute(self) -> None:
+        record = make_file_name_record("m3_alpha.txt")
+
+        attributes = parse_mft_attributes(record)
+        result = parse_file_name_attribute(attributes[0])
+
+        self.assertEqual(result["name"], "m3_alpha.txt")
+        self.assertEqual(result["real_size"], 123)
+        self.assertEqual(result["namespace"], 1)
+
+    def test_lists_file_names_from_mft_records(self) -> None:
+        empty_record = b"\x00" * 1024
+        named_record = make_file_name_record("m3_bravo.txt")
+
+        with tempfile.TemporaryDirectory() as directory:
+            image_path = Path(directory) / "test.dd"
+            image_path.write_bytes(empty_record + named_record)
+            result = list_mft_file_names(image_path, 0, 1024, 2)
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["record_number"], 1)
+        self.assertEqual(result[0]["name"], "m3_bravo.txt")
 
 
 if __name__ == "__main__":

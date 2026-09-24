@@ -26,7 +26,7 @@ Develop a controlled NTFS forensic laboratory that demonstrates Alternate Data S
 | **Area**          | **Success Criterion**                                                          | **Measurement**                                                                                           |
 | ----------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | Lab safety        | All testing occurs on a dedicated VirtualBox image, not a physical drive.      | Evidence log identifies the lab image and confirms no physical drives were used.                          |
-| NTFS parsing      | Parser reads required boot-sector and MFT information.                         | Boot-sector values match a trusted NTFS tool; parser lists at least 10 known files.                       |
+| NTFS parsing      | Parser reads required boot-sector and MFT information.                         | Boot-sector values match a trusted NTFS tool; parser lists the 8 known validation files.                  |
 | Attribute parsing | Parser identifies \$STANDARD_INFORMATION, \$FILE_NAME, and \$DATA information. | Tested records include file name, record number, size, stream name, and data state.                       |
 | Data hiding       | ADS and slack-space payloads are embedded in the project image.                | Each payload has a marker, byte length, location record, and SHA-256 hash.                                |
 | Forensic recovery | Extractor recovers both hidden payloads from the .dd image.                    | Recovered SHA-256 hashes exactly match the original payload hashes.                                       |
@@ -59,8 +59,8 @@ Develop a controlled NTFS forensic laboratory that demonstrates Alternate Data S
 
 | **Subtask**                                                                      | **Owner** | **Output**                                                    | **Measurement**                                                                                 |
 | -------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Prepare a known-file validation set and review parser results against the image. | Lucas     | Validation manifest and parser-review notes.                  | At least 10 known file names and sizes are compared; discrepancies are documented and assigned. |
-| Implement MFT location calculation, record reading, and initial file listing.    | Jeff      | Working MFT parser and file inventory in text or JSON format. | Lists at least 10 known files and correctly identifies valid FILE record signatures.            |
+| Prepare a known-file validation set and review parser results against the image. | Lucas     | Validation manifest and parser-review notes.                  | The 8 known file names and sizes are compared; discrepancies are documented and assigned.        |
+| Implement MFT location calculation, record reading, and initial file listing.    | Jeff      | Working MFT parser and file inventory in text or JSON format. | Lists the 8 known files and correctly identifies valid FILE record signatures.                   |
 
 **Milestone 4 - Attribute Support and Controlled Hiding**
 
