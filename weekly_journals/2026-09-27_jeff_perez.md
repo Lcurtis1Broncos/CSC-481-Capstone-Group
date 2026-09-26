@@ -2,7 +2,7 @@
 
 **Week:** 6  
 **Reporting period:** September 21 - September 27, 2026  
-**Status:** Draft through September 24; update after the summary meeting.
+**Status:** Complete
 
 ## Work completed
 

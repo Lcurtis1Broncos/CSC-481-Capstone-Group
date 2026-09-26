@@ -2,7 +2,7 @@
 
 **Reporting period:** September 21 - September 27, 2026  
 **Team:** Lucas Curtis and Jeff Perez  
-**Status:** Draft through September 24; complete after the Friday summary meeting.
+**Status:** Complete
 
 ## Milestones achieved
 
@@ -120,8 +120,9 @@ The team remains on track for Milestone 3. The reader now lists the eight
 confirmed validation-file names from the full-disk image, which completes the
 main technical objective for the week. The plan was adjusted from ten files to
 eight documented files to match the controlled validation set actually created
-in the VM. Before submission, the team must complete the Friday summary
-meeting, finalize both journals, and change this report status to Complete.
+in the VM. The team reviewed the completed code, tests, evidence, journals,
+manifest, and report during the Friday summary meeting and identified no
+unresolved issues.
 
 ## Plan for Week 7
 
