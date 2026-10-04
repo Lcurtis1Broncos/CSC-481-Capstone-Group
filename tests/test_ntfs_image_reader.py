@@ -12,17 +12,23 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPOSITORY_ROOT / "code"))
 
 from ntfs_image_reader import (
+    ATTRIBUTE_TYPE_DATA,
+    ATTRIBUTE_TYPE_STANDARD_INFORMATION,
     BOOT_SECTOR_SIZE,
     MBR_PARTITION_TABLE_OFFSET,
     calculate_absolute_mft_byte_offset,
     calculate_mft_byte_offset,
     find_windows_data_partition,
+    format_filetime,
+    get_mft_record_offset,
     list_mft_file_names,
     parse_file_name_attribute,
+    parse_data_attribute,
     parse_mft_attributes,
     parse_mft_record_header,
     parse_mbr_partitions,
     parse_ntfs_boot_sector,
+    parse_standard_information_attribute,
     read_first_sector,
     read_mft_record,
     read_sector_at_offset,
@@ -80,6 +86,56 @@ def make_file_name_record(name: str, *, record_size: int = 1024) -> bytes:
     record = bytearray(make_mft_record(record_size=record_size))
     record[56 : 56 + attribute_length] = attribute
     record[56 + attribute_length : 60 + attribute_length] = b"\xFF" * 4
+    return bytes(record)
+
+
+def make_resident_attribute(
+    attribute_type: int, value: bytes, *, name: str = ""
+) -> bytes:
+    """Create a basic resident attribute for controlled parser tests."""
+    name_bytes = name.encode("utf-16-le")
+    value_offset = 0x18 + len(name_bytes)
+    attribute_length = (value_offset + len(value) + 7) & ~7
+    attribute = bytearray(attribute_length)
+    attribute[0x00:0x04] = attribute_type.to_bytes(4, byteorder="little")
+    attribute[0x04:0x08] = attribute_length.to_bytes(4, byteorder="little")
+    attribute[0x09] = len(name)
+    if name:
+        attribute[0x0A:0x0C] = (0x18).to_bytes(2, byteorder="little")
+        attribute[0x18 : 0x18 + len(name_bytes)] = name_bytes
+    attribute[0x10:0x14] = len(value).to_bytes(4, byteorder="little")
+    attribute[0x14:0x16] = value_offset.to_bytes(2, byteorder="little")
+    attribute[value_offset : value_offset + len(value)] = value
+    return bytes(attribute)
+
+
+def make_nonresident_data_attribute(
+    *, logical_size: int, allocated_size: int, name: str = ""
+) -> bytes:
+    """Create a basic non-resident $DATA attribute for controlled tests."""
+    name_bytes = name.encode("utf-16-le")
+    attribute_length = (0x40 + len(name_bytes) + 7) & ~7
+    attribute = bytearray(attribute_length)
+    attribute[0x00:0x04] = ATTRIBUTE_TYPE_DATA.to_bytes(4, byteorder="little")
+    attribute[0x04:0x08] = attribute_length.to_bytes(4, byteorder="little")
+    attribute[0x08] = 1
+    attribute[0x09] = len(name)
+    if name:
+        attribute[0x0A:0x0C] = (0x40).to_bytes(2, byteorder="little")
+        attribute[0x40 : 0x40 + len(name_bytes)] = name_bytes
+    attribute[0x28:0x30] = allocated_size.to_bytes(8, byteorder="little")
+    attribute[0x30:0x38] = logical_size.to_bytes(8, byteorder="little")
+    return bytes(attribute)
+
+
+def make_record_with_attributes(*attributes: bytes, record_size: int = 1024) -> bytes:
+    """Create an in-use MFT record containing the provided attributes."""
+    record = bytearray(make_mft_record(record_size=record_size))
+    offset = 56
+    for attribute in attributes:
+        record[offset : offset + len(attribute)] = attribute
+        offset += len(attribute)
+    record[offset : offset + 4] = b"\xFF" * 4
     return bytes(record)
 
 
@@ -226,6 +282,59 @@ class NtfsImageReaderTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]["record_number"], 1)
         self.assertEqual(result[0]["name"], "m3_bravo.txt")
+
+    def test_decodes_standard_information_timestamps_and_flags(self) -> None:
+        filetime_epoch = 116_444_736_000_000_000
+        value = bytearray(0x30)
+        value[0x00:0x08] = filetime_epoch.to_bytes(8, byteorder="little")
+        value[0x08:0x10] = (filetime_epoch + 10_000_000).to_bytes(
+            8, byteorder="little"
+        )
+        value[0x20:0x24] = (0x0022).to_bytes(4, byteorder="little")
+        record = make_record_with_attributes(
+            make_resident_attribute(ATTRIBUTE_TYPE_STANDARD_INFORMATION, bytes(value))
+        )
+
+        result = parse_standard_information_attribute(parse_mft_attributes(record)[0])
+
+        self.assertEqual(result["created"], "1970-01-01 00:00:00 UTC")
+        self.assertEqual(result["modified"], "1970-01-01 00:00:01 UTC")
+        self.assertEqual(result["file_attributes"], 0x0022)
+        self.assertEqual(result["file_attribute_names"], "Hidden, Archive")
+
+    def test_summarizes_a_named_resident_data_stream(self) -> None:
+        record = make_record_with_attributes(
+            make_resident_attribute(
+                ATTRIBUTE_TYPE_DATA, b"ADS payload", name="project_note"
+            )
+        )
+
+        result = parse_data_attribute(parse_mft_attributes(record)[0])
+
+        self.assertEqual(result["stream_name"], "project_note")
+        self.assertTrue(result["resident"])
+        self.assertEqual(result["logical_size"], 11)
+        self.assertIsNone(result["allocated_size"])
+
+    def test_summarizes_a_nonresident_data_stream(self) -> None:
+        record = make_record_with_attributes(
+            make_nonresident_data_attribute(
+                logical_size=8_192, allocated_size=12_288, name="large_stream"
+            )
+        )
+
+        result = parse_data_attribute(parse_mft_attributes(record)[0])
+
+        self.assertEqual(result["stream_name"], "large_stream")
+        self.assertFalse(result["resident"])
+        self.assertEqual(result["logical_size"], 8_192)
+        self.assertEqual(result["allocated_size"], 12_288)
+
+    def test_calculates_an_mft_record_offset(self) -> None:
+        self.assertEqual(get_mft_record_offset(10_000, 1_024, 38), 48_912)
+
+    def test_formats_a_zero_filetime(self) -> None:
+        self.assertEqual(format_filetime(0), "Not set")
 
 
 if __name__ == "__main__":
