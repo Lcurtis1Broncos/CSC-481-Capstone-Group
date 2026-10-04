@@ -7,6 +7,7 @@ NTFS boot sector and full-disk images that begin with an MBR partition table.
 from __future__ import annotations
 
 import argparse
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 
@@ -18,8 +19,15 @@ MBR_PARTITION_ENTRY_SIZE = 16
 MBR_PARTITION_COUNT = 4
 MBR_SIGNATURE = b"\x55\xAA"
 WINDOWS_DATA_PARTITION_TYPE = 0x07
+ATTRIBUTE_TYPE_STANDARD_INFORMATION = 0x10
 ATTRIBUTE_TYPE_FILE_NAME = 0x30
+ATTRIBUTE_TYPE_DATA = 0x80
 ATTRIBUTE_TYPE_END = 0xFFFFFFFF
+
+# ANSI escape codes are understood by the VS Code terminal and make recovered
+# filenames easier to spot without changing the forensic data being displayed.
+ANSI_YELLOW = "\033[33m"
+ANSI_RESET = "\033[0m"
 
 
 def format_hex(data: bytes) -> str:
@@ -176,7 +184,7 @@ def parse_mft_record_header(record: bytes) -> dict[str, int | str | bool]:
     }
 
 
-def parse_mft_attributes(record: bytes) -> list[dict[str, int | bytes | bool]]:
+def parse_mft_attributes(record: bytes) -> list[dict[str, int | str | bytes | bool]]:
     """Return the valid attributes stored in an MFT record.
 
     Each attribute begins with a type and a length.  The length lets the reader
@@ -187,7 +195,7 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | bytes | bool]]:
         return []
 
     attribute_offset = int(header["first_attribute_offset"])
-    attributes: list[dict[str, int | bytes | bool]] = []
+    attributes: list[dict[str, int | str | bytes | bool]] = []
 
     while attribute_offset + 8 <= len(record):
         attribute_type = int.from_bytes(
@@ -204,11 +212,27 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | bytes | bool]]:
             raise ValueError("MFT attribute has an invalid length.")
 
         non_resident = bool(record[attribute_offset + 8])
-        attribute: dict[str, int | bytes | bool] = {
+        name_length = record[attribute_offset + 0x09]
+        name_offset = int.from_bytes(
+            record[attribute_offset + 0x0A : attribute_offset + 0x0C],
+            byteorder="little",
+        )
+        attribute_name = ""
+        if name_length:
+            name_start = attribute_offset + name_offset
+            name_end = name_start + name_length * 2
+            if name_offset < 0x10 or name_end > attribute_offset + attribute_length:
+                raise ValueError("MFT attribute has an invalid name range.")
+            attribute_name = record[name_start:name_end].decode(
+                "utf-16-le", errors="replace"
+            )
+
+        attribute: dict[str, int | str | bytes | bool] = {
             "type": attribute_type,
             "length": attribute_length,
             "offset": attribute_offset,
             "non_resident": non_resident,
+            "name": attribute_name,
         }
 
         if not non_resident:
@@ -228,6 +252,17 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | bytes | bool]]:
             ):
                 raise ValueError("Resident MFT attribute has an invalid value range.")
             attribute["value"] = record[value_start:value_end]
+        else:
+            if attribute_length < 0x40:
+                raise ValueError("Non-resident MFT attribute is too short.")
+            attribute["allocated_size"] = int.from_bytes(
+                record[attribute_offset + 0x28 : attribute_offset + 0x30],
+                byteorder="little",
+            )
+            attribute["real_size"] = int.from_bytes(
+                record[attribute_offset + 0x30 : attribute_offset + 0x38],
+                byteorder="little",
+            )
 
         attributes.append(attribute)
         attribute_offset += attribute_length
@@ -235,7 +270,9 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | bytes | bool]]:
     return attributes
 
 
-def parse_file_name_attribute(attribute: dict[str, int | bytes | bool]) -> dict[str, int | str]:
+def parse_file_name_attribute(
+    attribute: dict[str, int | str | bytes | bool],
+) -> dict[str, int | str]:
     """Decode the resident contents of an NTFS ``$FILE_NAME`` attribute."""
     if attribute["type"] != ATTRIBUTE_TYPE_FILE_NAME:
         raise ValueError("The supplied attribute is not a $FILE_NAME attribute.")
@@ -259,6 +296,98 @@ def parse_file_name_attribute(attribute: dict[str, int | bytes | bool]) -> dict[
         "allocated_size": int.from_bytes(value[0x28:0x30], byteorder="little"),
         "real_size": int.from_bytes(value[0x30:0x38], byteorder="little"),
     }
+
+
+def format_filetime(filetime: int) -> str:
+    """Return a UTC timestamp for a Windows FILETIME value."""
+    if filetime == 0:
+        return "Not set"
+
+    try:
+        filetime_epoch = datetime(1601, 1, 1, tzinfo=UTC)
+        timestamp = filetime_epoch + timedelta(microseconds=filetime // 10)
+    except OverflowError:
+        return f"Invalid FILETIME ({filetime})"
+
+    return timestamp.strftime("%Y-%m-%d %H:%M:%S UTC")
+
+
+def describe_file_attributes(flags: int) -> str:
+    """Return the common Windows file-attribute flags in plain language."""
+    names = {
+        0x0001: "Read-only",
+        0x0002: "Hidden",
+        0x0004: "System",
+        0x0020: "Archive",
+        0x0800: "Compressed",
+        0x1000: "Offline",
+        0x2000: "Not content indexed",
+        0x4000: "Encrypted",
+    }
+    descriptions = [name for bit, name in names.items() if flags & bit]
+    return ", ".join(descriptions) if descriptions else "None recorded"
+
+
+def parse_standard_information_attribute(
+    attribute: dict[str, int | str | bytes | bool],
+) -> dict[str, int | str]:
+    """Decode the basic timestamps and flags in ``$STANDARD_INFORMATION``."""
+    if attribute["type"] != ATTRIBUTE_TYPE_STANDARD_INFORMATION:
+        raise ValueError("The supplied attribute is not $STANDARD_INFORMATION.")
+    if attribute["non_resident"]:
+        raise ValueError("$STANDARD_INFORMATION must be resident in its MFT record.")
+
+    value = attribute.get("value")
+    if not isinstance(value, bytes) or len(value) < 0x24:
+        raise ValueError("$STANDARD_INFORMATION attribute is too short.")
+
+    flags = int.from_bytes(value[0x20:0x24], byteorder="little")
+    return {
+        "created": format_filetime(int.from_bytes(value[0x00:0x08], byteorder="little")),
+        "modified": format_filetime(int.from_bytes(value[0x08:0x10], byteorder="little")),
+        "mft_modified": format_filetime(
+            int.from_bytes(value[0x10:0x18], byteorder="little")
+        ),
+        "accessed": format_filetime(int.from_bytes(value[0x18:0x20], byteorder="little")),
+        "file_attributes": flags,
+        "file_attribute_names": describe_file_attributes(flags),
+    }
+
+
+def parse_data_attribute(
+    attribute: dict[str, int | str | bytes | bool],
+) -> dict[str, int | str | bool | None]:
+    """Summarize a normal or named ``$DATA`` attribute without reading content."""
+    if attribute["type"] != ATTRIBUTE_TYPE_DATA:
+        raise ValueError("The supplied attribute is not a $DATA attribute.")
+
+    stream_name = str(attribute["name"])
+    if attribute["non_resident"]:
+        return {
+            "stream_name": stream_name,
+            "resident": False,
+            "logical_size": int(attribute["real_size"]),
+            "allocated_size": int(attribute["allocated_size"]),
+        }
+
+    value = attribute.get("value")
+    if not isinstance(value, bytes):
+        raise ValueError("Resident $DATA attribute does not contain a value.")
+    return {
+        "stream_name": stream_name,
+        "resident": True,
+        "logical_size": len(value),
+        "allocated_size": None,
+    }
+
+
+def get_mft_record_offset(
+    mft_byte_offset: int, record_size: int, record_number: int
+) -> int:
+    """Return the absolute disk-image offset for an MFT record number."""
+    if record_number < 0:
+        raise ValueError("An MFT record number cannot be negative.")
+    return mft_byte_offset + record_number * record_size
 
 
 def list_mft_file_names(
@@ -355,10 +484,50 @@ def print_file_name_listing(file_names: list[dict[str, int | str | bool]]) -> No
 
     for file_name in file_names:
         item_type = "directory" if file_name["is_directory"] else "file"
+        highlighted_name = f"{ANSI_YELLOW}{file_name['name']}{ANSI_RESET}"
         print(
-            f"  Record {file_name['record_number']}: {file_name['name']} "
+            f"  Record {file_name['record_number']}: {highlighted_name} "
             f"({item_type}, namespace {file_name['namespace']})"
         )
+
+
+def print_attribute_summary(record_number: int, record: bytes) -> None:
+    """Print beginner-friendly summaries of selected MFT attribute types."""
+    record_header = parse_mft_record_header(record)
+    print(f"MFT record {record_number} attribute summary")
+    print(f"  FILE signature valid: {record_header['signature_valid']}")
+    print(f"  Record in use:        {record_header['in_use']}")
+
+    attributes = parse_mft_attributes(record)
+    if not attributes:
+        print("  No attributes were decoded.")
+        return
+
+    for attribute in attributes:
+        attribute_type = attribute["type"]
+        if attribute_type == ATTRIBUTE_TYPE_STANDARD_INFORMATION:
+            standard_information = parse_standard_information_attribute(attribute)
+            print("\n  $STANDARD_INFORMATION")
+            print(f"    Created:         {standard_information['created']}")
+            print(f"    Modified:        {standard_information['modified']}")
+            print(f"    File attributes: {standard_information['file_attribute_names']}")
+        elif attribute_type == ATTRIBUTE_TYPE_FILE_NAME:
+            file_name = parse_file_name_attribute(attribute)
+            print("\n  $FILE_NAME")
+            print(f"    Name:            {ANSI_YELLOW}{file_name['name']}{ANSI_RESET}")
+            print(f"    Logical size:    {file_name['real_size']} bytes")
+            print(f"    Allocated size:  {file_name['allocated_size']} bytes")
+        elif attribute_type == ATTRIBUTE_TYPE_DATA:
+            data = parse_data_attribute(attribute)
+            stream_name = data["stream_name"] or "[unnamed]"
+            print("\n  $DATA")
+            print(f"    Stream name:     {stream_name}")
+            print(f"    Resident:        {data['resident']}")
+            print(f"    Logical size:    {data['logical_size']} bytes")
+            if data["allocated_size"] is None:
+                print("    Allocated size:  resident in MFT record")
+            else:
+                print(f"    Allocated size:  {data['allocated_size']} bytes")
 
 
 def main() -> None:
@@ -371,6 +540,13 @@ def main() -> None:
         type=int,
         metavar="RECORDS",
         help="scan this many MFT records and display decoded file names",
+    )
+    parser.add_argument(
+        "--show-record",
+        type=int,
+        action="append",
+        metavar="NUMBER",
+        help="display an attribute summary; repeat this option for more records",
     )
     args = parser.parse_args()
 
@@ -452,6 +628,24 @@ def main() -> None:
                 parser.error(f"could not scan MFT records: {error}")
             print_file_name_listing(file_names)
             print()
+
+        if args.show_record is not None:
+            for record_number in args.show_record:
+                try:
+                    selected_record_offset = get_mft_record_offset(
+                        mft_byte_offset,
+                        int(boot_sector["mft_record_size"]),
+                        record_number,
+                    )
+                    selected_record = read_mft_record(
+                        args.image,
+                        selected_record_offset,
+                        int(boot_sector["mft_record_size"]),
+                    )
+                    print_attribute_summary(record_number, selected_record)
+                except (OSError, ValueError) as error:
+                    parser.error(str(error))
+                print()
 
     print("Offset  Hex bytes                                        ASCII")
     print(format_hex(first_sector))
