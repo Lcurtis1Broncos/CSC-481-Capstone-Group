@@ -233,6 +233,9 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | str | bytes | bo
             "offset": attribute_offset,
             "non_resident": non_resident,
             "name": attribute_name,
+            "flags": int.from_bytes(
+                record[attribute_offset + 0x0C : attribute_offset + 0x0E], "little"
+            ),
         }
 
         if not non_resident:
@@ -255,6 +258,19 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | str | bytes | bo
         else:
             if attribute_length < 0x40:
                 raise ValueError("Non-resident MFT attribute is too short.")
+            run_offset = int.from_bytes(
+                record[attribute_offset + 0x20 : attribute_offset + 0x22],
+                byteorder="little",
+            )
+            if run_offset < 0x40 or run_offset >= attribute_length:
+                raise ValueError("Non-resident attribute has an invalid data-run offset.")
+            attribute["start_vcn"] = int.from_bytes(
+                record[attribute_offset + 0x10 : attribute_offset + 0x18],
+                byteorder="little",
+            )
+            attribute["data_runs"] = record[
+                attribute_offset + run_offset : attribute_offset + attribute_length
+            ]
             attribute["allocated_size"] = int.from_bytes(
                 record[attribute_offset + 0x28 : attribute_offset + 0x30],
                 byteorder="little",
@@ -381,6 +397,105 @@ def parse_data_attribute(
     }
 
 
+def decode_data_runs(
+    mapping_pairs: bytes, *, start_vcn: int = 0
+) -> list[dict[str, int | None]]:
+    """Decode NTFS mapping pairs into file VCNs, volume LCNs, and lengths.
+
+    Lengths count clusters. LCN deltas are signed and relative to the previous
+    allocated run's starting LCN. A sparse run has no physical LCN.
+    """
+    if start_vcn < 0:
+        raise ValueError("Starting VCN cannot be negative.")
+    runs: list[dict[str, int | None]] = []
+    position = 0
+    current_lcn = 0
+    current_vcn = start_vcn
+    while position < len(mapping_pairs):
+        header = mapping_pairs[position]
+        position += 1
+        if header == 0:
+            return runs
+        length_bytes = header & 0x0F
+        offset_bytes = header >> 4
+        if not 1 <= length_bytes <= 8 or offset_bytes > 8:
+            raise ValueError("Data run has invalid field widths.")
+        end = position + length_bytes + offset_bytes
+        if end > len(mapping_pairs):
+            raise ValueError("Data run is truncated.")
+        count = int.from_bytes(
+            mapping_pairs[position : position + length_bytes], "little"
+        )
+        if count == 0:
+            raise ValueError("Data run must contain at least one cluster.")
+        position += length_bytes
+        lcn = None
+        if offset_bytes:
+            current_lcn += int.from_bytes(
+                mapping_pairs[position:end], "little", signed=True
+            )
+            if current_lcn < 0:
+                raise ValueError("Data run points before the start of the volume.")
+            lcn = current_lcn
+        runs.append({"start_vcn": current_vcn, "start_lcn": lcn, "cluster_count": count})
+        current_vcn += count
+        position = end
+    raise ValueError("Data-run list has no end marker.")
+
+
+def cluster_to_image_offset(
+    start_lcn: int, bytes_per_cluster: int, partition_offset: int
+) -> int:
+    """Convert a volume cluster location to an absolute image byte offset."""
+    if start_lcn < 0 or bytes_per_cluster <= 0 or partition_offset < 0:
+        raise ValueError("Cluster geometry and partition offset must be valid.")
+    return partition_offset + start_lcn * bytes_per_cluster
+
+
+def calculate_file_slack(
+    runs: list[dict[str, int | None]],
+    logical_size: int,
+    bytes_per_cluster: int,
+    partition_offset: int,
+) -> dict[str, int] | None:
+    """Locate the tail of the last cluster of ordinary nonresident data.
+
+    This describes a candidate range, not evidence of a hidden payload. Use
+    only for uncompressed, nonsparse, unencrypted streams. Extra preallocated
+    clusters beyond the file's last cluster are not included.
+    """
+    if logical_size < 0 or bytes_per_cluster <= 0 or partition_offset < 0:
+        raise ValueError("File size and image geometry must be valid.")
+    if logical_size == 0:
+        return None
+    expected_vcn = 0
+    for run in runs:
+        if run["start_vcn"] != expected_vcn or int(run["cluster_count"]) <= 0:
+            raise ValueError("Slack calculation requires contiguous VCN coverage from zero.")
+        if run["start_lcn"] is None:
+            raise ValueError("Slack calculation does not support sparse streams.")
+        expected_vcn += int(run["cluster_count"])
+    if expected_vcn * bytes_per_cluster < logical_size:
+        raise ValueError("Data runs do not cover the file's logical size.")
+    remainder = logical_size % bytes_per_cluster
+    if remainder == 0:
+        return None
+    final_vcn = (logical_size - 1) // bytes_per_cluster
+    for run in runs:
+        start_vcn = int(run["start_vcn"])
+        if start_vcn <= final_vcn < start_vcn + int(run["cluster_count"]):
+            final_lcn = int(run["start_lcn"]) + final_vcn - start_vcn
+            cluster_offset = cluster_to_image_offset(
+                final_lcn, bytes_per_cluster, partition_offset
+            )
+            return {
+                "final_lcn": final_lcn,
+                "byte_offset": cluster_offset + remainder,
+                "length": bytes_per_cluster - remainder,
+            }
+    raise ValueError("Could not locate the file's final cluster.")
+
+
 def get_mft_record_offset(
     mft_byte_offset: int, record_size: int, record_number: int
 ) -> int:
@@ -491,7 +606,13 @@ def print_file_name_listing(file_names: list[dict[str, int | str | bool]]) -> No
         )
 
 
-def print_attribute_summary(record_number: int, record: bytes) -> None:
+def print_attribute_summary(
+    record_number: int,
+    record: bytes,
+    *,
+    bytes_per_cluster: int | None = None,
+    partition_offset: int = 0,
+) -> None:
     """Print beginner-friendly summaries of selected MFT attribute types."""
     record_header = parse_mft_record_header(record)
     print(f"MFT record {record_number} attribute summary")
@@ -528,6 +649,41 @@ def print_attribute_summary(record_number: int, record: bytes) -> None:
                 print("    Allocated size:  resident in MFT record")
             else:
                 print(f"    Allocated size:  {data['allocated_size']} bytes")
+                runs = decode_data_runs(
+                    attribute["data_runs"], start_vcn=int(attribute["start_vcn"])
+                )
+                print("    Data runs:")
+                for number, run in enumerate(runs, start=1):
+                    lcn = run["start_lcn"]
+                    location = "sparse (no disk clusters)" if lcn is None else f"LCN {lcn}"
+                    print(
+                        f"      Run {number}: VCN {run['start_vcn']}, {location}, "
+                        f"{run['cluster_count']} clusters"
+                    )
+                    if lcn is not None and bytes_per_cluster is not None:
+                        offset = cluster_to_image_offset(
+                            lcn, bytes_per_cluster, partition_offset
+                        )
+                        print(f"        Image byte offset: {offset}")
+                if bytes_per_cluster is not None:
+                    if int(attribute["flags"]) & 0xC001:
+                        print("    Slack: not calculated for compressed, sparse, or encrypted data")
+                    elif int(attribute["start_vcn"]) != 0:
+                        print("    Slack: not calculated for an extension attribute alone")
+                    else:
+                        try:
+                            slack = calculate_file_slack(
+                                runs, int(data["logical_size"]),
+                                bytes_per_cluster, partition_offset,
+                            )
+                        except ValueError as error:
+                            print(f"    Slack: not calculated ({error})")
+                        else:
+                            if slack is None:
+                                print("    Final-cluster slack: 0 bytes")
+                            else:
+                                print(f"    Final-cluster slack: {slack['length']} bytes")
+                                print(f"    Slack image offset:  {slack['byte_offset']}")
 
 
 def main() -> None:
@@ -642,7 +798,12 @@ def main() -> None:
                         selected_record_offset,
                         int(boot_sector["mft_record_size"]),
                     )
-                    print_attribute_summary(record_number, selected_record)
+                    print_attribute_summary(
+                        record_number,
+                        selected_record,
+                        bytes_per_cluster=int(boot_sector["bytes_per_cluster"]),
+                        partition_offset=ntfs_boot_offset,
+                    )
                 except (OSError, ValueError) as error:
                     parser.error(str(error))
                 print()

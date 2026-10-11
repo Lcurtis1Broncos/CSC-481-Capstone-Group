@@ -1,0 +1,28 @@
+{
+  "created_utc": "2026-10-08T15:10:10.414422+00:00",
+  "source_image": "NTFS_Forensic_Baseline_ADS_Created_RAW.dd",
+  "working_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+  "marker": "TEAM3_SLACK_TEST_20261008",
+  "encoding": "UTF-8, no BOM or newline",
+  "record_number": 41,
+  "host_file": "Testfile.docx",
+  "logical_size": 13437,
+  "allocated_size": 16384,
+  "cluster_size": 4096,
+  "data_runs": [
+    {
+      "start_vcn": 0,
+      "start_lcn": 3659,
+      "cluster_count": 4
+    }
+  ],
+  "final_lcn": 3662,
+  "byte_offset": 16049277,
+  "length": 2947,
+  "source_sha256": "2240CF8A1AA9D30231C39C4672DC51157093314950C4930EBBF5D30F5F59D2F5",
+  "working_image_sha256": "D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7",
+  "payload_sha256": "3BF8F582FF237AD7F739D39EDCF54CB35E0E6FDFD75AD47CA55F3598629390F2",
+  "payload_length": 25,
+  "original_slack_bytes_hex": "00000000000000000000000000000000000000000000000000",
+  "verification": "Every output byte matches the source except the designated payload range."
+}
