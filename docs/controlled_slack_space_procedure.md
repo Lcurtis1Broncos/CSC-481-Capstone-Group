@@ -2,8 +2,8 @@
 
 ## Purpose and scope
 
-This procedure documents a future controlled experiment for the dedicated
-VirtualBox NTFS lab volume. It is not a recovery procedure and must never be
+This procedure documents a controlled experiment for the dedicated
+VirtualBox NTFS lab volume. It must never be
 used on a physical drive or unapproved media.
 
 Slack space is the unused portion of the final allocated cluster of a
@@ -22,23 +22,43 @@ nonresident file. For example, a file with a logical size of 5,000 bytes on a
 - Use a short, unique text marker and record its exact byte length and
   SHA-256 hash before embedding.
 
-## Planned procedure
+## Implemented procedure
 
-1. Create a working copy of the dedicated NTFS lab image and label it as the
-   slack-space test image.
-2. Create a host file large enough to require at least two clusters. Record
+1. Use the verified ADS lab image as a read-only source. The embedding tool
+   creates a new working image and refuses to overwrite an existing file.
+2. Select an existing nonresident host file. Record
    its file name, logical size, allocated size, MFT record number, and the
    relevant `$DATA` run information.
 3. Prepare a small controlled payload with a unique marker. Record the marker,
    byte length, SHA-256 hash, host file, and intended byte range.
-4. Use a documented, repeatable lab-only method to write only within the host
-   file's final allocated-cluster tail, after its logical end and before the
-   allocated end. The exact method and command will be added after team review.
-5. Export the powered-off working image as RAW and calculate its SHA-256 hash.
+4. Run `code/slack_embed.py` to locate the final-cluster tail using the file's
+   data runs and logical size, copy the RAW image, verify the known source
+   hash, and write the marker within that tail on the copy.
+5. The tool compares every output byte with the source plus the designated
+   marker range and calculates the working-image SHA-256. It also records
+   the bytes replaced within slack. File contents and metadata are preserved.
 6. Validate the host-file metadata and calculated slack range with the parser.
-7. In a later recovery phase, read the documented slack range from the RAW
-   image, extract the expected payload length, and compare the recovered
-   SHA-256 hash to the manifest.
+7. Save the generated manifest. Later recovery tests will locate and read the
+   documented range independently and compare the recovered payload hash.
+
+## Command for the controlled image
+
+Run from the repository root, using new destination and manifest paths:
+
+```powershell
+python code/slack_embed.py NTFS_Forensic_Baseline_ADS_Created_RAW.dd NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd --record 41 --marker TEAM3_SLACK_TEST_20261008 --manifest reports/evidence/week8/w8_slack_payload_manifest.json
+```
+
+The tool accepts only the previously verified ADS lab image's SHA-256. It
+requires an ordinary nonresident stream with complete data runs and refuses
+resident, compressed, sparse, encrypted, and extension-record cases. A failed
+operation may leave a partial copy for inspection; it never modifies the source.
+
+To review the location without changing the image:
+
+```powershell
+python code/ntfs_image_reader.py NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd --show-record 41
+```
 
 ## Required evidence
 
@@ -53,5 +73,7 @@ nonresident file. For example, a file with a logical size of 5,000 bytes on a
 
 ## Status
 
-This is a controlled procedure draft only. No slack payload has been embedded,
-and no recovery claim is being made at this stage.
+The embedding tool and data-run/slack calculations are implemented and covered
+by automated tests. The generated manifest records the outcome of each real
+embedding run. This is a controlled embedding experiment; generalized forensic
+content recovery remains a later project phase.

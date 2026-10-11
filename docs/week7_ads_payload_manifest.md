@@ -9,7 +9,7 @@
 | Stream name | `CapstoneEvidence` |
 | Payload marker | `CAPSTONE_ADS_TEST_20261001_Team3_001` |
 | Payload length | 36 bytes |
-| Payload SHA-256 (reported by Lucas) | `E3CB29B996899849E804A8FD7DB33F7CCECCBCB2569005353BD082D320D0D997E` |
+| Payload SHA-256 (reported by Lucas) | `E3CB29B996899849E804A8FD7DB33F7CCECBCB2569005353BD082D320D0D997E` |
 | Normal unnamed stream length | 31 bytes |
 | RAW image | `NTFS_Forensic_Baseline_ADS_Created_RAW.dd` |
 | Image length | 8,589,930,496 bytes |
@@ -36,6 +36,11 @@ hash above is Lucas's reported value, while the image hash was independently
 verified here.
 
 ## Source screenshots
+
+The [ADS creation workflow](ads_creation_workflow.md) records Lucas's supplied
+steps and corrections. On October 11, the payload hash transcription was
+corrected against the source screenshot and a hash of the exact ASCII marker.
+This check does not replace extraction from the image.
 
 - [Host file, stream, marker, length, and payload hash](../reports/evidence/week7/w7_ads_stream_info.png)
 - [Payload hash in the guest VM](../reports/evidence/week7/w7_ads_payload_hash.png)

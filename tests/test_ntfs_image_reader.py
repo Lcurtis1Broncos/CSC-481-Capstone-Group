@@ -18,6 +18,9 @@ from ntfs_image_reader import (
     MBR_PARTITION_TABLE_OFFSET,
     calculate_absolute_mft_byte_offset,
     calculate_mft_byte_offset,
+    calculate_file_slack,
+    cluster_to_image_offset,
+    decode_data_runs,
     find_windows_data_partition,
     format_filetime,
     get_mft_record_offset,
@@ -110,11 +113,13 @@ def make_resident_attribute(
 
 
 def make_nonresident_data_attribute(
-    *, logical_size: int, allocated_size: int, name: str = ""
+    *, logical_size: int, allocated_size: int, name: str = "",
+    mapping_pairs: bytes = b"\x11\x03\x64\x00",
 ) -> bytes:
     """Create a basic non-resident $DATA attribute for controlled tests."""
     name_bytes = name.encode("utf-16-le")
-    attribute_length = (0x40 + len(name_bytes) + 7) & ~7
+    run_offset = (0x40 + len(name_bytes) + 7) & ~7
+    attribute_length = (run_offset + len(mapping_pairs) + 7) & ~7
     attribute = bytearray(attribute_length)
     attribute[0x00:0x04] = ATTRIBUTE_TYPE_DATA.to_bytes(4, byteorder="little")
     attribute[0x04:0x08] = attribute_length.to_bytes(4, byteorder="little")
@@ -125,6 +130,9 @@ def make_nonresident_data_attribute(
         attribute[0x40 : 0x40 + len(name_bytes)] = name_bytes
     attribute[0x28:0x30] = allocated_size.to_bytes(8, byteorder="little")
     attribute[0x30:0x38] = logical_size.to_bytes(8, byteorder="little")
+    attribute[0x18:0x20] = (2).to_bytes(8, byteorder="little")
+    attribute[0x20:0x22] = run_offset.to_bytes(2, byteorder="little")
+    attribute[run_offset : run_offset + len(mapping_pairs)] = mapping_pairs
     return bytes(attribute)
 
 
@@ -335,6 +343,72 @@ class NtfsImageReaderTests(unittest.TestCase):
 
     def test_formats_a_zero_filetime(self) -> None:
         self.assertEqual(format_filetime(0), "Not set")
+
+    def test_decodes_fragmented_runs_with_a_negative_lcn_delta(self) -> None:
+        runs = decode_data_runs(b"\x11\x03\x64\x11\x02\xec\x00")
+        self.assertEqual(runs, [
+            {"start_vcn": 0, "start_lcn": 100, "cluster_count": 3},
+            {"start_vcn": 3, "start_lcn": 80, "cluster_count": 2},
+        ])
+
+    def test_sparse_run_keeps_previous_lcn_for_next_delta(self) -> None:
+        runs = decode_data_runs(b"\x11\x01\x64\x01\x02\x11\x01\x05\x00")
+        self.assertIsNone(runs[1]["start_lcn"])
+        self.assertEqual(runs[2]["start_lcn"], 105)
+        self.assertEqual(runs[2]["start_vcn"], 3)
+
+    def test_decodes_multibyte_run_at_nonzero_start_vcn(self) -> None:
+        runs = decode_data_runs(b"\x22\x00\x01\x00\x04\x00", start_vcn=8)
+        self.assertEqual(runs, [
+            {"start_vcn": 8, "start_lcn": 1024, "cluster_count": 256}
+        ])
+
+    def test_rejects_malformed_data_runs(self) -> None:
+        for raw in (b"\x10\x01\x00", b"\x19", b"\x11\x00\x01\x00",
+                    b"\x11\x01\xff\x00", b"\x11\x01\x01"):
+            with self.subTest(raw=raw), self.assertRaises(ValueError):
+                decode_data_runs(raw)
+
+    def test_nonresident_named_attribute_exposes_mapping_pairs(self) -> None:
+        record = make_record_with_attributes(make_nonresident_data_attribute(
+            logical_size=10_000, allocated_size=12_288, name="large_stream"
+        ))
+        attribute = parse_mft_attributes(record)[0]
+        self.assertEqual(decode_data_runs(attribute["data_runs"])[0]["start_lcn"], 100)
+        self.assertEqual(parse_data_attribute(attribute)["stream_name"], "large_stream")
+
+    def test_rejects_invalid_mapping_pairs_offset(self) -> None:
+        attribute = bytearray(make_nonresident_data_attribute(
+            logical_size=10_000, allocated_size=12_288
+        ))
+        attribute[0x20:0x22] = (len(attribute)).to_bytes(2, "little")
+        with self.assertRaises(ValueError):
+            parse_mft_attributes(make_record_with_attributes(bytes(attribute)))
+
+    def test_converts_lcn_to_absolute_image_offset(self) -> None:
+        self.assertEqual(cluster_to_image_offset(100, 4096, 1_048_576), 1_458_176)
+        self.assertEqual(cluster_to_image_offset(100, 4096, 0), 409_600)
+
+    def test_slack_follows_final_fragment_and_excludes_preallocation(self) -> None:
+        runs = decode_data_runs(b"\x11\x02\x64\x11\x03\x32\x00")
+        slack = calculate_file_slack(runs, 10_000, 4096, 1_048_576)
+        self.assertEqual(slack, {
+            "final_lcn": 150, "byte_offset": 1_664_784, "length": 2_288
+        })
+
+    def test_empty_and_cluster_aligned_files_have_no_final_cluster_slack(self) -> None:
+        runs = decode_data_runs(b"\x11\x03\x64\x00")
+        self.assertIsNone(calculate_file_slack(runs, 0, 4096, 0))
+        self.assertIsNone(calculate_file_slack(runs, 8192, 4096, 0))
+
+    def test_slack_rejects_sparse_incomplete_and_discontinuous_runs(self) -> None:
+        for runs in (
+            decode_data_runs(b"\x01\x03\x00"),
+            decode_data_runs(b"\x11\x01\x64\x00"),
+            decode_data_runs(b"\x11\x03\x64\x00", start_vcn=1),
+        ):
+            with self.subTest(runs=runs), self.assertRaises(ValueError):
+                calculate_file_slack(runs, 10_000, 4096, 0)
 
 
 if __name__ == "__main__":
