@@ -4,7 +4,7 @@
 **Course and team:** CSC-481 Capstone, Team 3  
 **Members:** Lucas Curtis (team leader) and Jeff Perez (parser lead)  
 **Coverage:** August 31 through October 11, 2026; technical results captured through October 8 and documentation/team review through October 11  
-**Status:** Prepared for final team-leader review and commit; GitHub upload and course submission remain pending.
+**Status:** Submitted October 11, 2026, as confirmed by Jeff. Preparation-stage descriptions below reflect the report's original cutoff.
 
 ## 1. Project objective and current progress
 
@@ -40,7 +40,7 @@ tracking; code, manifests, reports, and screenshots are the repository artifacts
 | 1. Setup and technical design, Aug. 31-Sept. 6 | Research, repository organization, evidence template, field references, and initial parser/test workflow established. | Week 3 research and reader evidence. Design decisions are documented across the references, code, and reports rather than a separate completed design document. |
 | 2. Lab image and boot-sector parser, Sept. 7-20 | Achieved. Unencrypted baseline exported and hash-verified; partition-aware boot parser validated against Windows. | Week 5 manual reads, parser output, and `fsutil` comparison. |
 | 3. Initial MFT parser and file listing, Sept. 21-27 | File-listing target achieved: all eight known names located. | Week 6 manifest and VM/parser screenshots. Explorer sizes are rounded; exact content-size/hash validation is not complete for all files. |
-| 4. Attributes and controlled hiding, Sept. 28-Oct. 11 | Technical demonstrations completed: attributes, controlled ADS, data runs, and controlled slack marker. ADS creation steps supplied October 11 and documented. | Week 7 ADS manifest, documented manual workflow, and Week 8 slack manifest. A standalone reusable ADS creation tool is not supplied. |
+| 4. Attributes and controlled hiding, Sept. 28-Oct. 11 | Technical demonstrations completed: attributes, controlled ADS, data runs, and controlled slack marker. ADS creation steps supplied October 11 and documented. | Week 7 ADS manifest, documented manual workflow, and Week 8 slack manifest. |
 | 5. Midterm integration, Oct. 12-18 | Started ahead of the planned interval with this cumulative draft and linked evidence. | Team review, documentation closeout, and submission remain. |
 | 6. Recovery/extractor, Oct. 19-Nov. 8 | Not complete. Data-location support provides a foundation. | Known-offset slack read-back is not generalized recovery; extracted ADS hash validation remains future work. |
 | 7. Full test campaign, Nov. 9-22 | Future milestone; incremental regression testing is already underway. | Current suite has 31 passing tests. |
@@ -367,7 +367,7 @@ steps and are not claimed as completed by that meeting.
 | Initial baseline contained BitLocker protection. | Lucas disabled protection and exported a new baseline; Jeff verified the replacement. Decryption was not added to project scope. |
 | Lab export was a full-disk image, not volume-only. | Added MBR parsing and partition-offset calculations while retaining volume-only support. |
 | Original known-file target was ten files. | Revised the project plan to eight files, including HTML and JSON, and validated all eight names. Rounded size evidence remains explicitly qualified. |
-| ADS creation was manual rather than a saved reusable tool. | Lucas supplied the written steps October 11; the corrected workflow, screenshots, and manifest are documented. A standalone tool remains a plan-output gap to resolve or explicitly adjust. |
+| ADS creation uses a manual PowerShell workflow. | Lucas supplied the written steps October 11; the corrected workflow, screenshots, and manifest are documented. |
 | Recovery is not yet implemented. | Keep metadata identification and known-offset verification separate from extraction claims; implement and hash-validate recovery in Milestone 6. |
 
 No unresolved failure was reported for the completed Week 8 real-image test

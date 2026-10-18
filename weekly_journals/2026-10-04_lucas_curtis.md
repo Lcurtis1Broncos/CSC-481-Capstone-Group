@@ -19,8 +19,7 @@ the work, learning, and problem details confirmed by Jeff after the team review.
 - Reviewed both members' work at the October 3 meeting at 7:30 p.m. The team
   confirmed that the parser functions and recognizes the controlled ADS.
 
-The workflow was performed manually; a reusable script was not created this
-week. Image integrity and parser results are documented in the
+The workflow was performed manually. Image integrity and parser results are documented in the
 [ADS payload manifest](../docs/week7_ads_payload_manifest.md).
 
 ## What I learned

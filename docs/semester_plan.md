@@ -68,7 +68,7 @@ Develop a controlled NTFS forensic laboratory that demonstrates Alternate Data S
 
 | **Subtask**                                                                                                                                    | **Owner** | **Output**                                                                                                 | **Measurement**                                                                                                                                                                                                     |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Build and document the ADS creation workflow using controlled test payloads.                                                                   | Lucas     | ADS creation tool, ADS payload manifest, and working image copy.                                           | At least one ADS payload is created with a unique marker, recorded byte length, host file, stream name, and SHA-256 hash.                                                                                           |
+| Perform and document manual ADS creation using controlled test payloads. | Lucas | Documented PowerShell ADS creation procedure, ADS payload manifest, and working image copy. | At least one ADS payload is created with a unique marker, recorded byte length, host file, stream name, and SHA-256 hash. |
 | Extend the parser to read \$STANDARD_INFORMATION, \$FILE_NAME, and \$DATA attributes; implement and document controlled slack-space embedding. | Jeff      | Attribute-parser modules, structured MFT inventory, slack-space embedding procedure, and payload manifest. | Inventory reports filename, record number, file status, stream name, logical size, allocated size, and resident/non-resident state; one slack payload has a marker, byte length, location record, and SHA-256 hash. |
 
 **Milestone 5 - Midterm Integration and Evidence Package**
@@ -133,9 +133,20 @@ Final presentation date: November 29, 2026. Lucas will lead the project overview
 **7\. Required Final Outputs**
 
 - Python raw-sector NTFS parser.
-- ADS creation and slack-space embedding tools and procedures.
+- Documented manual ADS creation procedure and controlled slack-space embedding tool/procedure.
 - Read-only forensic extractor and recovery report.
 - Baseline and hidden-data .dd images with recorded hashes.
 - Payload and hash manifest.
 - Test results, hexdumps, screenshots, and evidence log.
 - Final report, slides, README updates, and live demonstration materials.
+
+**Plan clarification, October 15, 2026:** The ADS creation deliverable is
+Lucas's documented manual PowerShell procedure. The payload, image, evidence,
+and success criteria remain unchanged. Parser and read-only extractor
+development continue as planned.
+
+**Schedule clarification, October 18, 2026:** October 12 was the midterm
+deadline, not the start of preparation. The midterm package was submitted
+October 11. The originally allocated October 12 - 18 interval was therefore
+used for follow-up parser validation, evidence/documentation checks, and
+planning the next phase. Milestone 6 remains scheduled for October 19 - November 8.
