@@ -30,3 +30,27 @@ VirtualBox File Explorer screenshot are retained in the Week 6 evidence folder.
 The parser also displayed two additional `$...txt` names. They are not listed
 here because they were not identified as part of the controlled visible
 validation set.
+
+## Exact-size comparison completed October 18
+
+Lucas supplied a guest-VM PowerShell listing of full filenames and exact
+`Length` values. Jeff compared it with the unnamed `$DATA` logical sizes
+already recorded in [attribute validation](week7_attribute_parser_validation.md).
+All eight names and byte sizes match; this closes the exact-size follow-up.
+
+| File | Guest VM bytes | Parser logical bytes | Result |
+|---|---:|---:|---|
+| `HTMLtestdoc.html` | 608 | 608 | Match |
+| `JSON_test_File.json` | 579 | 579 | Match |
+| `SunflowerTest.jpg` | 48,647 | 48,647 | Match |
+| `Test.txt` | 83 | 83 | Match |
+| `Test2.txt` | 1,778 | 1,778 | Match |
+| `Testfile.docx` | 13,437 | 13,437 | Match |
+| `Thetestfile.pdf` | 17,247 | 17,247 | Match |
+| `WaterfallTest.png` | 277,325 | 277,325 | Match |
+
+![Lucas's VM PowerShell listing of the eight files and exact byte sizes, received October 18.](../reports/evidence/week9/w9_vm_exact_file_sizes.png)
+
+This independently checks names and logical sizes, not file-content hashes,
+timestamps, or complete image identity. Payload recovery/hash validation
+remains separate work.

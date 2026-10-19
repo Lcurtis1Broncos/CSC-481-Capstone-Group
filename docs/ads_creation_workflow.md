@@ -10,7 +10,7 @@ Lucas manually created the `CapstoneEvidence` named data stream on
 `D:\ADS_Test\hostfile.txt` in the dedicated VirtualBox NTFS lab. The parser
 identified the host in record 58 and reported the same stream name and length.
 This document records that workflow, with corrections supported by the source
-screenshots and local command/hash checks. It is not a standalone ADS tool.
+screenshots and local command/hash checks.
 
 ## Corrections to the supplied notes
 
@@ -105,3 +105,6 @@ hash and [Week 7 report](../reports/weekly_report_07.md) for the parser and
 source screenshots. Future read-only extraction must compare the recovered
 ADS bytes with the payload hash above; metadata agreement alone is not
 payload recovery.
+
+Creation commands above are a record of the controlled lab procedure, not
+instructions to overwrite the original host or recreate preserved evidence.
