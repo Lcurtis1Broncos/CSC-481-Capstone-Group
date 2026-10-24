@@ -1,0 +1,251 @@
+{
+  "test_id": "W10-RECOVERY-SUPPORT",
+  "run_utc": "2026-10-21T15:41:58.782917+00:00",
+  "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+  "source_sha256_before": "D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7",
+  "source_sha256_after": "D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7",
+  "source_unchanged": true,
+  "files": [
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 38,
+      "record_offset": 3222312960,
+      "host_filename": "Test.txt",
+      "stream_name": "",
+      "resident": true,
+      "logical_size": 83,
+      "initialized_size": 83,
+      "extents": [],
+      "slack": null,
+      "resident_note": "Content comes from the USA-restored MFT record, not a raw contiguous range.",
+      "output_filename": "Test.txt",
+      "recovered_length": 83,
+      "recovered_sha256": "D68EC557336622896727E44ED003136662FCD67CE8F9F57B23E70C0E09ADA797",
+      "expected_length": 83,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 39,
+      "record_offset": 3222313984,
+      "host_filename": "Test2.txt",
+      "stream_name": "",
+      "resident": false,
+      "logical_size": 1778,
+      "initialized_size": 1778,
+      "extents": [
+        {
+          "image_offset": 16203776,
+          "allocated_length": 4096
+        }
+      ],
+      "slack": {
+        "final_lcn": 3700,
+        "byte_offset": 16205554,
+        "length": 2318
+      },
+      "resident_note": null,
+      "output_filename": "Test2.txt",
+      "recovered_length": 1778,
+      "recovered_sha256": "BA7F25F70009A6D45A9EF88C857C9C357856AA6D1201486DE9070522CFAEE64E",
+      "expected_length": 1778,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 41,
+      "record_offset": 3222316032,
+      "host_filename": "Testfile.docx",
+      "stream_name": "",
+      "resident": false,
+      "logical_size": 13437,
+      "initialized_size": 13437,
+      "extents": [
+        {
+          "image_offset": 16035840,
+          "allocated_length": 16384
+        }
+      ],
+      "slack": {
+        "final_lcn": 3662,
+        "byte_offset": 16049277,
+        "length": 2947
+      },
+      "resident_note": null,
+      "output_filename": "Testfile.docx",
+      "recovered_length": 13437,
+      "recovered_sha256": "84A8A7AC155C36A5F4F9196A412D8DB16A6F12BD10794FEC362542E562DBE347",
+      "expected_length": 13437,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 42,
+      "record_offset": 3222317056,
+      "host_filename": "SunflowerTest.jpg",
+      "stream_name": "",
+      "resident": false,
+      "logical_size": 48647,
+      "initialized_size": 48647,
+      "extents": [
+        {
+          "image_offset": 16093184,
+          "allocated_length": 49152
+        }
+      ],
+      "slack": {
+        "final_lcn": 3684,
+        "byte_offset": 16141831,
+        "length": 505
+      },
+      "resident_note": null,
+      "output_filename": "SunflowerTest.jpg",
+      "recovered_length": 48647,
+      "recovered_sha256": "658C1F66CE1C2D05B51F4E20044981228AAE39BE33B14737B5ADD448378B9E7C",
+      "expected_length": 48647,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 43,
+      "record_offset": 3222318080,
+      "host_filename": "Thetestfile.pdf",
+      "stream_name": "",
+      "resident": false,
+      "logical_size": 17247,
+      "initialized_size": 17247,
+      "extents": [
+        {
+          "image_offset": 16072704,
+          "allocated_length": 20480
+        }
+      ],
+      "slack": {
+        "final_lcn": 3672,
+        "byte_offset": 16089951,
+        "length": 3233
+      },
+      "resident_note": null,
+      "output_filename": "Thetestfile.pdf",
+      "recovered_length": 17247,
+      "recovered_sha256": "61FCC2B322094257A6B845E15D7AEFF99564E83260EA413DB05180DD8A0E3C8C",
+      "expected_length": 17247,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 44,
+      "record_offset": 3222319104,
+      "host_filename": "WaterfallTest.png",
+      "stream_name": "",
+      "resident": false,
+      "logical_size": 277325,
+      "initialized_size": 277325,
+      "extents": [
+        {
+          "image_offset": 16216064,
+          "allocated_length": 131072
+        },
+        {
+          "image_offset": 16412672,
+          "allocated_length": 65536
+        },
+        {
+          "image_offset": 16674816,
+          "allocated_length": 65536
+        },
+        {
+          "image_offset": 17199104,
+          "allocated_length": 16384
+        }
+      ],
+      "slack": {
+        "final_lcn": 3946,
+        "byte_offset": 17214285,
+        "length": 1203
+      },
+      "resident_note": null,
+      "output_filename": "WaterfallTest.png",
+      "recovered_length": 277325,
+      "recovered_sha256": "19CE26BC665962B8B6B766C48EFFC8676D1191B7B46CACD165418892ED42AA08",
+      "expected_length": 277325,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 55,
+      "record_offset": 3222330368,
+      "host_filename": "HTMLtestdoc.html",
+      "stream_name": "",
+      "resident": true,
+      "logical_size": 608,
+      "initialized_size": 608,
+      "extents": [],
+      "slack": null,
+      "resident_note": "Content comes from the USA-restored MFT record, not a raw contiguous range.",
+      "output_filename": "HTMLtestdoc.html",
+      "recovered_length": 608,
+      "recovered_sha256": "815246781F0ADE404A0FECD2531CB027AB7F6C1177868967BC7CCA47D88AE0FB",
+      "expected_length": 608,
+      "length_match": true,
+      "original_content_hash_match": null
+    },
+    {
+      "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+      "record_number": 56,
+      "record_offset": 3222331392,
+      "host_filename": "JSON_test_File.json",
+      "stream_name": "",
+      "resident": true,
+      "logical_size": 579,
+      "initialized_size": 579,
+      "extents": [],
+      "slack": null,
+      "resident_note": "Content comes from the USA-restored MFT record, not a raw contiguous range.",
+      "output_filename": "JSON_test_File.json",
+      "recovered_length": 579,
+      "recovered_sha256": "65EAF0824C357D4FC9955E75CA29CF3F6476DCB0374241DAB08C3714991E8D34",
+      "expected_length": 579,
+      "length_match": true,
+      "original_content_hash_match": null
+    }
+  ],
+  "ads": {
+    "source_image": "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd",
+    "record_number": 58,
+    "record_offset": 3222333440,
+    "host_filename": "hostfile.txt",
+    "stream_name": "CapstoneEvidence",
+    "resident": true,
+    "logical_size": 36,
+    "initialized_size": 36,
+    "extents": [],
+    "slack": null,
+    "resident_note": "Content comes from the USA-restored MFT record, not a raw contiguous range.",
+    "output_filename": "hostfile_CapstoneEvidence.bin",
+    "recovered_length": 36,
+    "recovered_sha256": "E3CB29B996899849E804A8FD7DB33F7CCECBCB2569005353BD082D320D0D997E",
+    "expected_length": 36,
+    "expected_sha256": "E3CB29B996899849E804A8FD7DB33F7CCECBCB2569005353BD082D320D0D997E",
+    "length_match": true,
+    "hash_match": true
+  },
+  "slack_range": {
+    "final_lcn": 3662,
+    "byte_offset": 16049277,
+    "length": 2947
+  },
+  "result": "PASS for size, ADS payload hash, slack range, and source preservation checks",
+  "limitations": [
+    "Original content hashes for the eight baseline files were not supplied; hash equality is unverified.",
+    "Actual output hashes are recorded, not presented as independent original-file matches.",
+    "Slack bytes are not recovered by this test; only the documented range is checked.",
+    "Real-image offset results require independent offset review; synthetic tests check exact known offsets."
+  ]
+}
