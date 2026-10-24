@@ -11,7 +11,8 @@ lab's MBR full-disk image, it selects a `0x07` partition and verifies the NTFS
 boot-sector identifier. A volume-only input can begin directly at the boot
 sector. Output is terminal text: boot geometry, record headers, a bounded
 filename listing, selected attribute summaries, and supported data-run/slack
-locations. No payload extraction command is currently implemented.
+locations. As of October 21, the separate `ntfs_recovery.py` support layer can
+locate and export supported file streams; see the Week 10 validation below.
 
 Processing follows this sequence:
 
@@ -41,7 +42,7 @@ Multi-byte integer fields are little-endian unless identified as text.
 | Attribute | `0x08`, `0x09`, 1 byte each; `0x0A`, 2 bytes | Nonresident flag; name character count; name offset. |
 | Resident attribute | `0x10`, 4 bytes; `0x14`, 2 bytes | Content length; content offset. |
 | Nonresident attribute | `0x10`, 8 bytes; `0x20`, 2 bytes | Starting VCN; mapping-pairs offset. |
-| Nonresident attribute | `0x28`, `0x30`, 8 bytes each | Allocated and logical size. |
+| Nonresident attribute | `0x28`, `0x30`, `0x38`, 8 bytes each | Allocated, logical, and initialized size. |
 
 For this lab, partition offset is 1,048,576, cluster size is 4,096, and the
 first MFT record is at 3,222,274,048. File content location is
@@ -56,8 +57,10 @@ first MFT record is at 3,222,274,048. File content location is
   complete output against the source plus the intended marker range.
 - General fragmented-MFT traversal and extension-record/attribute-list
   resolution are not implemented. A successful lab run is not universal NTFS support.
-- The reader does not yet apply the embedding tool's sector-tail fixup checks
-  in every parsing path. Results involving those bytes need additional care.
+- The recovery layer applies the shared sector-tail fixup checks before
+  reading attributes or resident contents. The original metadata-reader CLI
+  does not yet apply those checks in every parsing path; its output is not a
+  substitute for the recovery layer's validated content.
 - Sparse runs can be recognized, but slack embedding excludes sparse,
   compressed, encrypted, resident, and extension-record streams.
 - Filename metadata is not the same as recovered contents. Use `$DATA` for
@@ -73,5 +76,8 @@ The tests cover valid and malformed sectors/records, filename and attribute
 decoding, signed data runs, sparse runs, slack boundaries, and protected image
 copying. Independent Windows output and manual byte reads complement unit
 tests. See [Week 9 validation](week9_validation.md) for the latest results.
-Future recovery tests must compare actual extracted bytes with original hashes
-and validate content locations for at least three files, as the plan requires.
+The [Week 10 recovery-support record](week10_recovery_support.md) describes
+the new support functions, independent first-run checks for three files, and
+the first recovered ADS hash comparison. Original hashes for the eight baseline
+files remain needed for independent content verification. These checks do not
+complete the full ADS/slack recovery campaign scheduled through November 8.

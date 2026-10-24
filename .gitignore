@@ -1,3 +1,8 @@
 __pycache__/
 *.py[cod]
 *.dd
+reports/evidence/week10/recovered*/
+# Personal lesson exports; retain locally, not as source/evidence submissions.
+/friday_ADS_recovered.bin
+/thursday_Test_recovered.txt
+/thursday_Testfile_recovered.docx

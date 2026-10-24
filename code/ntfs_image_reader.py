@@ -167,6 +167,26 @@ def read_mft_record(image_path: Path, byte_offset: int, record_size: int) -> byt
     return record
 
 
+def restore_record_fixups(record: bytes, sector_size: int) -> bytes:
+    """Validate the update-sequence array and restore original sector tails."""
+    usa_offset = int.from_bytes(record[4:6], "little")
+    usa_count = int.from_bytes(record[6:8], "little")
+    if sector_size <= 0 or len(record) % sector_size:
+        raise ValueError("Invalid record sector geometry.")
+    if usa_count != len(record) // sector_size + 1:
+        raise ValueError("Invalid MFT update-sequence count.")
+    if usa_offset < 8 or usa_offset + 2 * usa_count > len(record):
+        raise ValueError("Invalid MFT update-sequence array.")
+    restored = bytearray(record)
+    sequence = record[usa_offset : usa_offset + 2]
+    for index in range(1, usa_count):
+        tail = index * sector_size - 2
+        if record[tail : tail + 2] != sequence:
+            raise ValueError("MFT sector-tail fixup validation failed.")
+        restored[tail : tail + 2] = record[usa_offset + index * 2 : usa_offset + index * 2 + 2]
+    return bytes(restored)
+
+
 def parse_mft_record_header(record: bytes) -> dict[str, int | str | bool]:
     """Extract a few introductory fields from an MFT record header."""
     if len(record) < 24:
@@ -268,6 +288,9 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | str | bytes | bo
                 record[attribute_offset + 0x10 : attribute_offset + 0x18],
                 byteorder="little",
             )
+            attribute["end_vcn"] = int.from_bytes(
+                record[attribute_offset + 0x18 : attribute_offset + 0x20], "little"
+            )
             attribute["data_runs"] = record[
                 attribute_offset + run_offset : attribute_offset + attribute_length
             ]
@@ -278,6 +301,9 @@ def parse_mft_attributes(record: bytes) -> list[dict[str, int | str | bytes | bo
             attribute["real_size"] = int.from_bytes(
                 record[attribute_offset + 0x30 : attribute_offset + 0x38],
                 byteorder="little",
+            )
+            attribute["initialized_size"] = int.from_bytes(
+                record[attribute_offset + 0x38 : attribute_offset + 0x40], "little"
             )
 
         attributes.append(attribute)

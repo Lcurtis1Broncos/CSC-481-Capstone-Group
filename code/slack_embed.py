@@ -14,31 +14,11 @@ from ntfs_image_reader import (
     calculate_file_slack, decode_data_runs, find_windows_data_partition,
     get_mft_record_offset, parse_file_name_attribute, parse_mbr_partitions,
     parse_mft_attributes, parse_mft_record_header, parse_ntfs_boot_sector,
-    read_first_sector, read_mft_record, read_sector_at_offset,
+    read_first_sector, read_mft_record, read_sector_at_offset, restore_record_fixups,
 )
 
 LAB_IMAGE_SHA256 = "2240CF8A1AA9D30231C39C4672DC51157093314950C4930EBBF5D30F5F59D2F5"
 CHUNK_SIZE = 8 * 1024 * 1024
-
-
-def restore_record_fixups(record: bytes, sector_size: int) -> bytes:
-    """Validate the update-sequence array and restore original sector tails."""
-    usa_offset = int.from_bytes(record[4:6], "little")
-    usa_count = int.from_bytes(record[6:8], "little")
-    if sector_size <= 0 or len(record) % sector_size:
-        raise ValueError("Invalid record sector geometry.")
-    if usa_count != len(record) // sector_size + 1:
-        raise ValueError("Invalid MFT update-sequence count.")
-    if usa_offset < 8 or usa_offset + 2 * usa_count > len(record):
-        raise ValueError("Invalid MFT update-sequence array.")
-    restored = bytearray(record)
-    sequence = record[usa_offset : usa_offset + 2]
-    for index in range(1, usa_count):
-        tail = index * sector_size - 2
-        if record[tail : tail + 2] != sequence:
-            raise ValueError("MFT sector-tail fixup validation failed.")
-        restored[tail : tail + 2] = record[usa_offset + index * 2 : usa_offset + index * 2 + 2]
-    return bytes(restored)
 
 
 def locate_lab_slack(source: Path, record_number: int) -> dict:
