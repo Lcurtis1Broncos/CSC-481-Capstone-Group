@@ -8,8 +8,10 @@
 
 ## Work completed
 
-- Met with Lucas Monday, October 26 to discuss this week's assignments and
-  planned to meet again Friday to share our completed work.
+- Met with Lucas Monday, October 26 at 7:30 p.m. to discuss this week's
+  assignments and exchange our work and status. No issues were reported.
+- Met again Friday, October 30 at 7:30 p.m. We exchanged our completed work
+  and current status. No issues were reported.
 - Used the existing recovery implementation for this week's planned ADS
   validation instead of treating last week's code as new development.
 - Inspected MFT record 58 and confirmed hostfile.txt has a 31-byte unnamed

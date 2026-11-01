@@ -4,7 +4,7 @@
 
 **Team:** Lucas Curtis and Jeff Perez
 
-**Status:** Jeff's portion complete; updated November 1. Lucas's unconfirmed entries are left blank; team completion is not claimed.
+**Status:** Waiting for Lucas input
 
 ## Milestones achieved and progress against the plan
 
@@ -36,7 +36,7 @@ November 2 - 8. No schedule adjustment has been confirmed.
 | Jeff | Ran the October 29 integrated ADS recovery and checked expected/actual payload values and source before/after hashes. |
 | Jeff | Ran the October 30 wrong-expected-hash test and verified rejection without changing the image or payload. |
 | Jeff | Ran all 56 automated tests October 30; captured the passing result and supplied recovery screenshots and JSON reports. |
-| Jeff and Lucas | Met Monday, October 26 to discuss the week's assigned tasks; planned another meeting Friday to share completed work. |
+| Jeff and Lucas | Completed both meetings October 26 and October 30, starting at 7:30 p.m. Exchanged work and status; no issues were reported. |
 | Lucas | |
 
 Lucas's earlier workflow/template remains the basis for this week's tests;
@@ -189,8 +189,8 @@ mix-up was resolved by selecting the recovery utility; no code fix was needed.
   finalized for publication. No code change was required by these results.
 - Lucas's unconfirmed contribution/results fields and journal sections are
   intentionally blank for him to complete; no workflow run by him is claimed.
-- Friday's meeting outcome has not been confirmed as of November 1. Its
-  section in the single weekly minutes document remains explicitly unconfirmed.
+- Both meetings are complete, with their 7:30 p.m. start times and no-issue
+  status recorded in the single weekly minutes document.
 - Publish Jeff's completed portion for review. The team leader remains
   responsible for the course submission; publishing on GitHub is not proof
   of a submission to the course site.
