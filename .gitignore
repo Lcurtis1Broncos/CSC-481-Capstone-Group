@@ -6,3 +6,8 @@ reports/evidence/week10/recovered*/
 /friday_ADS_recovered.bin
 /thursday_Test_recovered.txt
 /thursday_Testfile_recovered.docx
+# Week 11 original run outputs; reports are preserved under reports/evidence/week11/.
+/week11_ADS_recovered.bin
+/week11_ADS_negative.bin
+/week11_ADS_report.json
+/week11_ADS_negative_report.json

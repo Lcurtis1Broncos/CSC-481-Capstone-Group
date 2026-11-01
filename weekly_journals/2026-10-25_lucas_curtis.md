@@ -56,5 +56,4 @@ as a team deliverable, not as an independent implementation or test run by me.
 - [GitHub contribution](https://github.com/Lcurtis1Broncos/CSC-481-Capstone-Group/commit/3f5339d)
 - [Week 10 team report](../reports/weekly_report_10.md)
 - [Recovery-support integration handoff](../docs/week10_recovery_support.md)
-- [October 20 meeting minutes](../meeting_minutes/2026-10-20.md)
-- [October 23 meeting minutes](../meeting_minutes/2026-10-23.md)
+- [Week 10 meeting minutes: October 20 and 23](../meeting_minutes/2026-10-20.md)
