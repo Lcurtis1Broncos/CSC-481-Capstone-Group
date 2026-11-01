@@ -45,15 +45,15 @@ are not attributed to Lucas.
 
 ### Lucas's workflow test results
 
-**Test date: 11/1/2026 **
+Test date: 11/1/2026 
 
-**Work completed: Used the ADS Recovery Workflow Template to test and verify ADS recovery in the ADS.dd image. **
+Work completed: Used the ADS Recovery Workflow Template to test and verify ADS recovery in the ADS.dd image. 
 
-**Recovery result and evidence: Recovery was successful. **
+Recovery result and evidence: Recovery was successful. 
 
-**Lessons learned: Learned to recover the ADS from the image and verify the contents. **
+Lessons learned: Learned to recover the ADS from the image and verify the contents. 
 
-**Problems encountered: No problems were encountered. **
+Problems encountered: No problems were encountered. 
 
 ## Detailed tests and decisive screenshots
 
