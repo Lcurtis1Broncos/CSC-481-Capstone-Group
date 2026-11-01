@@ -174,5 +174,4 @@ payload comparison; no new ADS or creation script is needed.
 
 - [Jeff's journal](../weekly_journals/2026-10-25_jeff_perez.md)
 - [Lucas's journal](../weekly_journals/2026-10-25_lucas_curtis.md)
-- [October 20 planning meeting](../meeting_minutes/2026-10-20.md)
-- [October 23 progress meeting](../meeting_minutes/2026-10-23.md)
+- [Week 10 meeting minutes: October 20 and 23](../meeting_minutes/2026-10-20.md)
