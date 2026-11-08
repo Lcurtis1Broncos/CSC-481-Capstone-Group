@@ -187,8 +187,6 @@ mix-up was resolved by selecting the recovery utility; no code fix was needed.
 
 - Jeff's validation, journal, reports, and embedded screenshot evidence are
   finalized for publication. No code change was required by these results.
-- Lucas's unconfirmed contribution/results fields and journal sections are
-  intentionally blank for him to complete; no workflow run by him is claimed.
 - Both meetings are complete, with their 7:30 p.m. start times and no-issue
   status recorded in the single weekly minutes document.
 - Publish Jeff's completed portion for review. The team leader remains
@@ -202,6 +200,6 @@ planned work is slack-space recovery and validation, November 2 - 8.
 ## Team records
 
 - [Jeff's journal](../weekly_journals/2026-11-01_jeff_perez.md)
-- [Lucas's journal: blank sections for his entry](../weekly_journals/2026-11-01_lucas_curtis.md)
+- [Lucas's journal](../weekly_journals/2026-11-01_lucas_curtis.md)
 - [Week 11 meeting minutes: October 26 and 30](../meeting_minutes/2026-10-26.md)
 - [Evidence index](evidence/week11/README.md)
