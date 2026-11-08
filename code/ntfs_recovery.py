@@ -8,7 +8,7 @@ $MFT layouts are deliberately refused rather than guessed.
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 import hashlib
 import json
@@ -38,6 +38,9 @@ class StreamLocation:
     # (absolute image offset, allocated byte count), in logical file order.
     extents: tuple[tuple[int, int], ...]
     slack: dict[str, int] | None
+    recovery_kind: str = "stream"
+    host_logical_size: int | None = None
+    slack_relative_offset: int | None = None
 
     def summary(self) -> dict:
         return {
@@ -52,6 +55,9 @@ class StreamLocation:
             "extents": [{"image_offset": offset, "allocated_length": length}
                         for offset, length in self.extents],
             "slack": self.slack,
+            "recovery_kind": self.recovery_kind,
+            "host_logical_size": self.host_logical_size,
+            "slack_relative_offset": self.slack_relative_offset,
             "resident_note": (
                 "Content comes from the USA-restored MFT record, not a raw contiguous range."
                 if self.resident_value is not None else None
@@ -194,8 +200,35 @@ def locate_stream(image: Path, record_number: int, stream_name: str = "") -> Str
                           logical_size, initialized_size, value, extents, slack)
 
 
+def locate_slack_payload(
+    image: Path, record_number: int, payload_length: int,
+    relative_offset: int = 0, stream_name: str = "",
+) -> StreamLocation:
+    """Select a bounded range within calculated final-cluster slack.
+
+    This uses the host's validated data runs, not an arbitrary supplied disk
+    offset. The caller must know the payload's location/length; no automatic
+    discovery or claim that the rest of slack is empty is made.
+    """
+    if type(payload_length) is not int or payload_length <= 0:
+        raise ValueError("Slack payload length must be a positive integer.")
+    if type(relative_offset) is not int or relative_offset < 0:
+        raise ValueError("Slack relative offset must be a nonnegative integer.")
+    host = locate_stream(image, record_number, stream_name)
+    if host.resident_value is not None or host.slack is None:
+        raise ValueError("Selected stream has no supported final-cluster slack.")
+    if relative_offset + payload_length > host.slack["length"]:
+        raise ValueError("Requested payload extends outside the calculated slack range.")
+    offset = host.slack["byte_offset"] + relative_offset
+    if offset + payload_length > host.image.stat().st_size:
+        raise ValueError("Requested slack payload exceeds the image.")
+    return replace(host, logical_size=payload_length, initialized_size=payload_length,
+                   extents=((offset, payload_length),), recovery_kind="slack_payload",
+                   host_logical_size=host.logical_size, slack_relative_offset=relative_offset)
+
+
 def iter_stream_content(location: StreamLocation):
-    """Yield logical content in bounded chunks; never include cluster slack.
+    """Yield the selected stream or explicit bounded slack payload in chunks.
 
     NTFS bytes past initialized size read as zero, not stale disk contents.
     Keep the source image unchanged between locating and recovering a stream.
@@ -267,6 +300,7 @@ def recover_with_report(
     destination: Path, report_path: Path, *,
     expected_length: int | None = None, expected_sha256: str | None = None,
     expected_image_sha256: str | None = None,
+    slack_length: int | None = None, slack_offset: int = 0,
 ) -> dict:
     """Team 3 extractor/report integration using the existing support engine.
 
@@ -287,15 +321,19 @@ def recover_with_report(
         raise ValueError("Output and report must both be NEW files; nothing is overwritten.")
     if not destination.parent.is_dir() or not report_path.parent.is_dir():
         raise ValueError("Output and report parent directories must already exist.")
-    location = locate_stream(image, record_number, stream_name)
+    if slack_length is None and slack_offset != 0:
+        raise ValueError("A slack offset requires a slack payload length.")
+    location = (locate_stream(image, record_number, stream_name) if slack_length is None
+                else locate_slack_payload(image, record_number, slack_length,
+                                          slack_offset, stream_name))
     before = _sha256_file(image)
     if expected_image_sha256 is not None and before != expected_image_sha256:
         raise ValueError("Source image hash does not match the expected image; export refused.")
     report = {
-        "test_id": "TEAM3-STREAM-RECOVERY",
+        "test_id": "TEAM3-SLACK-RECOVERY" if slack_length is not None else "TEAM3-STREAM-RECOVERY",
         "team": "CSC-481 Team 3",
         "created_utc": datetime.now(UTC).isoformat(),
-        "tool": "ntfs_recovery.py; Week 10 integrated reporting",
+        "tool": "ntfs_recovery.py; stream and bounded slack reporting",
         "source_image_path": str(image),
         "source_sha256_before": before,
         "source_sha256_after": None,
@@ -348,7 +386,11 @@ def main() -> None:
     parser.add_argument("--expected-length", type=int, help="original payload byte count")
     parser.add_argument("--expected-sha256", help="original payload SHA-256 from its manifest")
     parser.add_argument("--expected-image-sha256", help="refuse export if source image differs")
+    parser.add_argument("--slack-length", type=int, help="recover this many bytes from calculated slack")
+    parser.add_argument("--slack-offset", type=int, default=0, help="byte offset within slack; default zero")
     args = parser.parse_args()
+    if args.slack_length is None and args.slack_offset != 0:
+        parser.error("--slack-offset requires --slack-length")
     if args.report is not None and args.output is None:
         parser.error("--report requires --output")
     if args.report is None and any(value is not None for value in (
@@ -360,9 +402,12 @@ def main() -> None:
                 args.image, args.record, args.stream, args.output, args.report,
                 expected_length=args.expected_length, expected_sha256=args.expected_sha256,
                 expected_image_sha256=args.expected_image_sha256,
+                slack_length=args.slack_length, slack_offset=args.slack_offset,
             )
         else:
-            location = locate_stream(args.image, args.record, args.stream)
+            location = (locate_stream(args.image, args.record, args.stream)
+                        if args.slack_length is None else locate_slack_payload(
+                            args.image, args.record, args.slack_length, args.slack_offset, args.stream))
             result = recover_stream(location, args.output) if args.output else location.summary()
         print(json.dumps(result, indent=2))
     except (OSError, ValueError) as error:
