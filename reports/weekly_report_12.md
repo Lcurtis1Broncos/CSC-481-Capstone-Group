@@ -140,8 +140,7 @@ bounded-slack selection tests.*
 - Finalize journals/report and publish genuine contributions for the November 8 submission.
 - Retain the independent baseline-file hash gap in Milestone 6 tracking.
 
-Next week's plan begins the full test campaign and forensic documentation,
-November 9 - 15. Do not represent unverified milestone checks as completed.
+Next week's plan ( November 9 - 15) begins the full test campaign and forensic documentation
 
 ## Supporting documents
 
