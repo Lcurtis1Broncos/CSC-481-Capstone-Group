@@ -97,6 +97,24 @@ recovery errors. Preflight errors create no output/report. Failures after
 reservation may leave a diagnostic report or partial output; do not label
 these successful recoveries. Existing files are never automatically replaced.
 
+## Recover a Known Slack Payload
+
+Use `--slack-length` to select bytes from a file's calculated final-cluster
+slack instead of its normal content. The default offset is zero within the
+slack region; optional `--slack-offset` selects a later byte within that
+region. These offsets are not absolute disk offsets. Out-of-range requests,
+resident streams, and files without final-cluster slack are refused.
+
+```powershell
+py code/ntfs_recovery.py "NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd" --record 41 --slack-length 25 --output "slack_verified.bin" --report "slack_verified_report.json" --expected-length 25 --expected-sha256 3BF8F582FF237AD7F739D39EDCF54CB35E0E6FDFD75AD47CA55F3598629390F2 --expected-image-sha256 D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7
+```
+
+Choose new output/report filenames for each run. The command does not discover
+unknown hidden payloads: the expected length/hash come from the lab manifest.
+Reports distinguish the payload size from `host_logical_size`, label the
+`recovery_kind` as `slack_payload`, and retain the full calculated slack range.
+See [Week 12 slack validation](docs/week12_slack_validation.md).
+
 ## Safety Note
 
 Use only controlled practice images or images you are authorized to examine.

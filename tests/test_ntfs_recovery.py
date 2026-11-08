@@ -10,7 +10,7 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "code"))
-from ntfs_recovery import locate_stream, iter_stream_content, recover_stream, recover_with_report
+from ntfs_recovery import locate_stream, locate_slack_payload, iter_stream_content, recover_stream, recover_with_report
 from test_ntfs_image_reader import (
     make_boot_sector, make_resident_attribute, make_nonresident_data_attribute,
     make_record_with_attributes, make_mbr_sector,
@@ -186,6 +186,81 @@ class RecoveryTests(unittest.TestCase):
         result = recover_stream(locate_stream(self.image, 1), self.root / "empty")
         self.assertEqual(result["recovered_length"], 0)
         self.assertEqual((self.root / "empty").read_bytes(), b"")
+
+    def test_slack_payload_follows_final_fragment_and_preserves_source(self):
+        original = self.image_bytes(nonresident())
+        location = locate_slack_payload(self.image, 1, 25)
+        self.assertEqual(location.extents, ((5308, 25),))
+        self.assertEqual(location.host_logical_size, 700)
+        self.assertEqual(location.recovery_kind, "slack_payload")
+        result = recover_stream(location, self.root / "slack.bin")
+        self.assertEqual((self.root / "slack.bin").read_bytes(), b"B" * 25)
+        self.assertEqual(result["recovered_length"], 25)
+        self.assertEqual(self.image.read_bytes(), original)
+
+    def test_slack_payload_relative_offset_and_exact_boundary(self):
+        self.image_bytes(nonresident())
+        location = locate_slack_payload(self.image, 1, 24, 300)
+        self.assertEqual(location.extents, ((5608, 24),))
+        self.assertEqual(b"".join(iter_stream_content(location)), b"B" * 24)
+        whole = locate_slack_payload(self.image, 1, 324)
+        self.assertEqual(len(b"".join(iter_stream_content(whole))), 324)
+
+    def test_slack_payload_rejects_invalid_lengths_and_outside_ranges(self):
+        self.image_bytes(nonresident())
+        for length, offset in ((0, 0), (-1, 0), (True, 0), (25, -1),
+                               (325, 0), (25, 300), (1, 324)):
+            with self.subTest(length=length, offset=offset):
+                with self.assertRaises(ValueError):
+                    locate_slack_payload(self.image, 1, length, offset)
+
+    def test_slack_payload_refuses_resident_aligned_and_empty_streams(self):
+        for attribute in (make_resident_attribute(0x80, b"test"),
+                          nonresident(size=512), nonresident(size=0)):
+            self.image_bytes(attribute)
+            with self.assertRaisesRegex(ValueError, "no supported"):
+                locate_slack_payload(self.image, 1, 1)
+
+    def test_slack_report_pass_and_wrong_expectation_fail(self):
+        self.image_bytes(nonresident())
+        for stem, expected, status in (("good", hashlib.sha256(b"B" * 25).hexdigest(), "PASS"),
+                                       ("bad", "0" * 64, "FAIL")):
+            result = self.report_run(stem=stem, slack_length=25,
+                                     expected_length=25, expected_sha256=expected)
+            self.assertEqual(result["overall_result"], status)
+            self.assertEqual(result["test_id"], "TEAM3-SLACK-RECOVERY")
+            self.assertEqual(result["host_logical_size"], 700)
+            self.assertTrue(result["source_unchanged"])
+
+    def test_slack_invalid_report_range_creates_no_files(self):
+        self.image_bytes(nonresident())
+        for options in ({"slack_length": 325}, {"slack_offset": 1}):
+            with self.assertRaises(ValueError):
+                self.report_run(**options)
+        self.assertFalse((self.root / "report.bin").exists())
+        self.assertFalse((self.root / "report.json").exists())
+
+    def test_slack_cli_recovers_only_selected_slack_bytes(self):
+        self.image_bytes(nonresident())
+        script = Path(__file__).resolve().parents[1] / "code" / "ntfs_recovery.py"
+        result = subprocess.run([sys.executable, str(script), str(self.image),
+            "--record", "1", "--slack-length", "25", "--output", str(self.root / "slack.bin"),
+            "--report", str(self.root / "slack.json"), "--expected-length", "25",
+            "--expected-sha256", hashlib.sha256(b"B" * 25).hexdigest()],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["overall_result"], "PASS")
+        self.assertEqual((self.root / "slack.bin").read_bytes(), b"B" * 25)
+
+    def test_slack_export_reuses_no_overwrite_protection(self):
+        self.image_bytes(nonresident())
+        location = locate_slack_payload(self.image, 1, 25)
+        existing = self.root / "keep"
+        existing.write_bytes(b"keep")
+        for destination in (existing, self.image):
+            with self.assertRaises(ValueError):
+                recover_stream(location, destination)
+        self.assertEqual(existing.read_bytes(), b"keep")
 
     def report_run(self, *, stem="report", **expectations):
         return recover_with_report(self.image, 1, "", self.root / f"{stem}.bin",
