@@ -13,6 +13,7 @@
 4. [ADS creation and parsing](#4-ads-creation-and-parsing)
 5. [Slack-space marker placement](#5-slack-space-marker-placement)
 6. [Parser validation](#6-parser-validation)
+7. [Screenshot-by-screenshot identification](#screenshot-by-screenshot-identification)
 7. [File and ADS recovery](#7-file-and-ads-recovery)
 8. [ADS positive and negative tests](#8-ads-positive-and-negative-tests)
 9. [Bounded slack recovery](#9-bounded-slack-recovery)
@@ -21,6 +22,109 @@
 12. [Evidence limitations](#evidence-limitations)
 
 ---
+
+## Screenshot-by-screenshot identification
+
+**How these descriptions were prepared:** The explanations below are based on the matching weekly progress reports and the evidence-folder README files. They identify the command or artifact shown, the capstone task it supports, and the result the team recorded. They are documentation-based descriptions, not a claim that the image pixels were independently re-inspected.
+
+### Week 3 — NTFS research and initial boot-sector reader
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w3_ntfs_image_test.png](evidence/week3/w3_ntfs_image_test.png) | Terminal test of the initial read-only reader against the controlled `7-ntfs-undel.dd` image. It displays the NTFS identifier, 512-byte sectors, 2 sectors per cluster (1,024-byte clusters), MFT start LCN 2005, 1,024-byte MFT records, and a valid boot signature. Supports the first boot-sector parsing milestone. |
+| [w3_automated_tests.png](evidence/week3/w3_automated_tests.png) | Automated parser test run: three tests passed, covering 1,024-byte and 4,096-byte cluster layouts and rejection of an image shorter than one sector. Supports repeatable validation of the initial reader. |
+| [w3_evidence_log_template.png](evidence/week3/w3_evidence_log_template.png) | Lucas's evidence-log template. It documents the proposed consistent format for recording forensic evidence as the project develops. |
+| [w3_ntfs_research.png](evidence/week3/w3_ntfs_research.png) | Lucas's NTFS on-disk structure research. Supports the research task by documenting important filesystem structures and their forensic value. |
+| [w3_ntfs_definitions.png](evidence/week3/w3_ntfs_definitions.png) | Lucas's reference for NTFS structures and fields, including boot-sector, MFT, and data-attribute terminology. Supports the team's shared technical vocabulary. |
+
+### Week 4 — First MFT record and baseline image
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w4_mft_record_read.png](evidence/week4/w4_mft_record_read.png) | Reader output using boot-sector geometry to locate MFT record 0 (`$Mft`) in the controlled image. The report records byte offset 2,053,120, a 1,024-byte record, valid `FILE` signature, first attribute at byte 56, and in-use/non-directory flags. Demonstrates the first MFT-record read. |
+| [w4_automated_tests.png](evidence/week4/w4_automated_tests.png) | Automated reader suite with six passing tests, including MFT-offset calculation, valid/invalid MFT signatures, valid record parsing, cluster layouts, and short-image rejection. |
+
+### Week 5 — Full-disk partition and NTFS geometry validation
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w5_ntfs_partition_identifier.png](evidence/week5/w5_ntfs_partition_identifier.png) | Manual sector read at byte offset 1,048,576 that returns the NTFS identifier. Confirms the parser must skip the full-disk partition area and inspect the partition's volume boot sector. |
+| [w5_ntfs_boot_sector_fields.png](evidence/week5/w5_ntfs_boot_sector_fields.png) | Manual boot-sector field check: 512 bytes per sector, 8 sectors per cluster, 4,096 bytes per cluster, MFT start LCN 786,432, and valid `55 AA` boot signature. Supports independent validation of NTFS geometry. |
+| [w5_full_disk_mft_reader.png](evidence/week5/w5_full_disk_mft_reader.png) | Full-disk reader output showing MBR partition type `0x07`, start LBA 2,048, NTFS boot offset 1,048,576, valid NTFS/boot signatures, MFT start LCN 786,432, MFT record 0 at byte offset 3,222,274,048, valid `FILE` signature, and volume serial. Demonstrates partition-aware MFT addressing. |
+| [w5_fsutil_ntfsinfo_comparison.png](evidence/week5/w5_fsutil_ntfsinfo_comparison.png) | Windows `fsutil fsinfo ntfsinfo D:` output from the VirtualBox guest, compared with the parser's values. The weekly report records matching volume serial, sector/cluster sizes, MFT record size, MFT start LCN, and MFT mirror LCN. This is an independent cross-check. |
+| [w5_automated_tests.png](evidence/week5/w5_automated_tests.png) | Ten automated tests passing for boot-sector, MBR partition, offset-read, absolute MFT-offset, volume-serial, and earlier reader behavior. |
+
+### Week 6 — Known-file validation set and MFT filename listing
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w6_vm_baseline_files.png](evidence/week6/w6_vm_baseline_files.png) | VirtualBox guest File Explorer showing the eight controlled validation files on the NTFS baseline volume. Establishes which files should later be found by the parser. |
+| [w6_files_added_image_hash.png](evidence/week6/w6_files_added_image_hash.png) | PowerShell `Get-FileHash` output for the RAW image after the eight test files were added. The weekly report records SHA-256 `053D7CF98D07AAAEE265A1B4D027B384C528ABC55F1D59310B9BFDEE2CB76691`. Supports image-integrity tracking for the known-file image. |
+| [w6_mft_file_listing_part1.png](evidence/week6/w6_mft_file_listing_part1.png) | First part of the parser run, showing the full-disk image and its partition/NTFS/MFT validation before or at the start of the MFT filename scan. Establishes the image context for the listing. |
+| [w6_mft_file_listing_part2.png](evidence/week6/w6_mft_file_listing_part2.png) | Continuation of the MFT scan showing the eight known filenames found in the first 64 records: Test.txt (38), Test2.txt (39), Testfile.docx (41), SunflowerTest.jpg (42), Thetestfile.pdf (43), WaterfallTest.png (44), HTMLtestdoc.html (55), and JSON_test_File.json (56). Demonstrates filename discovery against the controlled set. |
+| [w6_automated_tests.png](evidence/week6/w6_automated_tests.png) | Twelve automated tests passing after adding MFT attribute walking, resident `$FILE_NAME` decoding, and filename listing. |
+
+### Week 7 — Attribute parsing and controlled ADS creation
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w7_attribute_summary_normal_file.png](evidence/week7/w7_attribute_summary_normal_file.png) | Parser summary for ordinary file `Test.txt`, including `$FILE_NAME` and unnamed resident `$DATA` (the weekly report also describes `$STANDARD_INFORMATION`). Demonstrates interpretation of normal-file attributes before examining ADS. |
+| [w7_automated_tests.png](evidence/week7/w7_automated_tests.png) | Seventeen automated tests passing after support for `$STANDARD_INFORMATION`, `$FILE_NAME`, and `$DATA` parsing, timestamps, flags, named resident/nonresident data, and record offsets. |
+| [w7_ads_parser_host_record.png](evidence/week7/w7_ads_parser_host_record.png) | Parser command and image validation leading to MFT record 58, which identifies `hostfile.txt`. Establishes the host record selected for the controlled ADS test. |
+| [w7_ads_parser_result.png](evidence/week7/w7_ads_parser_result.png) | Parser output for record 58 showing the 31-byte unnamed resident DATA stream and the 36-byte resident `CapstoneEvidence` named stream. Demonstrates ADS metadata recognition, not yet payload extraction. |
+| [w7_ads_stream_info.png](evidence/week7/w7_ads_stream_info.png) | Guest-VM evidence for the host file, stream name, unique marker, byte length, and payload hash. Supports the controlled ADS creation manifest. |
+| [w7_ads_stream_lengths.png](evidence/week7/w7_ads_stream_lengths.png) | Guest-VM stream listing comparing the 31-byte ordinary file contents with the 36-byte named ADS. Confirms the distinct stream lengths. |
+| [w7_ads_payload_hash.png](evidence/week7/w7_ads_payload_hash.png) | Guest-VM calculation of the ADS payload SHA-256. Provides the original expected payload hash later used to verify recovery. |
+| [w7_ads_image_hash.png](evidence/week7/w7_ads_image_hash.png) | RAW image export and SHA-256 evidence for the ADS-created working image. Supports image provenance/integrity tracking. |
+
+### Week 8 — Slack-space identification and marker placement
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w8_data_runs_slack.png](evidence/week8/w8_data_runs_slack.png) | Parser output for record 41 (`Testfile.docx`) showing its data run/final allocated cluster and calculated 2,947-byte slack region beginning at image offset 16,049,277. Supports locating the bounded slack range. |
+| [w8_slack_marker_readback.png](evidence/week8/w8_slack_marker_readback.png) | PowerShell read-back of the 25-byte marker `TEAM3_SLACK_TEST_20261008` at offset 16,049,277, with its byte length and matching SHA-256. Confirms the controlled marker was written to and read from the documented range. |
+| [w8_automated_tests.png](evidence/week8/w8_automated_tests.png) | Automated test run showing 31 tests passing after data-run/slack-related parser and embedding work. |
+
+### Week 9 — Parser revalidation and exact file-size comparison
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w9_parser_record41.png](evidence/week9/w9_parser_record41.png) | Parser command, image geometry, and record 41 identification as `Testfile.docx`, with logical size 13,437 bytes and allocated size 16,384 bytes. Establishes the file whose final-cluster slack is analyzed. |
+| [w9_parser_slack_ads.png](evidence/week9/w9_parser_slack_ads.png) | Continuation showing record 41's data run and 2,947-byte slack at offset 16,049,277, followed by record 58's `hostfile.txt` and its 31-byte unnamed DATA plus 36-byte `CapstoneEvidence` ADS. Revalidates both controlled targets. |
+| [w9_vm_exact_file_sizes.png](evidence/week9/w9_vm_exact_file_sizes.png) | Guest-VM PowerShell listing of all eight full filenames and exact byte lengths. The weekly report says all eight lengths matched the parser's recorded logical sizes; this is size validation, not a content-hash comparison. |
+| [w9_automated_tests.png](evidence/week9/w9_automated_tests.png) | October 15 regression run showing all 31 automated tests passing, with no skips or failures. |
+
+### Week 10 — File/ADS recovery and reporting integration
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w10_resident_recovery.png](evidence/week10/w10_resident_recovery.png) | Hands-on recovery of resident `Test.txt` from MFT record 38. The weekly report records an 83-byte output, demonstrating recovery from resident MFT data. |
+| [w10_nonresident_recovery.png](evidence/week10/w10_nonresident_recovery.png) | Hands-on recovery of nonresident `Testfile.docx` from record 41. The output is 13,437 logical bytes; the 2,947 allocated slack bytes are correctly excluded from ordinary file recovery. |
+| [w10_overwrite_refusal.png](evidence/week10/w10_overwrite_refusal.png) | Repeated recovery using an existing destination path. The utility refuses to overwrite the existing output, demonstrating an evidence-safety safeguard. |
+| [w10_ads_recovery.png](evidence/week10/w10_ads_recovery.png) | Recovery of the named `CapstoneEvidence` ADS from record 58. The expected output is 36 bytes and its SHA-256 matches the original ADS manifest hash. |
+| [w10_automated_tests_command.png](evidence/week10/w10_automated_tests_command.png) | Command and initial output for Jeff's October 23 regression run of the 45-test suite. |
+| [w10_automated_tests_summary.png](evidence/week10/w10_automated_tests_summary.png) | Final summary of that October 23 run: 45 tests passed in 0.297 seconds, with no skips or failures. |
+| [w10_integrated_tests_command.png](evidence/week10/w10_integrated_tests_command.png) | Command and initial output for the October 24 expanded regression run covering automated extractor/report integration. |
+| [w10_integrated_tests_summary.png](evidence/week10/w10_integrated_tests_summary.png) | Final summary of the October 24 expanded suite: 56 tests passed in 1.708 seconds, with no skips or failures. |
+
+### Week 11 — ADS recovery verification and negative testing
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w11_parser_ads_streams.png](evidence/week11/w11_parser_ads_streams.png) | Record 58 metadata showing the 31-byte unnamed stream and 36-byte named `CapstoneEvidence` ADS. Shows why the named stream must be explicitly selected for ADS recovery. |
+| [w11_ads_recovery_pass.png](evidence/week11/w11_ads_recovery_pass.png) | October 29 positive ADS recovery result: 36 bytes recovered, expected and actual payload hashes match, expected source-image hash matches, and the source image is unchanged before/after. Overall result PASS. |
+| [w11_ads_expected_hash_fail.png](evidence/week11/w11_ads_expected_hash_fail.png) | October 30 negative test with an intentionally incorrect expected SHA-256 (64 zeros). The 36-byte length still matches, but payload hash comparison is false and overall result is FAIL as intended; the source image remains unchanged. This is a successful negative test, not a recovery defect. |
+| [w11_automated_tests.png](evidence/week11/w11_automated_tests.png) | October 30 regression run showing all 56 tests passed in 1.694 seconds, without skips or failures. |
+
+### Week 12 — Bounded slack recovery
+
+| Screenshot | What it shows and why it matters |
+|---|---|
+| [w12_slack_location.png](evidence/week12/w12_slack_location.png) | November 3 inspection of record 41 confirming `Testfile.docx` has 13,437 logical bytes, a 16,384-byte allocation, and a 2,947-byte slack region beginning at offset 16,049,277. Establishes the location and bounds for recovery. |
+| [w12_manual_marker_recovery.png](evidence/week12/w12_manual_marker_recovery.png) | November 4 read-only manual extraction of exactly 25 bytes from the documented slack offset. The output displays `TEAM3_SLACK_TEST_20261008`; hash verification is documented separately. |
+| [w12_slack_recovery_pass.png](evidence/week12/w12_slack_recovery_pass.png) | Display of the saved integrated recovery report from November 6. It records 25 bytes recovered, matching expected payload length/hash, matching source-image hash before/after, and overall PASS. It is a display of the saved report, not a separate recovery execution. |
+| [w12_automated_tests_command.png](evidence/week12/w12_automated_tests_command.png) | Command and initial output for Jeff's November 6 rerun of the expanded 64-test suite, including bounded-slack recovery tests. |
+| [w12_automated_tests_summary.png](evidence/week12/w12_automated_tests_summary.png) | Final summary of Jeff's November 6 regression rerun: 64 tests passed in 4.741 seconds, with no failures or skips. |
 
 ## 1. NTFS research and evidence format
 
