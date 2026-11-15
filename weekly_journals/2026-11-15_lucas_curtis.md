@@ -4,7 +4,7 @@
 
 **Reporting period:** November 9–15, 2026
 
-**Status:** Draft — awaiting Lucas's review and reflections
+**Status:** Complete
 
 ## Work completed
 
@@ -18,10 +18,15 @@
   and identify fields for Jeff to complete.
 
 ## What I learned
+My tasks this week were simple, so I didn't learn much; I suppose I got better at getting the repository
+organized and made sure everything was in order.
 
 ## Problems encountered and resolution
+No major problems occurred this week. I had a minor merge issue with a Pull Request from Jeff, but I got it fixed; it was just a name mismatch for one
+of the documents I created.
 
 ## Plan for next week
+I will be finalizing the evidence log and technical report, as well as any document clean-ups and organization.
 
 ## Supporting evidence
 
