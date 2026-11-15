@@ -26,5 +26,5 @@
 ## Supporting evidence
 
 - [Forensic evidence catalog](../reports/FORENSIC_EVIDENCE_CATALOG.md)
-- [Week 12 slack workflow write-up](../reports/evidence/week12/WEEK12_SLACK_SPACE_RECOVERY_WORKFLOW.md)
+- [Week 12 slack workflow write-up](../reports/evidence/week12/WEEK12_Slack_Space_Recovery_Results.md)
 - [Week 13 report](../reports/weekly_report_13.md)
