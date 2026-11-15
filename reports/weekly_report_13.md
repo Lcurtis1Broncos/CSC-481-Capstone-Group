@@ -77,4 +77,4 @@ No unexpected test failures were observed in the checks recorded above.
 
 - [November 9 planning minutes](../meeting_minutes/2026-11-09.md)
 - [Jeff's journal](../weekly_journals/2026-11-15_jeff_perez.md)
-- [Lucas's journal draft](../weekly_journals/2026-11-15_lucas_curtis.md)
+- [Lucas's journal](../weekly_journals/2026-11-15_lucas_curtis.md)
