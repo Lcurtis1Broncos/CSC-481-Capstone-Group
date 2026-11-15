@@ -4,7 +4,7 @@
 
 **Team:** Capstone Project Team 3
 
-**Status:** Ready for team review
+**Status:** Complete — Week 13 testing and evidence documented
 
 ## Progress against the plan
 
@@ -21,7 +21,9 @@ documentation remain scheduled for November 16–22.
 - **Lucas:** Added the forensic evidence catalog, including a hash register,
   screenshot index, and payload hexdumps. Published the Week 12 slack workflow
   write-up on November 15; it records Week 12 work, not a new Week 13 test.
-- **Team:** Met November 9 to discuss the work planned for the week.
+- **Team:** Met November 9 to plan the week and November 15 from 11:00 to
+  11:30 a.m. to finalize the week's work. Discussed Lucas's template-based
+  slack write-up and the fields that still needed supporting evidence.
 
 ## November 15 test results
 
@@ -53,15 +55,15 @@ image. The original acceptance values come from the [known-file manifest](../doc
 - [November 15 slack payload and source-hash results](evidence/week13/slack_validation.json)
 - [Forensic evidence catalog](FORENSIC_EVIDENCE_CATALOG.md)
 
-### Prior reference screenshots
+### November 15 verification screenshots
 
-These illustrate the earlier verification workflow; they are not screenshots
-of the November 15 reruns. The dated machine-readable results and test log
-above document the current run.
+These screenshots display the saved results of the November 15 runs.
 
-![Week 11 reference: ADS payload verification passed.](evidence/week11/w11_ads_recovery_pass.png)
+![Figure 1. Week 13 regression log: all 64 tests passed in 4.729 seconds.](evidence/week13/w13_regression.png)
 
-![Week 12 reference: slack marker verification passed.](evidence/week12/w12_slack_recovery_pass.png)
+![Figure 2. Week 13 image validation: the 36-byte ADS matched its original SHA-256, and the calculated slack range matched the manifest.](evidence/week13/w13_ads_validation.png)
+
+![Figure 3. Week 13 bounded slack recovery: the 25-byte payload matched its original SHA-256, the source image was unchanged, and the result was PASS.](evidence/week13/w13_slack_validation.png)
 
 ## Lessons and remaining checks
 

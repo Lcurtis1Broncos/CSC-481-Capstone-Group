@@ -13,6 +13,9 @@
   screenshots, and payload hexdumps.
 - Published the Week 12 slack-recovery workflow write-up on November 15.
   This documents prior-week work and is not treated as a fresh Week 13 test.
+- Used the existing slack-test evidence to populate the workflow template.
+- Met November 15 from 11:00 to 11:30 a.m. to finalize the week's work
+  and identify fields for Jeff to complete.
 
 ## What I learned
 
