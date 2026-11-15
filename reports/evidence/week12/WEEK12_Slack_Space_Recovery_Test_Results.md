@@ -29,22 +29,22 @@ The task was a **known-range, bounded slack-payload recovery test**. It did not 
 | Field | Recorded value |
 |---|---|
 | Evidence ID | `TEAM3-SLACK-RECOVERY` |
-| Original image filename | Original acquisition filename not recorded in the Week 12 report |
+| Pre-embedding source image (E-004) | `NTFS_Forensic_Baseline_ADS_Created_RAW.dd` |
 | Source/working image filename | `NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd` |
-| Original image size (bytes) | Not recorded in the Week 12 source documents |
-| Working image size (bytes) | Not recorded in the Week 12 source documents |
-| Original SHA-256 | Not separately recorded for this recovery run |
+| Pre-embedding source size (bytes) | 8,589,930,496 (local file length checked November 15) |
+| Working image size (bytes) | 8,589,930,496 (local file length checked November 15) |
+| Pre-embedding source SHA-256 | `2240CF8A1AA9D30231C39C4672DC51157093314950C4930EBBF5D30F5F59D2F5` (recorded in the Week 8 manifest) |
 | Source/working image SHA-256 before | `D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7` |
 | Source/working image SHA-256 after | `D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7` |
 | Expected working-image SHA-256 | `D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7` |
-| Image creation date | Not recorded in the Week 12 source documents |
-| Working copy creation date | Not recorded in the Week 12 source documents |
+| E-004 acquisition timestamp | Exact acquisition time not recorded. E-004 validation is documented on October 3, 2026. |
+| Working copy creation date | October 8, 2026 (Week 8 manifest and evidence log) |
 | Recovery source path in report | `NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd` |
 | Analyst | Jeff Perez |
 
 **Result:** PASS. The source hash matched the expected working-image hash, and the before/after hashes were identical. The report records `source_image_hash_match: true` and `source_unchanged: true`.
 
-**Integrity note:** The Week 12 report establishes that the image used for this recovery was unchanged. It does not provide a separate original-acquisition image hash or image byte size; those values are intentionally left unspecified.
+**Integrity note:** E-004 is the pre-embedding source for this experiment, not the original clean acquisition. E-005 is the recovery input. The Week 8 manifest records the intended 25-byte difference between them. Preservation for this recovery is verified by comparing E-005 against itself before and after extraction, not by expecting E-004 and E-005 to have identical hashes.
 
 ## 2. Identify NTFS Partitions
 
@@ -56,18 +56,18 @@ The Week 12 recovery report identifies the source as an NTFS working image and r
 |---|---|
 | Evidence ID | `TEAM3-SLACK-RECOVERY` |
 | Image filename | `NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd` |
-| Partition number | Not recorded in the Week 12 source documents |
-| Partition starting sector | Not recorded in the Week 12 source documents |
-| Partition offset (bytes) | Not recorded in the Week 12 source documents |
-| Partition size (bytes) | Not recorded in the Week 12 source documents |
-| Sector size (bytes) | Not recorded in the Week 12 source documents |
+| Partition number | 1 (MBR type 0x07) |
+| Partition starting sector | 2,048 |
+| Partition offset (bytes) | 1,048,576 |
+| Partition size (bytes) | 8,586,788,864 (16,771,072 MBR sectors × 512 bytes) |
+| Sector size (bytes) | 512 |
 | Cluster size (bytes) | 4,096 |
-| NTFS volume label | Not recorded in the Week 12 source documents |
+| NTFS volume label | `NTFS_BASELINE` (verified in the working image's NTFS volume-name attribute) |
 | Filesystem type | NTFS |
 | Tool used | `ntfs_recovery.py` (stream and bounded-slack reporting) |
 | Date examined | November 3–6, 2026 |
 
-**Note:** The 4,096-byte cluster size is consistent with the Week 12 validation's 16,384-byte allocation spanning four clusters. Partition geometry is not inferred here because it is not included in the two source documents used for this report.
+**November 15 supplement:** Partition start and sector size were checked from the working image using the image reader. Partition length was read from the first MBR entry and is not the NTFS boot sector's total-sector field. Image sizes were measured from the local RAW files. The volume label was verified from the volume-name attribute in MFT record 3.
 
 ## 3. Identify Files and MFT Records
 
@@ -79,7 +79,7 @@ The selected file was `Testfile.docx`, identified in MFT record 41. The weekly r
 |---|---|
 | Evidence ID | `TEAM3-SLACK-RECOVERY` |
 | Original filename | `Testfile.docx` |
-| File path | Full host path not recorded; file is identified by name in the NTFS image |
+| File path | `\Testfile.docx` (relative to the NTFS volume root; the filename attribute in record 41 points to root record 5) |
 | File extension | `.docx` |
 | File class | Document |
 | MFT record number | 41 |
@@ -155,7 +155,7 @@ The integrated recovery/report utility used MFT record 41 and the bounded option
 | Extracted filename | `w12_slack_marker.bin` |
 | Extraction method | Manual read-only extraction; integrated bounded slack recovery |
 | Extraction tool | `ntfs_recovery.py` (stream and bounded slack reporting); manual read-only image read |
-| Tool version | Not recorded in the Week 12 source documents |
+| Tool version | The November 6 report identifies `ntfs_recovery.py` with stream and bounded-slack reporting. Week 12 implementation recorded in commit `245048c` on November 8; the exact November 6 checkout was not logged. |
 | Extracted byte length | 25 |
 | Manual extraction date | November 4, 2026 |
 | Integrated report timestamp | November 6, 2026, 17:26:44 UTC |
@@ -178,7 +178,7 @@ The JSON report records the original Windows output path under Jeff's working di
 | Recovered text | `TEAM3_SLACK_TEST_20261008` |
 | Test marker identified | Yes — exact expected marker |
 | Artifact type | Controlled ASCII/UTF-8 test marker |
-| Hexadecimal image offset | `0x00F4D27D` (decimal 16,049,277) |
+| Hexadecimal image offset | `0x00F4E47D` (decimal 16,049,277) |
 | Slack-relative offset | 0 |
 | Analysis tool | Manual read-back and `ntfs_recovery.py` integrated recovery/report workflow |
 | Analysis findings | Recovered marker is 25 bytes and matches the known test payload hash |
@@ -213,10 +213,10 @@ The recovery report records the selected payload extent at image offset 16,049,2
 | Hash match status | MATCH |
 | Test marker match status | MATCH |
 | Validation result | PASS |
-| Discrepancies | No payload length/hash discrepancy reported. Original-acquisition image hash, image sizes, partition geometry, and tool version are not provided in the Week 12 source documents. |
+| Discrepancies | No payload length or hash discrepancy. Image sizes and partition geometry were supplemented on November 15; some historical metadata remains unrecorded. |
 | Recovery report location | `reports/evidence/week12/w12_slack_recovery_report.json` |
 | Validation date | November 6, 2026 |
-| Reviewing analyst | Not separately identified in the source report |
+| Reviewing analyst | No independent sign-off recorded. Jeff Perez is listed as the recovery and validation analyst; Lucas Curtis prepared the workflow documentation. |
 | Final evidence status | PASS — known 25-byte payload recovered and verified; source image unchanged |
 
 ### Overall finding
