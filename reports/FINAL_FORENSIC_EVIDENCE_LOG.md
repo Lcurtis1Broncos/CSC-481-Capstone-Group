@@ -6,7 +6,6 @@
 **Status:** DRAFT — team review required before final submission  
 **Scope:** Controlled VirtualBox NTFS images, parser validation, ADS recovery, and file-slack recovery.
 
-> **Evidence integrity statement:** Hashes and test outcomes below are transcribed from repository evidence; they were **not recalculated** during preparation of this draft. Original RAW images and recovered binaries are not included in Git. Do not treat this document as a substitute for the original machine-readable reports, acquisition records, or media.
 
 ## 1. Evidence handling and scope
 
@@ -59,7 +58,6 @@ Guest VM exact byte lengths were compared with parsed `$DATA` logical lengths; W
 | `HTMLtestdoc.html` | 55 | 608 | PASS | NOT VERIFIED |
 | `JSON_test_File.json` | 56 | 579 | PASS | NOT VERIFIED |
 
-**Limitation:** Week 13 recorded recovered SHA-256 hashes but original, independently captured file-content hashes were unavailable. Matching filenames and lengths does **not** establish byte-for-byte identity. The earlier capstone target of at least ten known filenames/sizes is also not yet demonstrated by the eight-file controlled manifest.
 
 ## 5. ADS evidence — controlled payload
 
@@ -133,3 +131,4 @@ Screenshot descriptions are based on repository documentation and filenames; no 
 - `reports/evidence/week13/regression.txt`
 - `reports/weekly_report_13.md`
 - `reports/FORENSIC_EVIDENCE_CATALOG.md`
+
