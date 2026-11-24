@@ -87,7 +87,7 @@ Guest VM exact byte lengths were compared with parsed `$DATA` logical lengths; W
 | Cluster size | 4,096 bytes |
 | Data run | Start LCN 3659; 4 clusters |
 | Final LCN | 3662 |
-| Slack image start offset | 16,049,277 decimal (`0x00F4D27D`) |
+| Slack image start offset | 16,049,277 decimal (`0x00F4E47D`) |
 | Available file slack | 2,947 bytes |
 | Marker | `TEAM3_SLACK_TEST_20261008` |
 | Marker encoding | UTF-8, no BOM or newline |

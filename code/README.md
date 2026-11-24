@@ -15,7 +15,18 @@ python code/ntfs_image_reader.py path/to/image.dd
 
 Selected record attributes and supported data-run/slack locations can be
 inspected with `--show-record 41 --show-record 58`. The reader remains read-only;
-general payload extraction is not implemented.
+content export is provided separately by `ntfs_recovery.py`.
+
+## Recovery and verification
+
+`ntfs_recovery.py` locates and exports supported resident and nonresident
+streams, named ADS, and selected final-cluster slack bytes. `--report` saves
+expected and actual lengths/hashes and source-image hashes before and after
+recovery. Existing destinations are refused. Unsupported stream types and
+invalid ranges are rejected. Run `py code/ntfs_recovery.py --help` for options.
+
+The [root README](../README.md) contains execution examples and a standalone
+generated-data verification workflow. No external Python packages are needed.
 
 ## Controlled lab tools
 

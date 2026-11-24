@@ -30,7 +30,40 @@ for controlled `.dd` images.
    cd CSC-481-Capstone-Group
    ```
 
-No external Python packages are required at this stage.
+No external Python packages are required.
+
+## Complete-code submission (`v1.0-final`)
+
+After cloning, select the submitted release with `git checkout v1.0-final`.
+Run these commands from the repository root (Windows uses `py`; on other
+systems use `python3`):
+
+```powershell
+py -m unittest discover -s tests -v
+py tests/verify_submission.py submission_check
+```
+
+The second command creates a **new** folder containing a deterministic 32 KB
+synthetic image, original payloads, recovery outputs, JSON reports, and
+`verification.json`. It checks fragmented file recovery, a resident ADS,
+bounded slack recovery, a deliberately wrong hash, overwrite protection,
+and an invalid slack range. Use a different folder name on subsequent runs.
+
+To generate only the dataset and its expected hashes:
+
+```powershell
+py tests/generate_submission_dataset.py generated_dataset
+py code/ntfs_image_reader.py generated_dataset/synthetic.dd --show-record 1 --show-record 2
+```
+
+This handcrafted parser fixture is not a mountable Windows filesystem or
+the original VirtualBox evidence. The repository includes its generation
+scripts and requires no downloaded test data for these checks. The original
+8 GB lab images are excluded from Git; the lab commands below require a
+separately retained team image. Original hashes for the eight baseline files
+remain unavailable; their independent content equality is unverified.
+See [release verification](reports/COMPLETE_CODE_CHECKLIST.md) and
+[supported boundaries](docs/parser_design_and_limitations.md).
 
 ## Run the Current Tool
 

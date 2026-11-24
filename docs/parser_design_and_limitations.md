@@ -1,6 +1,6 @@
 # Parser Design and Limitations
 
-**As-built documentation:** October 15, 2026. This consolidates the existing
+**As-built documentation:** updated November 24, 2026. This consolidates the existing
 implementation; it is not a claim that a standalone design document existed
 at the start of the semester.
 
@@ -12,7 +12,8 @@ boot-sector identifier. A volume-only input can begin directly at the boot
 sector. Output is terminal text: boot geometry, record headers, a bounded
 filename listing, selected attribute summaries, and supported data-run/slack
 locations. As of October 21, the separate `ntfs_recovery.py` support layer can
-locate and export supported file streams; see the Week 10 validation below.
+locate and export supported file streams. It also supports bounded slack
+exports and JSON verification reports; see the root README for execution.
 
 Processing follows this sequence:
 
@@ -75,9 +76,13 @@ first MFT record is at 3,222,274,048. File content location is
 The tests cover valid and malformed sectors/records, filename and attribute
 decoding, signed data runs, sparse runs, slack boundaries, and protected image
 copying. Independent Windows output and manual byte reads complement unit
-tests. See [Week 9 validation](week9_validation.md) for the latest results.
+tests. See [Week 9 validation](week9_validation.md) for historical parser results.
 The [Week 10 recovery-support record](week10_recovery_support.md) describes
 the new support functions, independent first-run checks for three files, and
 the first recovered ADS hash comparison. Original hashes for the eight baseline
-files remain needed for independent content verification. These checks do not
-complete the full ADS/slack recovery campaign scheduled through November 8.
+files remain needed for independent content verification. Later bounded slack
+checks are described in [Week 12 validation](week12_slack_validation.md).
+The [complete-code checklist](../reports/COMPLETE_CODE_CHECKLIST.md) records
+release verification using a generated synthetic dataset. That dataset makes
+the submission runnable without the original 8 GB image; it does not establish
+the missing baseline-file hash comparisons or universal NTFS compatibility.

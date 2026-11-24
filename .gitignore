@@ -1,4 +1,6 @@
 __pycache__/
+submission_check*/
+generated_dataset*/
 *.py[cod]
 *.dd
 reports/evidence/week10/recovered*/
