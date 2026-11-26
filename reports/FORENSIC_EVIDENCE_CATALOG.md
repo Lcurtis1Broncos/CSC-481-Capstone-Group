@@ -5,6 +5,13 @@
 
 > Screenshots are linked to their original files in this repository. Hashes are transcribed from committed logs/manifests/reports, not recalculated here. Full disk images and recovered binary outputs are not stored in Git.
 
+## Current Original-File Hash Status
+
+On November 25, Jeff confirmed matching original/recovered SHA-256 hashes
+for all eight baseline files. The [dated comparison](../docs/baseline_hash_verification.md)
+records those values and the basis of confirmation. Descriptions below of
+missing originals refer to the earlier dated test evidence.
+
 ## Contents
 
 1. [NTFS research and evidence format](#1-ntfs-research-and-evidence-format)
@@ -246,7 +253,7 @@ Related document: ../docs/week9_validation.md.
 
 Machine-readable records: evidence/week10/w10_recovery_validation.json, evidence/week10/w10_integrated_ads_report.json. Text logs: evidence/week10/w10_automated_tests.txt and evidence/week10/w10_integrated_tests.txt.
 
-The integrated ADS report records 36 recovered bytes, matching expected/recovered payload hashes, and identical source hashes before and after. The eight baseline file outputs have recorded hashes and matching lengths, but original file hashes were not supplied; original-content equality is therefore unverified.
+The integrated ADS report records 36 recovered bytes, matching expected/recovered payload hashes, and identical source hashes before and after. At that Week 10 run, the eight baseline files had recorded output hashes and matching lengths, while original-content hash equality was unverified. The team confirmed all eight original/recovered matches on November 25; see the dated comparison above.
 
 Related docs: ../docs/week10_recovery_support.md and week10_ads_recovery_report.md.
 
@@ -294,14 +301,14 @@ Hashes are copied from the evidence log and machine-generated reports; they are 
 | ADS payload, CapstoneEvidence | E3CB29B996899849E804A8FD7DB33F7CCECBCB2569005353BD082D320D0D997E | 36-byte payload; later matched by recovery reports |
 | E-005 ADS + slack working image | D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7 | Working image; before/after source-preservation checks match |
 | Slack marker payload | 3BF8F582FF237AD7F739D39EDCF54CB35E0E6FDFD75AD47CA55F3598629390F2 | 25-byte marker; matched by Week 12 recovery |
-| Recovered Test.txt | D68EC557336622896727E44ED003136662FCD67CE8F9F57B23E70C0E09ADA797 | 83-byte output; no original hash supplied |
-| Recovered Test2.txt | BA7F25F70009A6D45A9EF88C857C9C357856AA6D1201486DE9070522CFAEE64E | 1,778-byte output; no original hash supplied |
-| Recovered Testfile.docx | 84A8A7AC155C36A5F4F9196A412D8DB16A6F12BD10794FEC362542E562DBE347 | 13,437-byte output; no original hash supplied |
-| Recovered SunflowerTest.jpg | 658C1F66CE1C2D05B51F4E20044981228AAE39BE33B14737B5ADD448378B9E7C | 48,647-byte output; no original hash supplied |
-| Recovered Thetestfile.pdf | 61FCC2B322094257A6B845E15D7AEFF99564E83260EA413DB05180DD8A0E3C8C | 17,247-byte output; no original hash supplied |
-| Recovered WaterfallTest.png | 19CE26BC665962B8B6B766C48EFFC8676D1191B7B46CACD165418892ED42AA08 | 277,325-byte output; no original hash supplied |
-| Recovered HTMLtestdoc.html | 815246781F0ADE404A0FECD2531CB027AB7F6C1177868967BC7CCA47D88AE0FB | 608-byte output; no original hash supplied |
-| Recovered JSON_test_File.json | 65EAF0824C357D4FC9955E75CA29CF3F6476DCB0374241DAB08C3714991E8D34 | 579-byte output; no original hash supplied |
+| Recovered Test.txt | D68EC557336622896727E44ED003136662FCD67CE8F9F57B23E70C0E09ADA797 | 83-byte output; original match team-confirmed Nov 25 |
+| Recovered Test2.txt | BA7F25F70009A6D45A9EF88C857C9C357856AA6D1201486DE9070522CFAEE64E | 1,778-byte output; original match team-confirmed Nov 25 |
+| Recovered Testfile.docx | 84A8A7AC155C36A5F4F9196A412D8DB16A6F12BD10794FEC362542E562DBE347 | 13,437-byte output; original match team-confirmed Nov 25 |
+| Recovered SunflowerTest.jpg | 658C1F66CE1C2D05B51F4E20044981228AAE39BE33B14737B5ADD448378B9E7C | 48,647-byte output; original match team-confirmed Nov 25 |
+| Recovered Thetestfile.pdf | 61FCC2B322094257A6B845E15D7AEFF99564E83260EA413DB05180DD8A0E3C8C | 17,247-byte output; original match team-confirmed Nov 25 |
+| Recovered WaterfallTest.png | 19CE26BC665962B8B6B766C48EFFC8676D1191B7B46CACD165418892ED42AA08 | 277,325-byte output; original match team-confirmed Nov 25 |
+| Recovered HTMLtestdoc.html | 815246781F0ADE404A0FECD2531CB027AB7F6C1177868967BC7CCA47D88AE0FB | 608-byte output; original match team-confirmed Nov 25 |
+| Recovered JSON_test_File.json | 65EAF0824C357D4FC9955E75CA29CF3F6476DCB0374241DAB08C3714991E8D34 | 579-byte output; original match team-confirmed Nov 25 |
 | Recovered ADS output | E3CB29B996899849E804A8FD7DB33F7CCECBCB2569005353BD082D320D0D997E | 36-byte recovered stream; expected hash matches |
 | Recovered slack marker | 3BF8F582FF237AD7F739D39EDCF54CB35E0E6FDFD75AD47CA55F3598629390F2 | 25-byte recovered marker; expected hash matches |
 
@@ -344,7 +351,7 @@ These are payload-byte representations from the committed marker strings and the
 
 1. Full .dd images and recovered binary outputs are excluded from Git; only evidence metadata, reports, hashes and screenshots are stored.
 2. No standalone .hex or .dump files appear in the repository tree. The slack manifest contains the 25 overwritten bytes as hex; marker hexdumps above are byte encodings of the recorded marker strings. Terminal hex views, if present in screenshots, remain in the original screenshots.
-3. The Week 10 report explicitly says original hashes for the eight baseline files were not supplied. Recovered output hashes and matching lengths do not prove original-content equality.
+3. The Week 10 report records that original hashes were not then supplied. On November 25, the team confirmed all eight original/recovered matches; see the dated confirmation above. Historical logs retain the earlier status.
 4. The ADS payload hash is recorded in the Week 7 manifest and later matches recovered ADS output in Weeks 10 and 11.
 5. The slack payload hash matches in the Week 8 manifest and Week 12 integrated recovery report. The working image's before/after hashes match.
 6. Week 11's wrong-expected-hash FAIL is an expected negative-test result, not a failed positive recovery.
@@ -361,3 +368,11 @@ These are payload-byte representations from the committed marker strings and the
 - evidence/week11/w11_ads_recovery_report.json
 - evidence/week12/w12_slack_recovery_report.json
 - weekly_report_12.md
+
+## November 25 Detection Evaluation Evidence
+
+[Final detection evidence](evidence/final_detection/README.md) contains all
+100 synthetic labels and decisions, input hashes, measured confusion counts,
+rates, a figure, Windows positive checks and the 73-test regression log.
+These findings address fixed-rule screening and remain separate from payload
+hash verification and earlier weekly records.

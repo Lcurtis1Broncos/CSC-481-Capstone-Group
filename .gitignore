@@ -1,6 +1,14 @@
 __pycache__/
 submission_check*/
 generated_dataset*/
+report_campaign*/
+/demo_output*/
+reports/final_report/main.aux
+reports/final_report/main.log
+reports/final_report/main.lof
+reports/final_report/main.lot
+reports/final_report/main.out
+reports/final_report/main.toc
 *.py[cod]
 *.dd
 reports/evidence/week10/recovered*/
@@ -15,3 +23,8 @@ reports/evidence/week10/recovered*/
 /week11_ADS_negative_report.json
 /week12_slack_marker.bin
 reports/evidence/week12/recovered*/
+/detection_campaign*/
+# Local signature assembly copies; publish the single project-named final PDF.
+reports/final_report/main_signed.pdf
+reports/final_report/main_signed_dated.pdf
+reports/final_report/signed_prior_version_received_2026-11-25.pdf

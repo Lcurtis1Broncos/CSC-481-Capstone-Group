@@ -1,0 +1,154 @@
+\chapter{User Manual and Quick Start Guide}
+\section{Installation and Release Selection}
+Install Git and Python 3.11 or later. These Windows commands use \file{py};
+use your Python executable elsewhere. No third-party runtime packages are needed.
+\begin{lstlisting}
+git clone https://github.com/Lcurtis1Broncos/CSC-481-Capstone-Group.git
+cd CSC-481-Capstone-Group
+git checkout v1.0-final
+py -m unittest discover -s tests -v
+py tests/verify_submission.py submission_check
+\end{lstlisting}
+The acceptance script generates inputs, invokes the CLIs, and saves outputs
+and reports. All seven checks should pass. Always choose a new output folder.
+
+\section{Inspecting the Generated Image}
+To create only the portable dataset and inspect its records:
+\begin{lstlisting}
+py tests/generate_submission_dataset.py generated_dataset
+py code/ntfs_image_reader.py generated_dataset/synthetic.dd --list-files 8 --show-record 1 --show-record 2
+py code/ntfs_recovery.py generated_dataset/synthetic.dd --record 2 --stream CapstoneEvidence --output new_ads.bin
+\end{lstlisting}
+The final command exports and hashes the ADS. The acceptance script adds
+original expectations and a saved report to establish a verified PASS.
+
+\section{Reproducing the Report Campaign}
+From the report branch, which adds the campaign after the code tag, run:
+\begin{lstlisting}
+py tests/run_report_campaign.py report_campaign_new
+\end{lstlisting}
+Expected results are 50 exact recoveries, 50 baseline matches, and 50
+single-bit hash failures. Originals, paired inputs, reports, and CSV results
+are saved in the new folder.
+
+For the separate detection experiment on the report branch:
+\begin{lstlisting}
+py tests/run_detection_campaign.py detection_campaign_new
+\end{lstlisting}
+This creates 100 labeled inputs, a manifest, \file{results.csv}, and
+\file{summary.json}. To repeat the two Windows positive checks as well,
+add \file{--lab-image} followed by the preserved working-image path.
+This optional step hashes the entire large image twice. Recorded results,
+the 73-test log, a result figure, and reproduction details are retained under
+\file{reports/evidence/final_detection/}. The earlier code tag does not
+contain either report campaign.
+
+\section{Historical Windows Image Commands}
+These commands require the separately retained Windows image. Set the
+PowerShell variable to its actual path first.
+\begin{lstlisting}
+$IMAGE = "path/to/NTFS_Forensic_Baseline_ADS_Slack_Working_RAW.dd"
+py code/ntfs_image_reader.py $IMAGE --show-record 41 --show-record 58
+py code/ntfs_recovery.py $IMAGE --record 58 --stream CapstoneEvidence --output new_lab_ads.bin
+py code/ntfs_recovery.py $IMAGE --record 41 --slack-length 25 --output new_lab_slack.bin
+\end{lstlisting}
+For a saved verification decision, add these options with the original values:
+\begin{lstlisting}
+--report NEW_REPORT.json
+--expected-length ORIGINAL_BYTE_COUNT
+--expected-sha256 ORIGINAL_PAYLOAD_HASH
+--expected-image-sha256 ORIGINAL_IMAGE_HASH
+\end{lstlisting}
+Appendix B records the hashes. Output parents must exist; destinations must
+be new. Full-image hashing takes longer than locating content.
+
+\section{Interpreting Decisions}
+PASS requires the expected payload length and original hash to match, with
+observed source preservation. FAIL indicates a mismatched expectation or
+changed source. NOT\_VERIFIED means an original expectation was omitted.
+Input or recovery errors are distinct from a failed content comparison.
+The reporting CLI returns 0 for PASS, 1 for FAIL or NOT\_VERIFIED, and 2 for
+input/recovery errors. Diagnostic or partial files after an error must not
+be treated as completed evidence.
+
+\chapter{Complete Raw Test Results}
+\section{Marker and Image Hash Register}
+\noindent\textbf{Working-image SHA-256:}\\
+\workinghash
+
+\medskip\noindent\textbf{ADS marker, 36 bytes:}\\
+\file{CAPSTONE_ADS_TEST_20261001_Team3_001}\\
+\texttt{E3CB29B996899849E804A8FD7DB33F7CC}\\
+\texttt{ECBCB2569005353BD082D320D0D997E}
+
+\medskip\noindent\textbf{Slack marker, 25 bytes:}\\
+\file{TEAM3_SLACK_TEST_20261008}\\
+\texttt{3BF8F582FF237AD7F739D39EDCF54CB35E}\\
+\texttt{0E6FDFD75AD47CA55F3598629390F2}
+
+\medskip\noindent Windows slack location: record 41, absolute byte offset
+16,049,277; available tail 2,947 bytes; selected payload 25 bytes.
+These markers and their hashes precede the later recovery comparisons.
+The portable fixture uses the same marker strings but a different image
+and geometry; its image hash must not be confused with the Windows image.
+
+\input{raw_results}
+
+\section{Detection Campaign: All 100 Decisions}
+The following raw CSV retains every construction label, prediction, outcome,
+and source-preservation decision from November 25. The header identifies the
+columns. True means a present hidden payload, a flag, or unchanged source as
+appropriate. Interpret the two screening groups separately using Chapter 5's
+denominators; this file is not a recovery-hash comparison.
+\lstinputlisting[basicstyle=\ttfamily\scriptsize]{../evidence/final_detection/results.csv}
+
+\section{Raw Artifact Locations}
+The repository retains the full historical image and slack validation JSON
+under \file{reports/evidence/week13/}, release output under
+\file{reports/evidence/final_code/}, and all 50 campaign rows with timing
+columns under \file{reports/evidence/final_report/results.csv}.
+The campaign generator recreates individual originals, images, outputs,
+and reports; those generated binaries need not be stored in Git. The
+historical evidence catalog contains additional image-state hashes,
+screenshots, and hexdumps.
+
+\chapter{Development Log and Contribution Record}
+\section{Version History Summary}
+The table below was generated from non-merge commits reachable from the
+report branch's starting point, through November 24. Merge commits are
+excluded to avoid counting integration as another implementation change.
+Jeff's historical identities are grouped together; the Lucas identity is
+\file{Lcurtis1Broncos}. Counts are evidence of recorded activity, not
+measurements of effort, quality, or a prescribed individual grade.
+The underlying dated commit list is retained in
+\file{reports/evidence/final_report/commit_history.txt}.
+
+\input{development}
+
+\section{Contribution Summary}
+Lucas prepared the dedicated VirtualBox laboratory, supplied image exports
+and known-file information, documented the manual ADS procedure, and added
+ADS/slack workflow records, an evidence catalog, and the initial final-report
+and evidence-log drafts. His repository activity also records review,
+documentation updates, and integration of weekly work.
+
+Jeff implemented the boot and MFT parser, attribute and run interpretation,
+controlled slack-copy tool, recovery support and verification reporting,
+automated tests, and release packaging. He recorded parser and payload
+validation evidence and assembled weekly documentation. Jeff also prepared
+the November 24 report campaign and expanded report.
+
+The meeting records and journals provide context alongside commits. The
+semester plan's midterm interval was adjusted after the actual deadline
+required submission on October 11. The following week was used for validation
+and planning. Later work progressed through recovery, ADS checks, slack
+checks, consolidated testing, and final evidence/report preparation. This
+sequence is visible in the dated source history and weekly evidence.
+
+\section{Repository Contents}
+The tagged code package includes source modules, tests and dataset generators,
+README instructions, design notes, evidence, and weekly documentation. The
+report branch adds the final report source, figures, campaign generator, and
+raw campaign tables. Large original images and personal lesson exports
+remain outside Git. For the code assignment the immutable submission
+reference is \file{v1.0-final}; the signed final report is a separate artifact.

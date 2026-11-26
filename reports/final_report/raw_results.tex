@@ -1,0 +1,77 @@
+\section{Baseline File Hash Register}
+The November 15 recovery recorded the hashes below. On November 25, Jeff confirmed that the original-file hashes match all eight recorded values. Original values are reproduced on that team confirmation; original command output was not attached. The dated confirmation is stored in reports/evidence/final\_report/baseline\_hash\_confirmation.json.
+\begin{longtable}{p{1.6in}p{4.4in}}
+\caption{Original and recovered SHA-256 values confirmed equal for all eight files.}\\
+\toprule File & Original and recovered SHA-256\\\midrule\endfirsthead
+\toprule File & Original and recovered SHA-256\\\midrule\endhead
+Test.txt & \texttt{D68EC557336622896727E44ED0031366}\newline\texttt{62FCD67CE8F9F57B23E70C0E09ADA797}\\[0.6em]
+Test2.txt & \texttt{BA7F25F70009A6D45A9EF88C857C9C35}\newline\texttt{7856AA6D1201486DE9070522CFAEE64E}\\[0.6em]
+Testfile.docx & \texttt{84A8A7AC155C36A5F4F9196A412D8DB1}\newline\texttt{6A6F12BD10794FEC362542E562DBE347}\\[0.6em]
+SunflowerTest.jpg & \texttt{658C1F66CE1C2D05B51F4E2004498122}\newline\texttt{8AAE39BE33B14737B5ADD448378B9E7C}\\[0.6em]
+Thetestfile.pdf & \texttt{61FCC2B322094257A6B845E15D7AEFF9}\newline\texttt{9564E83260EA413DB05180DD8A0E3C8C}\\[0.6em]
+WaterfallTest.png & \texttt{19CE26BC665962B8B6B766C48EFFC867}\newline\texttt{6D1191B7B46CACD165418892ED42AA08}\\[0.6em]
+HTMLtestdoc.html & \texttt{815246781F0ADE404A0FECD2531CB027}\newline\texttt{AB7F6C1177868967BC7CCA47D88AE0FB}\\[0.6em]
+JSON\_test\_File.json & \texttt{65EAF0824C357D4FC9955E75CA29CF3F}\newline\texttt{6476DCB0374241DAB08C3714991E8D34}\\[0.6em]
+\bottomrule\end{longtable}
+\section{All Synthetic Payload Samples}
+Each row represents a separately generated payload. Clean recovery and the direct-read baseline matched exactly in every row. Each changed case contains one deliberately flipped bit and a failed original-payload hash comparison.
+\begin{longtable}{rrrrrr}
+\caption{Complete 50-sample synthetic campaign results.}\\
+\toprule ID & Bytes & Clean BER \% & Changed BER \% & Exact baseline & Hash failure\\\midrule\endfirsthead
+\toprule ID & Bytes & Clean BER \% & Changed BER \% & Exact baseline & Hash failure\\\midrule\endhead
+1 & 1 & 0 & 12.500000 & Yes & Yes\\
+2 & 25 & 0 & 0.500000 & Yes & Yes\\
+3 & 100 & 0 & 0.125000 & Yes & Yes\\
+4 & 200 & 0 & 0.062500 & Yes & Yes\\
+5 & 324 & 0 & 0.038580 & Yes & Yes\\
+6 & 1 & 0 & 12.500000 & Yes & Yes\\
+7 & 25 & 0 & 0.500000 & Yes & Yes\\
+8 & 100 & 0 & 0.125000 & Yes & Yes\\
+9 & 200 & 0 & 0.062500 & Yes & Yes\\
+10 & 324 & 0 & 0.038580 & Yes & Yes\\
+11 & 1 & 0 & 12.500000 & Yes & Yes\\
+12 & 25 & 0 & 0.500000 & Yes & Yes\\
+13 & 100 & 0 & 0.125000 & Yes & Yes\\
+14 & 200 & 0 & 0.062500 & Yes & Yes\\
+15 & 324 & 0 & 0.038580 & Yes & Yes\\
+16 & 1 & 0 & 12.500000 & Yes & Yes\\
+17 & 25 & 0 & 0.500000 & Yes & Yes\\
+18 & 100 & 0 & 0.125000 & Yes & Yes\\
+19 & 200 & 0 & 0.062500 & Yes & Yes\\
+20 & 324 & 0 & 0.038580 & Yes & Yes\\
+21 & 1 & 0 & 12.500000 & Yes & Yes\\
+22 & 25 & 0 & 0.500000 & Yes & Yes\\
+23 & 100 & 0 & 0.125000 & Yes & Yes\\
+24 & 200 & 0 & 0.062500 & Yes & Yes\\
+25 & 324 & 0 & 0.038580 & Yes & Yes\\
+26 & 1 & 0 & 12.500000 & Yes & Yes\\
+27 & 25 & 0 & 0.500000 & Yes & Yes\\
+28 & 100 & 0 & 0.125000 & Yes & Yes\\
+29 & 200 & 0 & 0.062500 & Yes & Yes\\
+30 & 324 & 0 & 0.038580 & Yes & Yes\\
+31 & 1 & 0 & 12.500000 & Yes & Yes\\
+32 & 25 & 0 & 0.500000 & Yes & Yes\\
+33 & 100 & 0 & 0.125000 & Yes & Yes\\
+34 & 200 & 0 & 0.062500 & Yes & Yes\\
+35 & 324 & 0 & 0.038580 & Yes & Yes\\
+36 & 1 & 0 & 12.500000 & Yes & Yes\\
+37 & 25 & 0 & 0.500000 & Yes & Yes\\
+38 & 100 & 0 & 0.125000 & Yes & Yes\\
+39 & 200 & 0 & 0.062500 & Yes & Yes\\
+40 & 324 & 0 & 0.038580 & Yes & Yes\\
+41 & 1 & 0 & 12.500000 & Yes & Yes\\
+42 & 25 & 0 & 0.500000 & Yes & Yes\\
+43 & 100 & 0 & 0.125000 & Yes & Yes\\
+44 & 200 & 0 & 0.062500 & Yes & Yes\\
+45 & 324 & 0 & 0.038580 & Yes & Yes\\
+46 & 1 & 0 & 12.500000 & Yes & Yes\\
+47 & 25 & 0 & 0.500000 & Yes & Yes\\
+48 & 100 & 0 & 0.125000 & Yes & Yes\\
+49 & 200 & 0 & 0.062500 & Yes & Yes\\
+50 & 324 & 0 & 0.038580 & Yes & Yes\\
+\bottomrule\end{longtable}
+\section{Release Regression Output}
+The following complete output is the November 24 clean-copy release test run. The seven acceptance checks are recorded in the accompanying verification JSON.
+\lstinputlisting[basicstyle=\ttfamily\scriptsize]{../evidence/final_code/regression.txt}
+\section{Acceptance Summary}
+\lstinputlisting[basicstyle=\ttfamily\scriptsize]{../evidence/final_code/verification.json}

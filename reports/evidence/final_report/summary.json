@@ -1,0 +1,24 @@
+{
+  "samples": 50,
+  "dataset": "Synthetic NTFS-shaped fixtures",
+  "payload_sizes": [
+    1,
+    25,
+    100,
+    200,
+    324
+  ],
+  "samples_per_size": 10,
+  "clean_exact_matches": 50,
+  "baseline_exact_matches": 50,
+  "one_bit_changes_detected": 50,
+  "clean_bit_error_rate_percent": 0,
+  "security_scope": "Payload-integrity mismatch detection only; no steganalysis accuracy or detection-evasion experiment",
+  "python": "3.15.0",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "seed": 4812026,
+  "slack_offset": 15548,
+  "slack_capacity_bytes": 324,
+  "baseline": "Direct byte read at construction-known offset; no metadata parsing",
+  "timing_scope": "Single in-process runs on tiny cached fixtures; not disk throughput benchmarks"
+}

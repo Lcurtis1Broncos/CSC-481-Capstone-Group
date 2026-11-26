@@ -150,3 +150,11 @@ deadline, not the start of preparation. The midterm package was submitted
 October 11. The originally allocated October 12 - 18 interval was therefore
 used for follow-up parser validation, evidence/documentation checks, and
 planning the next phase. Milestone 6 remains scheduled for October 19 - November 8.
+
+**Completion review, November 26, 2026:** Implementation, testing, evidence,
+and final written materials are complete within the documented supported
+scope. The final report is signed and dated; the slides, standalone project
+summary, contribution record, and demonstration guide are prepared. Milestone
+8 remains open for the joint rehearsal, live presentation/demonstration, and
+course-site submission confirmations. See the
+[completion checklist](../reports/SEMESTER_COMPLETION_CHECKLIST.md).

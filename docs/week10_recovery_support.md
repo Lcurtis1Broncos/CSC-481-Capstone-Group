@@ -1,5 +1,7 @@
 # Week 10: Data-location and recovery support
 
+**Later follow-up, November 25:** Jeff confirmed original/recovered SHA-256 matches for all eight baseline files. See the [dated comparison](baseline_hash_verification.md). References below to missing original hashes describe the status during this report period.
+
 **Period:** October 19–25, 2026
 
 **Implementation:** Jeff; October 21

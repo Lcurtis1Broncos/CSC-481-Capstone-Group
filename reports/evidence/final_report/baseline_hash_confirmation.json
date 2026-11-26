@@ -1,0 +1,77 @@
+{
+  "confirmation_date": "2026-11-25",
+  "confirmed_by": "Jeff Perez",
+  "basis": "Jeff confirmed that the original hashes for all eight files match the hashes already recorded by the project.",
+  "hash_values_basis": "Original values are recorded as equal to the committed recovered hashes on that confirmation. Original command output was not attached.",
+  "recovery_evidence": "reports/evidence/week13/image_validation.json",
+  "recovery_run_date": "2026-11-15",
+  "comparison_count": 8,
+  "matches_reported": 8,
+  "assistant_performed_new_original_file_hashing": false,
+  "files": [
+    {
+      "filename": "Test.txt",
+      "record_number": 38,
+      "recovered_length": 83,
+      "recorded_recovered_sha256": "D68EC557336622896727E44ED003136662FCD67CE8F9F57B23E70C0E09ADA797",
+      "confirmed_original_sha256": "D68EC557336622896727E44ED003136662FCD67CE8F9F57B23E70C0E09ADA797",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "Test2.txt",
+      "record_number": 39,
+      "recovered_length": 1778,
+      "recorded_recovered_sha256": "BA7F25F70009A6D45A9EF88C857C9C357856AA6D1201486DE9070522CFAEE64E",
+      "confirmed_original_sha256": "BA7F25F70009A6D45A9EF88C857C9C357856AA6D1201486DE9070522CFAEE64E",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "Testfile.docx",
+      "record_number": 41,
+      "recovered_length": 13437,
+      "recorded_recovered_sha256": "84A8A7AC155C36A5F4F9196A412D8DB16A6F12BD10794FEC362542E562DBE347",
+      "confirmed_original_sha256": "84A8A7AC155C36A5F4F9196A412D8DB16A6F12BD10794FEC362542E562DBE347",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "SunflowerTest.jpg",
+      "record_number": 42,
+      "recovered_length": 48647,
+      "recorded_recovered_sha256": "658C1F66CE1C2D05B51F4E20044981228AAE39BE33B14737B5ADD448378B9E7C",
+      "confirmed_original_sha256": "658C1F66CE1C2D05B51F4E20044981228AAE39BE33B14737B5ADD448378B9E7C",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "Thetestfile.pdf",
+      "record_number": 43,
+      "recovered_length": 17247,
+      "recorded_recovered_sha256": "61FCC2B322094257A6B845E15D7AEFF99564E83260EA413DB05180DD8A0E3C8C",
+      "confirmed_original_sha256": "61FCC2B322094257A6B845E15D7AEFF99564E83260EA413DB05180DD8A0E3C8C",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "WaterfallTest.png",
+      "record_number": 44,
+      "recovered_length": 277325,
+      "recorded_recovered_sha256": "19CE26BC665962B8B6B766C48EFFC8676D1191B7B46CACD165418892ED42AA08",
+      "confirmed_original_sha256": "19CE26BC665962B8B6B766C48EFFC8676D1191B7B46CACD165418892ED42AA08",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "HTMLtestdoc.html",
+      "record_number": 55,
+      "recovered_length": 608,
+      "recorded_recovered_sha256": "815246781F0ADE404A0FECD2531CB027AB7F6C1177868967BC7CCA47D88AE0FB",
+      "confirmed_original_sha256": "815246781F0ADE404A0FECD2531CB027AB7F6C1177868967BC7CCA47D88AE0FB",
+      "comparison_result": "MATCH_REPORTED"
+    },
+    {
+      "filename": "JSON_test_File.json",
+      "record_number": 56,
+      "recovered_length": 579,
+      "recorded_recovered_sha256": "65EAF0824C357D4FC9955E75CA29CF3F6476DCB0374241DAB08C3714991E8D34",
+      "confirmed_original_sha256": "65EAF0824C357D4FC9955E75CA29CF3F6476DCB0374241DAB08C3714991E8D34",
+      "comparison_result": "MATCH_REPORTED"
+    }
+  ]
+}

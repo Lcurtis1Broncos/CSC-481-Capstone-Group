@@ -1,6 +1,6 @@
 # Parser Design and Limitations
 
-**As-built documentation:** updated November 24, 2026. This consolidates the existing
+**As-built documentation:** updated November 25, 2026. This consolidates the existing
 implementation; it is not a claim that a standalone design document existed
 at the start of the semester.
 
@@ -79,10 +79,10 @@ copying. Independent Windows output and manual byte reads complement unit
 tests. See [Week 9 validation](week9_validation.md) for historical parser results.
 The [Week 10 recovery-support record](week10_recovery_support.md) describes
 the new support functions, independent first-run checks for three files, and
-the first recovered ADS hash comparison. Original hashes for the eight baseline
-files remain needed for independent content verification. Later bounded slack
+the first recovered ADS hash comparison. The team confirmed original/recovered hash matches for all eight baseline
+files on November 25; see the [dated comparison](baseline_hash_verification.md). Later bounded slack
 checks are described in [Week 12 validation](week12_slack_validation.md).
 The [complete-code checklist](../reports/COMPLETE_CODE_CHECKLIST.md) records
 release verification using a generated synthetic dataset. That dataset makes
 the submission runnable without the original 8 GB image; it does not establish
-the missing baseline-file hash comparisons or universal NTFS compatibility.
+the separate original-file comparisons or universal NTFS compatibility.

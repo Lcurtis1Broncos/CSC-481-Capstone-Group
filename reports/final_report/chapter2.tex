@@ -1,0 +1,144 @@
+\chapter{Literature Review and Related Work}
+\section{History of Steganography}
+Classical examples of steganography rely on concealing the existence of a
+message inside an apparently ordinary object or communication. Anderson's
+account includes messages hidden beneath writing surfaces and distinguishes
+concealment from making content unreadable \cite{anderson}. The present
+project uses the same broad question at a filesystem boundary: which bytes
+are omitted by a routine view of a file? It does not implement the
+cryptographic constructions discussed in that work.
+
+The transition to digital media created several possible carriers, including
+images, audio, documents, and system storage. Petitcolas's information-hiding
+resource distinguishes applications such as watermarking, fingerprinting,
+covert channels, and hidden-information detection \cite{petitcolas}.
+Those applications have different objectives. A watermark may be intended
+to survive ordinary processing, whereas a forensic training marker is useful
+when it provides a known expected answer. Our plaintext markers were selected
+for traceability, not for strong concealment against an informed examiner.
+
+Filesystem hiding is also different from image-bit substitution. It relies
+on how storage structures expose or omit byte ranges, rather than on a
+perceptual model of pixels. This difference drives the evaluation: capacity
+can be expressed in bytes, while correctness requires reconstructing the
+appropriate stream or slack range. A perceptually unchanged document is not
+by itself evidence that all associated storage bytes are unchanged.
+
+\section{NTFS Structures Relevant to Recovery}
+Microsoft describes the Master File Table as the structure holding
+information needed to retrieve files. File records contain typed attributes,
+and a file can require more than one record \cite{mft}. This supports a
+metadata-driven approach: recovery begins by identifying an appropriate
+record and attribute rather than searching blindly for a familiar content
+signature. It also establishes a boundary for the project, because resolving
+additional attribute records was not implemented.
+
+The file-record header identifies the first attribute, flags, and the
+relationship to a base record \cite{record}. The implementation checks those
+fields before exporting content. Attribute headers distinguish resident
+values from nonresident values and identify named attributes \cite{attribute}.
+Our design treats this distinction as a branching point. Resident bytes
+come from the validated record; nonresident bytes require mapping pairs.
+Confusing the branches would produce an incorrect offset or an incomplete
+recovery.
+
+The update sequence array protects multisector structures by replacing and
+later restoring sector-tail words. Microsoft's description requires checking
+the sequence values before restoring saved words \cite{usa}. This is
+especially important for resident content crossing a sector boundary.
+Reading its apparent raw range without restoration can include the transfer
+sequence word instead of the original content. The recovery implementation
+therefore uses fixup-restored records, and the automated suite includes
+a resident-content case crossing that boundary.
+
+The standard-information attribute and filename attribute supply different
+metadata roles \cite{standard,filename}. The project reports timestamps,
+flags, and names for context, but selects actual content through
+\file{$DATA}. During validation, filename metadata sizes did not always
+agree with current data-stream sizes. We retained this distinction in the
+reporting rules instead of treating every size field as interchangeable.
+
+\section{Streams and Allocation Semantics}
+Each NTFS stream has its own allocation, actual size, and valid-data length
+\cite{streams}. Those concepts matter both for recovering ordinary content
+and for avoiding disclosure of bytes the filesystem would not present as
+initialized content. Microsoft documents that reads between valid-data
+length and logical end return zeros \cite{fsutilfile}. Our recovery path
+follows that semantic distinction: initialized bytes are read from mapped
+extents, then any required logical tail is generated as zeros.
+
+Final-cluster slack is a separate selection. Its start follows the logical
+end in the last cluster that contains content. Recovering a normal file
+should stop at its logical size; recovering a known slack marker should
+explicitly request a bounded range outside that content. This separation
+prevents a file export from silently mixing document bytes with hidden or
+residual material.
+
+\section{Related Systems and Tools}
+\subsection{Sysinternals Streams}
+Streams enumerates named streams associated with live files and directories;
+its official documentation provides the stream-name syntax and command
+options \cite{sysstreams}. It offers a straightforward way to expose ADS
+on a mounted NTFS volume. The project differs in working from a raw image
+and showing how the named attribute leads to the recovered bytes. Streams
+was reviewed as related work, not benchmarked in this campaign.
+
+\subsection{The Sleuth Kit}
+The Sleuth Kit provides image-oriented filesystem analysis, including NTFS
+attributes and alternate streams \cite{tsk}. Its \file{icat} utility can
+export content by metadata address and optionally include slack
+\cite{icat}. These capabilities directly overlap the broad recovery task.
+Our implementation does not claim a new category of extraction capability.
+Its smaller scope permits close inspection of a selected record, the
+derived extents, the expected payload, and the resulting JSON report.
+
+\subsection{Autopsy}
+Autopsy provides a broader analysis environment around filesystem
+capabilities, including case management and automated operations
+\cite{tsk}. Such integration is valuable in a full investigation, where
+organizing evidence and correlating findings matter alongside extraction.
+Our command-line workflow does not replace that environment. The project
+instead exposes a narrow teaching sequence that can be demonstrated without
+introducing a complete case-management system.
+
+\subsection{PhotoRec}
+PhotoRec uses underlying data and recognized file formats rather than
+depending entirely on filesystem metadata \cite{photorec}. This can help
+when metadata is damaged, but it answers a different starting question
+from selecting a named attribute in an intact record. For the deliberately
+small plaintext markers in this experiment, a documented stream identity
+and length provide a more direct oracle than a file-format signature.
+No measured superiority over PhotoRec is asserted.
+
+\section{Forensic Validation and Evidence Strength}
+NIST's Computer Forensics Tool Testing program emphasizes specifications,
+procedures, criteria, and test sets for examining tool reliability
+\cite{cftt}. The project adopts that general testing discipline at a student
+scale: supported outcomes are written down, failure conditions are exercised,
+and test inputs are reproducible. It has not undergone CFTT certification
+or an independent validation program.
+
+SHA-256 is used as an integrity check, following the digest concept defined
+by the Secure Hash Standard \cite{sha}. A recovered file's digest has its
+strongest practical role when compared with a separately recorded expected
+digest. Hashing an output after extraction establishes an identifier for that
+output, but does not retrospectively establish its agreement with an unknown
+original. For this reason, the earlier baseline-file content comparisons remained
+unverified until the team confirmed the original hash matches on November 25.
+
+\section{Gap Analysis and Project Rationale}
+The reviewed tools already address ADS enumeration, raw-image examination,
+or content recovery. The gap addressed here is instructional transparency
+and reproducibility within the semester project. The implementation joins
+raw geometry, record validation, named-stream selection, bounded slack
+extraction, and explicit expected-value reporting in one inspectable path.
+It avoids dependence on a mounted original disk for recovery.
+
+That choice trades breadth for a clearer explanation of supported behavior.
+It also creates identifiable weaknesses: a known-record workflow does not
+find every hidden payload, and a handcrafted fixture does not reproduce
+Windows allocation behavior. Those weaknesses are not shortcomings proved
+against the reviewed mature tools. They are limitations of this project's
+scope and evidence. The comparison in Chapter 5 therefore uses a simple,
+actually executed direct-byte-read baseline, while the tools reviewed here
+remain qualitative context.

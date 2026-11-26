@@ -50,10 +50,11 @@ apply record fixups on every path; content recovery validates fixups.
 
 The generated dataset is a handcrafted parser fixture, not a mountable
 Windows filesystem. Historical VirtualBox image checks remain separately
-documented under weekly evidence. Original hashes for the eight baseline
-files were not supplied, so independent original-content equality for those
-files remains unverified. Their missing hashes do not prevent reproducing
-the included synthetic tests or the documented ADS/slack payload checks.
+documented under weekly evidence. At the November 24 release check, original-file hash comparisons were
+pending. On November 25, Jeff confirmed that all eight original-file hashes
+match the recorded recovered-file hashes; see the
+[dated comparison](../docs/baseline_hash_verification.md). The original release
+logs and immutable `v1.0-final` tag retain their dated state.
 
 The final technical report, slides, and presentation are separate deliverables.
 The team leader must submit the tagged repository URL to the course site;

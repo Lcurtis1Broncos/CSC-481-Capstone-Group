@@ -1,0 +1,104 @@
+% Adapted from the instructor-provided Fall 2026 report template.
+\documentclass[12pt,letterpaper]{report}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx,booktabs,listings,xcolor,longtable,array}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\bibname}{References}
+\onehalfspacing
+\setlength{\emergencystretch}{3em}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,
+  keepspaces=true,showstringspaces=false,frame=none,aboveskip=10pt,belowskip=10pt}
+\graphicspath{{assets/}}
+\newcommand{\file}[1]{\path{#1}}
+\newcommand{\workinghash}{\texttt{D54886033D5ED8E6B9BA5C58EF60A414}\\\texttt{C3F2202BD1A2F6A5A7D407D499BCA5C7}}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+{\LARGE Fayetteville State University}\\[0.5em]
+{\large Department of Mathematics and Computer Science}\\[2.5em]
+{\LARGE\bfseries NTFS Filesystem Steganography and Forensic MFT Parser}\\[1.5em]
+{\large CS481 Capstone Project --- Final Report}\\[0.5em]
+{\large Fall 2026}\\[2em]
+\textbf{Team 3}\\[1em]
+\begin{tabular}{@{}lll@{}}
+\toprule Role & Name & Student ID\\\midrule
+Team Leader & Lucas Curtis & 830849238\\[1em]
+Team Member & Jeff Perez & 830822886\\\bottomrule
+\end{tabular}\\[2em]
+\textbf{Supervisor:} Professor Xianping Wang\\[0.7em]
+\textbf{Date of Submission:} November 29, 2026
+\vfill
+\url{https://github.com/Lcurtis1Broncos/CSC-481-Capstone-Group}\\
+Code release: \file{v1.0-final}
+\end{titlepage}
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\chapter*{Declaration of Originality}
+\addcontentsline{toc}{chapter}{Declaration of Originality}
+We declare that the submitted report and accompanying project accurately
+represent our work and contributions. External sources, technical definitions,
+and ideas are acknowledged using numeric citations. We have reviewed the
+reported experiments, limitations, and contribution records. We distinguish
+new experiments from historical evidence and do not claim unperformed tests.
+AI assistance was used for drafting, code support, and formatting. The
+authors are responsible for checking the sources, software, and claims and
+for ensuring this assistance complies with university and course policy
+before signing.
+
+\vspace{2em}
+\noindent Lucas Curtis\\[1em]
+Signature: \rule{2.8in}{0.4pt}\quad Date: \rule{1in}{0.4pt}\\[2em]
+Jeff Perez\\[1em]
+Signature: \rule{2.8in}{0.4pt}\quad Date: \rule{1in}{0.4pt}
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Information concealed in NTFS alternate data streams and file slack can be
+missed by examinations limited to ordinary filenames and logical file
+contents. This project investigates whether a small read-only Python tool
+can expose the relevant filesystem structures and recover controlled hidden
+payloads while preserving its source image. The implementation parses
+partition and boot metadata, selected Master File Table attributes, resident
+streams, nonresident data runs, and bounded final-cluster slack. It exports
+payloads to separate files and records expected and actual lengths, SHA-256
+hashes, and image-integrity results. A dedicated Windows VirtualBox laboratory
+provided eight baseline files, a 36-byte named-stream marker, and a 25-byte
+slack marker. Historical validation matched all eight file lengths and both
+hidden-payload hashes. On November 25, the team confirmed original/recovered
+SHA-256 matches for all eight baseline files. Release verification passed 68 automated tests and seven
+end-to-end acceptance checks. An additional campaign recovered 50 synthetic
+slack payloads exactly, agreed with a direct-byte-read baseline in all 50
+cases, and detected all 50 deliberately introduced single-bit payload changes
+as integrity failures. A separate 100-image detection experiment measured
+100\% ADS detection with 40\% false positives; slack signature search measured
+60\% detection and 40\% evasion with no false positives. These fixed-rule
+results describe constructed known-record cases, not general steganalysis
+or universal NTFS support. The expanded suite passed 73 tests. Fragmented
+MFT storage and several advanced attribute types remain
+unsupported. The project provides a reproducible educational workflow whose
+claims are bounded by recorded evidence and explicit limitations.
+
+\vspace{1em}
+\noindent\textbf{Keywords:} NTFS; alternate data streams; file slack;
+Master File Table; forensic recovery; evidence integrity.
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+\input{chapter1}
+\input{chapter2}
+\input{chapter3}
+\input{chapter4}
+\input{chapter5}
+\input{chapter6}
+\input{chapter7}
+\clearpage
+\input{references}
+\appendix
+\input{appendices}
+\end{document}

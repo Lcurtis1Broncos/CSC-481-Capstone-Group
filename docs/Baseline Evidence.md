@@ -57,3 +57,10 @@ the original manual ADS experiment remains the controlled source.
 - **Findings:** NTFS boot signature valid; 4,096-byte clusters; MFT record 0 at
   byte offset 3,222,274,048; valid `FILE` record signature; volume serial
   number `461C98171C9803D9`.
+
+## Original-file hash follow-up — November 25
+
+Jeff confirmed that original SHA-256 hashes match the recorded recovered
+hashes for all eight baseline files. See the [dated comparison](baseline_hash_verification.md)
+for the values and confirmation basis. Earlier image acquisitions and test
+logs retain their original dates and recorded results.

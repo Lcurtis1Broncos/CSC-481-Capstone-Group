@@ -25,9 +25,24 @@ against it, comparing recovered bytes with those originals. Its JSON summary
 records seven acceptance checks, including deliberate failure cases.
 
 These synthetic structures are not a mountable filesystem or the original
-Windows lab image. Synthetic expected hashes do not replace the missing
-original hashes for the eight baseline files. Historical real-image evidence
+Windows lab image. Synthetic expectations remain separate from the
+[team-confirmed original-file comparisons](../docs/baseline_hash_verification.md),
+recorded November 25 for all eight baseline files. Historical real-image evidence
 is retained under `reports/evidence/`; the large images remain outside Git.
 
 Python 3.11 or later is required. On systems without the Windows `py` launcher,
 use `python3`. No third-party packages are required.
+
+## Report detection experiment
+
+```powershell
+py tests/run_detection_campaign.py detection_campaign_new
+```
+
+The report branch adds this 100-image labeled experiment and five tests
+(73 tests passed November 25). It measures named-stream screening and a
+known-marker search in calculated slack. Optional `--lab-image IMAGE` also
+checks the two documented Windows positives and full-image preservation.
+The detector does not receive construction labels or planted offsets.
+See [results and limitations](../reports/evidence/final_detection/README.md).
+Choose a new output folder; no large Windows image is needed for the synthetic run.

@@ -1,0 +1,702 @@
+[
+  {
+    "image": "ads_01.dd",
+    "sha256": "5E09C5591C23F606C6DE6FC8825A32FACBD4070A379ECF41B5B9F4E1A6A1D098",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_02.dd",
+    "sha256": "8CB8B4243AF5EA374C208F68B7F6DD61ED62D9CF0E43D5D5B7692416276B6213",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_03.dd",
+    "sha256": "AE8092570562BFA135492416E220565F92E75DB6FC975E1E8B8B248D489156DC",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_04.dd",
+    "sha256": "6A6845668C86B1D45372828500CC73AB52AD8AF9DDF77D2296D886B05A691850",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_05.dd",
+    "sha256": "42C9C34C9A6D0B81BEC3508CC174F72928561F4C6A40BE21EC9BD6FB3E2EE267",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_06.dd",
+    "sha256": "F77C9126F9BD0819BE50A0A43C9C6D86B7F60204AFB0EFF5BED3B1E0632C4938",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_07.dd",
+    "sha256": "8EB058450BEAB8B6EE81309A907C2EA1BB6A7CD243D2C7829D5321B3E46347E1",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_08.dd",
+    "sha256": "D2B6B879E351BEE522387630E68B3CCA2F88DAF79C7B8E0D80087D313E0319F0",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_09.dd",
+    "sha256": "2385B492CC769908AE9DC3D1D42DAD01C0A12DDD4A893347AE0CA119B2889F76",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_10.dd",
+    "sha256": "999AE8FF275ED229CA24E07971AAEA0A0645DDBAA703F3F35F885BA8D7AF2BA6",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_11.dd",
+    "sha256": "EF79F66C0C76874C9CDE2289C8BECAB6EA71AC5200379BAF3E4B601D326C3443",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_12.dd",
+    "sha256": "2F4E3139EFA0CA8395609C3779DC193D648B0F6CD9A59BCDA99717952CEC5DEF",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_13.dd",
+    "sha256": "7DDFF76A98B57A1CBA5716B170C3D15640B00DFB565BAA9F0E4F2769CE3CEF9A",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_14.dd",
+    "sha256": "088C662685F521A75EDAE8CCF69E3F0D181FF6B0654C082967853D4A652E66B4",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_15.dd",
+    "sha256": "2531445DE161362FBCBCFA7A3A0E94EB1FCEBC6EA0740480252EA8A5D1DFBB93",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_16.dd",
+    "sha256": "399061384C28796F4E39038D1E819D98C5B9B8EE877FA0DDE4D27918325A3008",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_17.dd",
+    "sha256": "9202965F0EF8C45E5C939BBF4D3EEB1129F1BE97BE94A948E034ECD49BD4B8D7",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_18.dd",
+    "sha256": "3FD457A9BC621A4EF9DC80A4D9602EFBFC1640557684815FCCB4E0483DC03F2D",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_19.dd",
+    "sha256": "11A646A0A81787A59EA6DF77653343B77AF6732168FD1DD61FCE4D4F91EE7980",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_20.dd",
+    "sha256": "328B4C978ECA06E371A8D4E1D667028A13C191160C373F50E94C424CB0A29EB5",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_21.dd",
+    "sha256": "E4096529E920214FD3F8C98FE65E97A3619BB1EF3913789AA1491B0F0CD755E0",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_22.dd",
+    "sha256": "D9AF07AFA3C976F66B7A0E4EF7246087CBDCD246B3FAF86D16C0E0AD5E54CD73",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_23.dd",
+    "sha256": "2F673150490E23348ABE6C3BA6F20B4F0BF002821F4F514FA389B1966891305A",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_24.dd",
+    "sha256": "F271B80C69CB2FF55BE259C433CA21D7BDD8181412C35009AD540E522D21923D",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_25.dd",
+    "sha256": "AB48331632C953A83E9386D79DB22C0CDBBF854D4E44BF8CA358F8F43E0A9E75",
+    "record": 2,
+    "scenario": "hidden_named_stream",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "ads_26.dd",
+    "sha256": "F1BE6BE7DAEA882152B1BF81F3D084B6F743FFCB9A4131C934CB711F28F83347",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_27.dd",
+    "sha256": "A0E39100BBA0E97BB3D16146F7ADAD1BB81DECD1E4414BEDAD7BA8CD5B52118F",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_28.dd",
+    "sha256": "41B0CD92C77FA521F0D90DF9169F1C12F3631DE4F5937D60EEBEBA86AABD1088",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_29.dd",
+    "sha256": "DA8BCB0A55BD72B46A2EA90D08BBEBC5ACAB94BC4BAB91514E550FA0FD70EF81",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_30.dd",
+    "sha256": "802F45276B716034B67881544D9408F785A8D15900ADC73DDB599176E2338CCB",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_31.dd",
+    "sha256": "509D454DE8A45685786EBC878F8B64A6E446792C77DBCA7E81C24D82B07FE189",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_32.dd",
+    "sha256": "48B34EDC836C1F8F0A1790C68D10AFF1B75977092680356ADC65269B64CB5B92",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_33.dd",
+    "sha256": "4B74C592A9FA8E314C7B753F0E2CAB7F35EBA9ADA5C85DCB5AE72CB51F82DFF4",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_34.dd",
+    "sha256": "E07A2FB49D425199218C345F283C9D7223ACF34D1B5F2197A0AD3E1637EE796D",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_35.dd",
+    "sha256": "F49919D00AFD1BF92E94FC773675F1B02B2FD46EB3BE356FA0226BBCD894015C",
+    "record": 2,
+    "scenario": "benign_named_stream",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_36.dd",
+    "sha256": "E9ECA6464C66EBAD31951886C54AC2B1B2F6B366E9D3B365C0E12B1ED06E1FDF",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_37.dd",
+    "sha256": "6385CDE0D8E43A0CD9D971D997DDD382FAB83D5552B2B8F1EE363B3CC8D9FB4F",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_38.dd",
+    "sha256": "FE11757800B579B428DBDA49878D8E9993691E6C953FAB9BE194A9823C553F41",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_39.dd",
+    "sha256": "4ACBE673A0AF89D3D0F53447FC10BD8D6A4AAD622D0EF69BC25646A266B8D0E0",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_40.dd",
+    "sha256": "1D24C93498B459B751EA0A75E4763C659F4D2C4944B967F4CB3EC5205C2F10FD",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_41.dd",
+    "sha256": "C867A2F20428A1C1D025602CEC89A91A6B0C8849961FEC1074F3FED9E03AD2A8",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_42.dd",
+    "sha256": "C03084F9D6C87484CD7C4B49D4EE84BE030F2569A069A72DB61B9FC6E1414361",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_43.dd",
+    "sha256": "8BE0CF0579E3EF474E789378C45B49496489500C14A74438133A8CA2FD51C5FE",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_44.dd",
+    "sha256": "8F8F4C05C2FC4A155D92B9FC7CD4125508EF04A6024E0264C19A716355552587",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_45.dd",
+    "sha256": "46D5CCED2D3AD93EA47C6EB06679D9E8383FC24123C2F94D7E000E88FF2B2D07",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_46.dd",
+    "sha256": "EC6218A7667D8E5844DB5A5A051E64D9C8A07B16196FF6224FF3480B411C9F11",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_47.dd",
+    "sha256": "748C2F1BFBB0F9195BF42895797ECE25379EDF3C62E26EE45C307E7398557360",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_48.dd",
+    "sha256": "6F9A23FE23A116E38D738B37C37803A401AC53AF94D12034DB5B3AD3085B9453",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_49.dd",
+    "sha256": "F97DFFA16696E7271F3DBAF7AA62F7DF09625CCEEB73C316385ED71A1C7D9695",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "ads_50.dd",
+    "sha256": "4A2A6D8455A8EB29B7E386E1D854216F7AE2F5E259C62C7FD08C71DBC146D468",
+    "record": 2,
+    "scenario": "ordinary_file",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_01.dd",
+    "sha256": "757203318631281331BEF2CEA81A527287FD45A8025EC527F8B6DC34A5752AA2",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_02.dd",
+    "sha256": "F708C776A71BE6E4A7AE604E2D7F59012DEA46A24B5651A580DF63AD47D7F670",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_03.dd",
+    "sha256": "4D27FF67000CF3D3A450D0984BAEFABC0DD02108ED21188A5EF7290BAB9DAE25",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_04.dd",
+    "sha256": "8AC445BCAD737F55E22777C4386EF857EBEF4CD854231350D13E2821781A3C36",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_05.dd",
+    "sha256": "524E8CAEB2E322E3CA75186263206A39B17B332860CFF740EB7529262AFF0DEC",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_06.dd",
+    "sha256": "E02082462870BE194807FD6368B098B6D5E822BD52A967040DC2398F90404E48",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_07.dd",
+    "sha256": "F4EBCB8DC8E462545CA198802CD6DA29E15DFF9C5F87C286C5281C185A2EF97D",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_08.dd",
+    "sha256": "5F7CA759EF734C4FF2AB725C3219EC67EFDA1E1694A15166B24CA5AF8244DA43",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_09.dd",
+    "sha256": "71677A2F2892265A5F327A854818FC232BEE55DDEFF9E332BCB3021E00A5E776",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_10.dd",
+    "sha256": "ED0C323C75342C7B29D05D1862126DF2FCE1A439FACD37A1537465053C1D0E0C",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_11.dd",
+    "sha256": "E18050F88AF4CB04A6C5EA46803AE18DDD7399A758C90CE9D59E7D2F482C61E3",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_12.dd",
+    "sha256": "9FF391687AE84B97603581DE9C7503015822D36E7D513124EE60532B5EA99CCC",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_13.dd",
+    "sha256": "9A40A78BF246C240C31DE4FC4DC91340BE212FF8B5B9C05F0FD6BC7AC48F22CB",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_14.dd",
+    "sha256": "E207ED39D21EFE2B023F09F950B7675A862BF10FD35A256EC82988360283F1A0",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_15.dd",
+    "sha256": "F90845A9EF2D804EC7600E1A880629F27E561E72031F21CE3A3360106E2FA295",
+    "record": 1,
+    "scenario": "plaintext_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_16.dd",
+    "sha256": "0A573638A3F9062F67E7F2B23460F070CA8E550582AC4D247E2A028E08EFEDE3",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_17.dd",
+    "sha256": "139D53687CE0593F47F2ADEA2C958DCD01BCF45F02A9E8B8CD03DE77CE1627E9",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_18.dd",
+    "sha256": "DEDA1E04E4A86533A59585B72CF2A1E54608E75FB7D70B940582010D41D8AAA6",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_19.dd",
+    "sha256": "58C128DD9CD73B575F5ED6EF096461EAB594F7F91DD5ED37AF9BE8A8B32B081D",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_20.dd",
+    "sha256": "FC2A09F9509212CE5017C443272C06E776882D45939074D0FB02DAA500DCB354",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_21.dd",
+    "sha256": "948296A210B2713AF5AD30880930A2616E9742B1D3B51C315970092B4BE536E5",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_22.dd",
+    "sha256": "D4209F39B81E3C0DA10C444D5154100DD466CBE9D27C0F7AA392AC3A1969F0A5",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_23.dd",
+    "sha256": "4FFE96CA7D13FF59B7E214D97A5F1A1B9520BE3A695BF414BCDA999E5A4C0AB7",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_24.dd",
+    "sha256": "5C1247B83DE9A031F9BBA8C0F5370DB26718BCA80D46DF1C153BB392661196F5",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_25.dd",
+    "sha256": "A799968A440674A616F61EF0B39E587F71C8325B914BF8DEAB886EDACC3CEBF0",
+    "record": 1,
+    "scenario": "xor_marker",
+    "hidden_payload_present": true
+  },
+  {
+    "image": "slack_26.dd",
+    "sha256": "9A908DDD877416F43C76492D8863D0E40FB4441BD0F26F5FE676D0961E102843",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_27.dd",
+    "sha256": "2F499816BB628D68996B1616AEDB3B7358078FBAAF0D60B2E2CBB9025857D03F",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_28.dd",
+    "sha256": "5FFA03A2B8EB704AB1805798D6423638333BED0C3B610BA7B8525E3491AB8E33",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_29.dd",
+    "sha256": "B54A7924D5782991FCC41536E8C53EA1E9FF38BA67D82270894349B36CA8E4B8",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_30.dd",
+    "sha256": "5B2EC7D71DA922C783EDA7479A8772A938E218FF98D6C9AA99414A3A82BD445C",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_31.dd",
+    "sha256": "8F3FB5B73673E3E2DF2DA452E8C016919A736003796058AA28846E2EF140DF44",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_32.dd",
+    "sha256": "6A23AFFDFFDD6A37FE90F81B5D1E820B48C4E844E62F83DCD40213897FA1DD79",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_33.dd",
+    "sha256": "5324545AFBAA6400C0853D2672E128B90EF27030EDF61B5539CC77AA03505D75",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_34.dd",
+    "sha256": "20601972F816CC65CDE499AC9B4DD9A98AA23F8C084841600D8BA1556AE504B1",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_35.dd",
+    "sha256": "EF4F56BB26806281B313FA4CCA527A9636E2E78182C71BA37C036BDE53D08248",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_36.dd",
+    "sha256": "9D28C1F02FD94C0661709FA2F183563CB49A50527D2DA2CA36E09618EC14511A",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_37.dd",
+    "sha256": "8BAB49498E74F5899C7C52649A997437173E0E7563F13ABEA423C9115FF1DD4C",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_38.dd",
+    "sha256": "5B764C6EAD68C751825C227EEBA61D24F2E7076D1E1EA0659C37A8D7ABD13006",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_39.dd",
+    "sha256": "2E430956AC2A3F6786684DCF2245EDD65CC16DB910A2CBF683222D351C82F758",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_40.dd",
+    "sha256": "495F64EC2984FB0D69CC8609C23EE92304BA3ED6AB57457385F789EED4CD1C96",
+    "record": 1,
+    "scenario": "random_slack",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_41.dd",
+    "sha256": "A40A6E77D5D7D37B97F9E5668B14BFD59D7ACFB9623EC0EA8C771275BC24EC0D",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_42.dd",
+    "sha256": "B3B098F1FAB03643CC812EC480EB69B2BF20C5453D827C8F37D1CD168846CA64",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_43.dd",
+    "sha256": "F21B3C4D9EC2C9E087C5BCA680DD70ACDF2B99B1C119D1DA1FACFDC97ECE414A",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_44.dd",
+    "sha256": "978D164FBA3E881ED75D652BB5EAC84180B9F10EA7716615AD42C2DEFB03F487",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_45.dd",
+    "sha256": "1A78CA75E01214A568D2CE459DCD4FCE77E105736AD1E968FDA35BCA943B2790",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_46.dd",
+    "sha256": "BACD5F79BE65135136EDA87375091C51BDE504FC4B217639543D35CBA947F822",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_47.dd",
+    "sha256": "5F64724D0F812F8E30344AFDFEE3AF71B1867A73A558705636B8C1CF9B47CBC9",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_48.dd",
+    "sha256": "D3084303607D73770A4982042744D6918ED282DF5855DBD6CBBFDF88F2365459",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_49.dd",
+    "sha256": "BC14643075415C619D3FCCAA354E01E099DC4C0B087B3F75A545B72ED6B898F4",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  },
+  {
+    "image": "slack_50.dd",
+    "sha256": "6BFC6C1123F3B64B28B18EE18B68559F43A23ACD7FCA424B30C69448DE6481B9",
+    "record": 1,
+    "scenario": "marker_in_logical_content",
+    "hidden_payload_present": false
+  }
+]

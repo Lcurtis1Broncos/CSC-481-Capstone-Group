@@ -1,0 +1,104 @@
+\chapter{Introduction}
+\section{Background}
+Digital forensic examination depends on understanding what a storage format
+makes visible and what a particular tool chooses to display. A normal file
+listing is useful for navigation, but it is not a complete representation of
+the bytes associated with an NTFS file. Microsoft documents files as having
+one default stream and potentially additional named streams \cite{streams,clusters}.
+For this project, the distinction matters because an examiner who exports
+only the default stream can recover a valid-looking host file while omitting
+the controlled information attached to it.
+
+Information hiding also has a longer history than digital filesystems.
+Anderson describes historical concealed messages and distinguishes passive
+observers from opponents able to modify communications \cite{anderson}.
+The relevant lesson for this laboratory is methodological: successfully
+storing a hidden message does not establish that it will remain secret,
+survive alteration, or be recoverable under every acquisition method. Each
+claim requires its own experiment. Our work addresses recovery and integrity
+in a deliberately limited storage environment.
+
+The second location examined here is final-cluster file slack: bytes after
+logical content ends in its final allocated cluster. We established a known
+marker's presence through recovery and comparison with its earlier recorded
+hash, rather than inferring it solely from unused capacity.
+
+\section{Problem Statement}
+The project asks whether a purpose-built Python parser can interpret the
+necessary structures in a controlled raw NTFS image, locate documented ADS
+and slack payloads, and recover them without changing the source image.
+A related problem is how to report the strength of the evidence: successful
+file identification, matching length, matching original hash, and unchanged
+source image support different conclusions and must not be merged into one
+unqualified success claim.
+
+The contribution is an inspectable educational workflow connecting on-disk
+offsets, extraction decisions, and verification reports. It does not claim
+that mature tools lack ADS or slack capabilities.
+
+\section{Aims and Objectives}
+The overall aim is to demonstrate controlled NTFS information hiding and
+defensive recovery with evidence that another reader can inspect. Six
+measurable objectives guide the evaluation:
+\begin{enumerate}
+\item To characterize the laboratory image by recording its hash, partition
+start, sector and cluster sizes, MFT location, and record size.
+\item To identify the eight known baseline files and compare their names and
+logical lengths with independently recorded Windows values.
+\item To document a named ADS marker and a bounded slack marker, including
+their lengths, locations, and expected SHA-256 values.
+\item To recover both hidden markers exactly while retaining the original
+source image and writing outputs to separate new files.
+\item To test malformed inputs, unsupported layouts, output protection, and
+verification outcomes using reproducible automated cases.
+\item To package the source, dataset-generation scripts, instructions, and
+results so a fresh checkout can reproduce the supported workflow.
+\end{enumerate}
+
+Original/recovered SHA-256 matches for all eight ordinary files were
+confirmed by the team on November 25. These comparisons remain separate
+from the independently documented hidden-marker comparisons.
+
+\section{Project Scope and Limitations}
+The primary experiment uses a dedicated VirtualBox NTFS disk exported as a
+raw image. The implementation supports selected in-use MFT records,
+resident data, ordinary nonresident extents, exact named-stream selection,
+and bounded reads from the final cluster's slack. It does not reconstruct
+deleted files, decrypt BitLocker or EFS, resolve attribute lists, or traverse
+arbitrary fragmented MFT storage. A successful controlled experiment is not
+evidence of compatibility with every NTFS volume.
+
+Handcrafted NTFS-shaped fixtures exercise supported paths without the
+large image; they are not mountable Windows filesystems. The 50 synthetic
+payload samples vary bytes and lengths within one layout, rather than
+representing independently acquired volumes.
+
+Two fixed detection rules were evaluated separately on 100 labeled synthetic
+images: named-stream screening and a known-marker search in calculated slack.
+Their measured false-positive and evasion rates apply only to the constructed
+cases and selected records. No statistical steganalysis classifier,
+confidentiality layer, or general unknown-payload detector was implemented.
+Chapter 5 explains the measured storage and detection metrics and why a
+visual-quality score is not applicable to this filesystem carrier.
+
+\section{Thesis Outline}
+Chapter 2 reviews information hiding, NTFS structures, and relevant tools.
+Chapter 3 defines the architecture, extraction rules, formulas, and
+experimental design. Chapter 4 explains the code and development challenges.
+Chapter 5 presents historical laboratory results and the new synthetic
+campaign. Chapter 6 examines attacks and limitations. Chapter 7 evaluates
+the objectives and proposes future work. The appendices provide execution
+instructions, raw results, and the development record.
+
+\section{Responsible Disclosure and Ethical Use Statement}
+The software and experiments are intended solely for education, research,
+and defensive analysis of authorized data. All hiding operations were
+restricted to dedicated laboratory material or newly generated fixtures.
+The tools must not be used for malicious concealment, unauthorized access,
+or alteration of another person's evidence. Recovery should operate on
+preserved images, with separate destinations for generated files.
+
+NIST places forensic activity within an organization's documented process
+\cite{nist86}. Accordingly, image identities and evidence gaps are retained.
+This project is not certified for operational casework. No third-party
+vulnerability requiring disclosure was discovered.

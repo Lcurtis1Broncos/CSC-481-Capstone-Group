@@ -12,8 +12,8 @@
 - [Slide 08 — Experiment 1: Alternate Data Stream](#slide-08--experiment-1-alternate-data-stream)
 - [Slide 09 — Experiment 2: File Slack Recovery](#slide-09--experiment-2-file-slack-recovery)
 - [Slide 10 — How Recovery Was Verified](#slide-10--how-recovery-was-verified)
-- [Slide 11 — Week 13: Final Recorded Test Campaign](#slide-11--week-13-final-recorded-test-campaign)
-- [Slide 12 — Important Limitations and Honest Claims](#slide-12--important-limitations-and-honest-claims)
+- [Slide 11 — Recorded Tests and Final Verification](#slide-11--recorded-tests-and-final-verification)
+- [Slide 12 — Verified Results and Remaining Limits](#slide-12--verified-results-and-remaining-limits)
 - [Slide 13 — Engineering and Forensic Lessons](#slide-13--engineering-and-forensic-lessons)
 - [Slide 14 — Project Outcome and Next Steps](#slide-14--project-outcome-and-next-steps)
 - [Slide 15 — Evidence and Source Documents](#slide-15--evidence-and-source-documents)
@@ -149,30 +149,30 @@ Slack calculation: 16,384 allocated − 13,437 logical = 2,947 unused bytes
 
 ---
 
-## Slide 11 — Week 13: Final Recorded Test Campaign
+## Slide 11 — Recorded Tests and Final Verification
 
 | Item | Details |
 |---|---|
-| 64 / 64 | Regression tests passed |
-| 8 / 8 | File names + lengths matched |
+| 73 / 73 | Current report-branch tests passed, November 25 |
+| 8 / 8 | Original-file hashes matched; team-confirmed November 25 |
 | 2 / 2 | Known payload hashes matched |
 | Source image unchanged | SHA-256 before = SHA-256 after |
 
-Evidence: November 15 regression.txt, image_validation.json, slack_validation.json
+Tagged release: 68 tests and seven checks (November 24). Report: 50 recovery samples and 100 detection images. The earlier November 15 lab suite had 64 tests.
 
 ---
 
-## Slide 12 — Important Limitations and Honest Claims
+## Slide 12 — Detection Results and Scope
 
-### Verified
+### ADS screening
 
-Known ADS and slack payloads matched expected byte counts and original SHA-256 values. The working image remained unchanged during validation.
+25 / 25 hidden streams flagged. 100% detection, 0% evasion, 40% false-positive rate. Legitimate streams also need review.
 
-### Not yet verified
+### Slack signature search
 
-The eight recovered baseline files match expected names and sizes, but independently recorded original content hashes are unavailable.
+15 / 25 hidden markers flagged. 60% detection, 40% evasion, 0% false-positive rate. All ten transformed markers were missed.
 
-Additional follow-up: earlier milestone requested at least 10 known files; current documented controlled set contains 8.
+100 synthetic images, 50 per rule. Known records and a fixed marker; these are not real-world population rates. See `reports/evidence/final_detection/` for all labels and decisions. Fragmented MFT storage, attribute lists, encrypted recovery and general unknown-payload discovery remain outside scope.
 
 ---
 
@@ -194,7 +194,7 @@ A read-only NTFS parser and recovery workflow can locate and recover controlled 
 
 ### What remains
 
-Obtain original hashes for the eight baseline files; expand the validation set if required; finalize evidence custody details and report/presentation review.
+Rehearse the 8–10-minute presentation, confirm handoffs, deliver the live demonstration, and submit final materials. The report is signed and dated.
 
 Bottom line: we connected filesystem structure → hidden bytes → recovery → independent verification.
 
@@ -207,7 +207,7 @@ Bottom line: we connected filesystem structure → hidden bytes → recovery →
 - docs/week7_ads_payload_manifest.md  •  controlled ADS
 - reports/evidence/week8/w8_slack_payload_manifest.json  •  slack marker
 - reports/evidence/week13/  •  regression and recovery validation
-- reports/FORENSIC_EVIDENCE_CATALOG.md  •  screenshot index
+- docs/baseline_hash_verification.md  •  eight original-file hash matches
 
 ---
 
