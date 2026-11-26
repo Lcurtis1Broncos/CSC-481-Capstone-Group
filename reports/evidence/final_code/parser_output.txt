@@ -1,0 +1,109 @@
+Image: C:\Users\jeffp\Documents\quickstart\final-code-check-3ad3bef1bf8b4f86a0062a59fa02c8fa\acceptance\dataset\synthetic.dd
+Read: 512 bytes (first sector)
+
+Boot-sector summary
+  OEM ID:               NTFS
+  NTFS signature valid: True
+  Bytes per sector:     512
+  Sectors per cluster:  1
+  Bytes per cluster:    512
+  Total sectors:        64
+  MFT start LCN:        4
+  MFT mirror LCN:       4
+  MFT record size:      1024 bytes
+  Volume serial:        0807060504030201
+  Boot signature valid: True
+
+First MFT record summary
+  Record number:        0 ($Mft)
+  Byte offset:          2048
+  Record size:          1024 bytes
+  Record signature:     FILE
+  FILE signature valid: True
+  First attribute:      byte 56
+  Record in use:        True
+  Is directory:         False
+
+MFT file-name listing
+  Record 0: [33m$MFT[0m (file, namespace 1)
+  Record 1: [33mSyntheticHost.bin[0m (file, namespace 1)
+  Record 2: [33mhostfile.txt[0m (file, namespace 1)
+  Record 3: [33m$Volume[0m (file, namespace 1)
+  Record 5: [33m.[0m (directory, namespace 1)
+
+MFT record 1 attribute summary
+  FILE signature valid: True
+  Record in use:        True
+
+  $FILE_NAME
+    Name:            [33mSyntheticHost.bin[0m
+    Logical size:    0 bytes
+    Allocated size:  0 bytes
+
+  $DATA
+    Stream name:     [unnamed]
+    Resident:        False
+    Logical size:    700 bytes
+    Allocated size:  1024 bytes
+    Data runs:
+      Run 1: VCN 0, LCN 40, 1 clusters
+        Image byte offset: 20480
+      Run 2: VCN 1, LCN 30, 1 clusters
+        Image byte offset: 15360
+    Final-cluster slack: 324 bytes
+    Slack image offset:  15548
+
+MFT record 2 attribute summary
+  FILE signature valid: True
+  Record in use:        True
+
+  $FILE_NAME
+    Name:            [33mhostfile.txt[0m
+    Logical size:    0 bytes
+    Allocated size:  0 bytes
+
+  $DATA
+    Stream name:     [unnamed]
+    Resident:        True
+    Logical size:    31 bytes
+    Allocated size:  resident in MFT record
+
+  $DATA
+    Stream name:     CapstoneEvidence
+    Resident:        True
+    Logical size:    36 bytes
+    Allocated size:  resident in MFT record
+
+Offset  Hex bytes                                        ASCII
+0000  00 00 00 4E 54 46 53 20 20 20 20 00 02 01 00 00  ...NTFS    .....
+0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0020  00 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00  ........@.......
+0030  04 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00  ................
+0040  F6 00 00 00 00 00 00 00 01 02 03 04 05 06 07 08  ................
+0050  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0060  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0070  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0080  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0090  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00A0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00B0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00C0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00D0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00E0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00F0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0100  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0110  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0120  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0130  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0140  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0150  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0160  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0170  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0180  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+0190  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+01A0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+01B0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+01C0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+01D0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+01E0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+01F0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 55 AA  ..............U.

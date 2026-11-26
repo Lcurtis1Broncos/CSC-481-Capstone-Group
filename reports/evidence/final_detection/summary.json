@@ -1,0 +1,56 @@
+{
+  "created_utc": "2026-11-26T00:56:32.693940+00:00",
+  "python": "3.15.0",
+  "seed": 4811125,
+  "synthetic_images": 100,
+  "scope": "Known-record synthetic screening experiment; not population accuracy or general steganalysis",
+  "ground_truth": "Intentional hidden payload versus legitimate stream/ordinary-content control, defined at construction",
+  "ADS": {
+    "TP": 25,
+    "TN": 15,
+    "FP": 10,
+    "FN": 0,
+    "samples": 50,
+    "positives": 25,
+    "negatives": 25,
+    "accuracy_percent": 80.0,
+    "detection_rate_percent": 100.0,
+    "false_positive_rate_percent": 40.0,
+    "evasion_rate_percent": 0.0
+  },
+  "SLACK": {
+    "TP": 15,
+    "TN": 25,
+    "FP": 0,
+    "FN": 10,
+    "samples": 50,
+    "positives": 25,
+    "negatives": 25,
+    "accuracy_percent": 80.0,
+    "detection_rate_percent": 60.0,
+    "false_positive_rate_percent": 0.0,
+    "evasion_rate_percent": 40.0
+  },
+  "source_images_unchanged": true,
+  "definitions": {
+    "ADS_rule": "Flag any named DATA attribute in selected record",
+    "SLACK_rule": "Find literal TEAM3_SLACK_TEST_20261008 only in calculated slack",
+    "evasion": "Hidden-positive cases not flagged by that fixed screening rule"
+  },
+  "windows_lab_positive_check": {
+    "ADS": {
+      "flagged": true,
+      "named_streams": [
+        "CapstoneEvidence"
+      ]
+    },
+    "SLACK": {
+      "flagged": true,
+      "marker_relative_offset": 0
+    },
+    "source_sha256_before": "D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7",
+    "source_sha256_after": "D54886033D5ED8E6B9BA5C58EF60A414C3F2202BD1A2F6A5A7D407D499BCA5C7",
+    "source_unchanged": true,
+    "scope": "Two known positive records only; no real-volume negative-rate claim"
+  }
+}

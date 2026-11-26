@@ -1,0 +1,114 @@
+2026-11-24|Jeff Perez|06eb0ff|Package final code with reproducible dataset and release verification
+2026-11-22|Lcurtis1Broncos|9dabb1a|Revise report status and conclusion sections
+2026-11-22|Lcurtis1Broncos|ba9d6bc|Revise forensic evidence log for clarity and accuracy
+2026-11-22|Lcurtis1Broncos|3dd8249|Add final capstone report: FINAL_FORENSIC_EVIDENCE_LOG.md
+2026-11-22|Lcurtis1Broncos|12ceb8d|Add final capstone report: FINAL_TECHNICAL_REPORT.md
+2026-11-15|Lcurtis1Broncos|446ce56|Update 2026-11-15_lucas_curtis.md
+2026-11-15|Lcurtis1Broncos|a556536|Update title of Week 12 Slack Space Recovery report
+2026-11-15|Lcurtis1Broncos|e38dfbb|Update link for Week 12 Slack workflow write-up
+2026-11-15|Lcurtis1Broncos|189b2fa|Update link for Week 12 slack workflow write-up
+2026-11-15|Lcurtis1Broncos|64fbd82|Update link to Lucas's journal in weekly report
+2026-11-15|Lcurtis1Broncos|f0cafe0|Remove superseded Week 12 workflow path after rename conflict resolution
+2026-11-15|Lcurtis1Broncos|2c040c3|Resolve Week 12 workflow rename conflict and preserve expanded evidence
+2026-11-15|Lcurtis1Broncos|d798ab2|Add WEEK12 Slack Space Recovery Test Results report
+2026-11-15|Jeff Perez|f5a1e19|W13: Finalize evidence, journals, and meeting minutes
+2026-11-15|Jeff Perez|ab3359e|W13: Record parser and recovery test campaign
+2026-11-15|Lcurtis1Broncos|a3e425b|Remove workflow from reports/week12 after move
+2026-11-15|Lcurtis1Broncos|8e87519|Move Week 12 slack recovery workflow into evidence folder
+2026-11-15|Lcurtis1Broncos|58605d4|Remove workflow from reports root after move
+2026-11-15|Lcurtis1Broncos|b1734ae|Move Week 12 slack recovery workflow into week12 reports folder
+2026-11-15|Lcurtis1Broncos|fbacdaa|Update SHA-256 recovery validation details
+2026-11-15|Lcurtis1Broncos|3212d99|Add Week 12 slack space recovery workflow report
+2026-11-14|Lcurtis1Broncos|9e78da4|Document screenshot evidence using weekly progress reports
+2026-11-14|Lcurtis1Broncos|c5de26b|Add organized forensic evidence catalog
+2026-11-08|Lcurtis1Broncos|6955b6d|Update next week's plan in weekly report
+2026-11-08|Lcurtis1Broncos|63335c2|Update weekly report for submission status
+2026-11-08|Lcurtis1Broncos|6888bc9|Finalize weekly journal for November 2 - November 8, 2026
+2026-11-08|Lcurtis1Broncos|1189416|Update weekly report status and contributions
+2026-11-08|Lcurtis1Broncos|ab620aa|Revise NTFS Slack Space Recovery Workflow template
+2026-11-08|Jeff Perez|245048c|W12: Add bounded slack recovery, validation, and weekly documentation
+2026-11-01|Lcurtis1Broncos|a225e07|Refine language in weekly journal entry
+2026-11-01|Lcurtis1Broncos|0cd5085|Fix formatting in weekly report 11
+2026-11-01|Lcurtis1Broncos|0b207f9|Revise weekly report for Lucas's ADS recovery tests
+2026-11-01|Lcurtis1Broncos|ddcbbb1|Add ADS Recovery Workflow Test documentation
+2026-11-01|Lcurtis1Broncos|8e26d3d|Rename ADS Recovery Workflow to Template
+2026-11-01|Jeff Perez|94e19f0|W11: Finalize meeting records and await Lucas input
+2026-11-01|Jeff Perez|bdbbec1|W11: Document Jeff ADS validation and weekly evidence
+2026-10-24|Jeff Perez|40b9f87|W10: Complete recovery support, automated reports, and weekly evidence
+2026-10-20|Lcurtis1Broncos|3f5339d|Add ADS Recovery Workflow documentation
+2026-10-18|Jeff Perez|73d3e9a|W9: Complete follow-up validation and weekly documentation
+2026-10-11|Jeff Perez|671e570|W8: Validate data runs and slack; prepare midterm package
+2026-10-03|Jeff Perez|489ec16|W7: Parse NTFS attributes and validate controlled ADS
+2026-09-28|Lcurtis1Broncos|570d21c|Correct meeting date in minutes
+2026-09-28|Lcurtis1Broncos|6b6bbf4|Update meeting minutes with additional details
+2026-09-28|Lcurtis1Broncos|6ee520a|Improve formatting by adding a blank line
+2026-09-28|Lcurtis1Broncos|6fadb58|Add empty line for formatting in meeting minutes
+2026-09-28|Lcurtis1Broncos|378c30f|Add meeting minutes for September 28, 2026
+2026-09-28|Lcurtis1Broncos|8f5ea4c|Add meeting minutes for week 7
+2026-09-25|Jeff Perez|e909692|W6: Finalize report and meeting review
+2026-09-24|Jeff Perez|f50ce53|W6: List known files from MFT records
+2026-09-21|Lcurtis1Broncos|b9c4ede|Add meeting minutes for September 21, 2026
+2026-09-20|Jeff Perez|7ca1cde|W5: Finalize report and meeting minutes
+2026-09-20|Lcurtis1Broncos|6187f74|Update weekly journal for week 5
+2026-09-20|Lcurtis1Broncos|1782420|Revise Lucas Curtis's contributions in weekly report
+2026-09-20|Lcurtis1Broncos|a5ec5cc|Revise meeting minutes for September 20, 2026
+2026-09-16|Jeff Perez|ee584dc|W5: Verify NTFS fields with Windows fsutil
+2026-09-16|Jeff Perez|28e42ed|W5: Add volume serial validation and refresh evidence
+2026-09-16|Jeff Perez|420edab|W5: Parse full-disk NTFS baseline and document evidence
+2026-09-15|Lcurtis1Broncos|703bb87|Add meeting minutes for week 5
+2026-09-12|Jeff Perez|8fc8c3e|W4: Professionalize report and evidence documentation
+2026-09-12|Lcurtis1Broncos|8d5084a|Revise weekly report with updated contributions
+2026-09-12|Lcurtis1Broncos|d9cbf40|Revise weekly journal for September 13, 2026
+2026-09-11|Lcurtis1Broncos|6139917|Rename 2026-19-11.md to 2026-09-11.md
+2026-09-11|Lcurtis1Broncos|adf75b8|Add meeting minutes for September 11, 2026
+2026-09-11|Lcurtis1Broncos|222c20a|Add files via upload
+2026-09-11|Lcurtis1Broncos|8a7e87d|Update Baseline Evidence.md
+2026-09-11|Lcurtis1Broncos|3bf1aab| Added baseline entry
+2026-09-11|Jeff Perez|4d32d80|W4: Draft team report with MFT evidence
+2026-09-11|Jeff Perez|f65922d|W4: Add Jeff Perez weekly journal
+2026-09-11|Jeff Perez|f7a7ae3|W4: Read and validate first MFT record
+2026-09-07|Jeff Perez|a0585c5|Docs: Add installation run and test instructions
+2026-09-06|Lcurtis1Broncos|fdba0ab|Update meeting end time to 5:30pm
+2026-09-06|Lcurtis1Broncos|356c928|Add meeting minutes for September 6, 2026
+2026-09-06|Lcurtis1Broncos|9c7e2cd|Revise meeting minutes for August 6, 2026
+2026-09-06|Jeff Perez|e60525c|W3: Add team report evidence screenshots
+2026-09-06|Jeff Perez|fe03bb6|W3: Add Lucas progress to team report
+2026-09-06|Lcurtis1Broncos|3dd7112|Update weekly journal with NTFS research and template
+2026-09-05|Lcurtis1Broncos|f01453a|Rename NTFS_structures_and_fields_definitions to NTFS_structures_and_fields_definitions.md
+2026-09-05|Lcurtis1Broncos|9bfe3d1|Rename NTFS on disk structure research file
+2026-09-05|Lcurtis1Broncos|cb2e332|Rename Evidence Log Format_template to Evidence Log Format_template.md
+2026-09-05|Lcurtis1Broncos|86eff0a|Document NTFS structures and field definitions
+2026-09-05|Lcurtis1Broncos|7ed61c4|Create Evidence Log Format template
+2026-09-05|Lcurtis1Broncos|2ab215b|Add research on NTFS on-disk structures
+2026-09-03|Jeff Perez|91d4221|W3: Draft team progress report
+2026-09-03|Jeff Perez|c3dd9b0|W3: Add NTFS boot sector reader
+2026-09-01|Jeff Perez|3b59691|W3: Remove weekly report placeholder
+2026-09-01|Jeff Perez|03e345b|W3: Add journal and report placeholders
+2026-09-01|Jeff Perez|fba4941|W3: Standardize meeting minutes and semester plan names
+2026-08-31|Lcurtis1Broncos|771bc16|Rename meeting minutes.md to Meeting Minutes 1.md
+2026-08-31|Lcurtis1Broncos|d6987f0|Update and rename Meeting Minutes Template.md to Meeting Minutes 2.md
+2026-08-31|jeff-actual|ad7b5b9|Add README for presentation folder
+2026-08-31|jeff-actual|07a1475|Add weekly journals folder
+2026-08-31|jeff-actual|a10f2a2|Add README for reports directory
+2026-08-31|jeff-actual|16bd31a|Add README for tests directory
+2026-08-31|jeff-actual|bd5f1c1|Add documentation folder
+2026-08-31|jeff-actual|0716270|Add capstone project folder structure
+2026-08-31|Lcurtis1Broncos|a0badc0|Remove README from Meeting Minutes folder
+2026-08-31|Lcurtis1Broncos|02e820d|Add meeting minutes template
+2026-08-31|Lcurtis1Broncos|b4ba094|Remove meeting minutes from repository root
+2026-08-31|Lcurtis1Broncos|59640de|Move meeting minutes into Meeting Minutes folder
+2026-08-31|Lcurtis1Broncos|6b22a2c|Add Meeting Minutes folder
+2026-08-31|Lcurtis1Broncos|80e6bdd|Delete Project Plan.md
+2026-08-31|Lcurtis1Broncos|6a0c9b5|Add files via upload
+2026-08-30|Lcurtis1Broncos|6f47bf0|Update team member section with Lucas's details
+2026-08-30|jeff-actual|de7e48c|Improve capstone project README
+2026-08-27|Lcurtis1Broncos|9d8924a|Add files via upload
+2026-08-21|jeff-actual|18bd661|added a new section about Jeff's background and experience in the README.md file.
+2026-08-21|jeff-actual|ad49f52|added a new section about Jeff's background and experience in the README.md file.
+2026-08-21|Lcurtis1Broncos|5afbf71|Fixed what I broke in the README file.
+2026-08-21|Lcurtis1Broncos|9cd5d9f|Revise meeting minutes for Meeting 1
+2026-08-21|Lcurtis1Broncos|71dd018|Initial commit
+2026-08-21|jeff-actual|8de4305|added self-description to README.md
+2026-08-21|Lcurtis1Broncos|f84cb3e|Add files via upload
+2026-08-21|Lcurtis1Broncos|bc2ee0c|Add team lead information to README
+2026-08-21|Lcurtis1Broncos|a0440d1|Initial commit

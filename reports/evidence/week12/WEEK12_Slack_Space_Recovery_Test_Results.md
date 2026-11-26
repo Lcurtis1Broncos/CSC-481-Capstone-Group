@@ -1,5 +1,10 @@
 # NTFS Slack Space Recovery Test Results — Week 12
 
+**Later follow-up, November 25:** Jeff confirmed matching original/recovered
+SHA-256 hashes for all eight baseline files. See the
+[dated comparison](../../../docs/baseline_hash_verification.md). The earlier
+limitations below describe the evidence available during this Week 12 run.
+
 **Evidence ID:** `TEAM3-SLACK-RECOVERY`  
 **Project:** CSC-481 Capstone, Team 3  
 **Workflow status:** <span>PASS</span>  

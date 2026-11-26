@@ -1,0 +1,112 @@
+\chapter{Security and Robustness Analysis}
+\section{Attack Surface Analysis}
+\subsection{Payload Removal or Overwrite}
+An actor with permission to alter the storage can remove a named stream,
+replace its contents, or overwrite the bytes holding the slack marker. A
+slack marker also depends on allocation remaining compatible with the
+recorded location. The current implementation does not reserve the slack
+through an active filesystem service and does not provide an error-correcting
+code. Once the selected original bytes are lost, knowing their earlier hash
+does not reconstruct them.
+
+The single-bit experiments demonstrate a narrow consequence: recovery still
+exports the requested length, but original-payload verification fails. They
+do not establish a measured survival rate after mounted filesystem writes,
+defragmentation, backup, copying to another filesystem, or secure deletion.
+Those transformations would require new controlled images and independent
+recording of their effects. For current evidence, stable offline storage is
+an assumption, not a robustness feature.
+
+\subsection{Manifest Substitution and Misleading Expectations}
+The original hash is a trust anchor. If an attacker replaces both a payload
+and the manifest used to judge it, matching those two values does not
+establish agreement with the earlier legitimate content. SHA-256 digests
+identify changes relative to a reference \cite{sha}; they are not signatures
+proving the reference's author. The project's plaintext JSON manifests are
+not cryptographically authenticated.
+
+This attack is feasible wherever a person can edit both the evidence copy
+and its expectations. Repository history offers a review trail, but an
+investigator still needs to establish which version is trusted. A useful
+hardening step would be to sign acquisition manifests and store the original
+digest record separately. That would address provenance and substitution;
+it would not hide the marker or improve NTFS parsing coverage.
+
+\subsection{Malformed Metadata and Resource Exhaustion}
+A hostile image can supply inconsistent lengths, invalid mapping pairs,
+out-of-volume extents, unsupported flags, or damaged update sequences. These
+structures can lead to false content, excessive work, or unexpected reads if
+interpreted without checks. The recovery layer validates many such cases and
+the suite includes malformed and truncated inputs. Unsupported layouts are
+refused instead of treated as successful empty files.
+
+The implementation has not undergone comprehensive fuzzing, formal
+verification, or independent adversarial review. Some valid-looking metadata
+can still request substantial work, and a full-image hash costs a read of
+the entire input. Controlled fixtures do not establish resistance to every
+resource-exhaustion attack. Operational hardening would include explicit
+resource budgets, controlled process execution, and a documented policy for
+very large images.
+
+\subsection{Source Changes During Examination}
+Before/after hashing is an observation over two points in time. It does not
+hold a transactionally immutable snapshot throughout the export. If another
+process changes the source while the tool is running, reads can observe an
+inconsistent state. The code warns against changing the image between
+location and recovery; the report can mark a changed-source hash as failure.
+An adversary able to change and restore a file between checks is outside the
+protection offered by those two hashes alone.
+
+The appropriate mitigation is acquisition and stable-image handling, with
+read-only media or a protected snapshot where available. A reproducible
+student experiment should not be described as a hardware write-blocking
+system or a complete chain-of-custody solution. NIST's forensic guidance
+provides the wider process context for preserving and interpreting evidence
+\cite{nist86}.
+
+\section{Detection and Confidentiality Limits}
+The markers are plain ASCII and the stream name is documented. The design
+does not attempt to defeat an examiner who enumerates named streams or reads
+the relevant slack bytes. The reviewed Streams and Sleuth Kit capabilities
+illustrate why omission from a default file view is not equivalent to
+undetectability \cite{sysstreams,icat}. Our results should therefore be read
+as evidence that such material can be recovered, not that the hiding method
+evades capable forensic tools.
+
+No encryption protects the hidden content. Microsoft's EFS is a distinct
+filesystem encryption feature \cite{efs}, and it is outside this extractor's
+supported stream types. Adding application-level encryption in a future
+experiment would address confidentiality of the payload, but would not make
+its existence inherently invisible. Verification of plaintext recovery would
+then require a clearly specified decryption stage and key-handling procedure.
+
+\section{Implementation and Evaluation Limitations}
+The release's recovery path applies fixups before interpreting resident
+content. The older metadata CLI does not apply those checks on every path;
+its output must not be treated as equivalent to a validated content export.
+Fragmented ordinary streams are tested, whereas general fragmented MFT
+traversal is refused. Extension records, attribute lists, sparse/compressed/
+encrypted recovery, GPT, complete directory reconstruction, and unknown
+payload discovery are not demonstrated.
+
+The team confirmed baseline-file hash matches on November 25.
+The 50 new samples share one handcrafted metadata layout.
+Recovery-corruption testing was limited to a single-bit substitution.
+The separate 100-image detection campaign measured fixed-rule false-positive
+and evasion rates, including misses for a reversible marker transformation.
+It did not measure unknown-content discovery across independent real volumes.
+No benchmark established general extraction throughput. These limits prevent
+broad security or compatibility claims even though all included tests passed.
+
+\section{Future Hardening}
+The first priority is a broader independent validation corpus: multiple
+Windows-formatted images, varied cluster sizes and fragmentation, and
+original hashes collected before extraction. A second priority is shared
+strict record validation across both CLIs, followed by bounded MFT-run and
+attribute-list support. Those changes should be tested against independent
+tools and retained failure cases.
+
+Signed manifests would strengthen provenance. Mutation testing and fuzzing
+would exercise parser defenses. Separate real-filesystem copy-and-write
+tests should measure payload loss. Encryption alone would not resolve these
+evidence and parsing limitations.

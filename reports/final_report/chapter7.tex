@@ -1,0 +1,81 @@
+\chapter{Conclusion and Future Work}
+\section{Conclusion}
+The project achieved its main controlled-recovery aim. A Python raw-image
+workflow identifies the relevant NTFS structures, selects documented named
+streams and final-cluster slack ranges, exports recovered bytes to separate
+files, and records verification outcomes. The two original hidden markers
+were recovered with matching expected lengths and SHA-256 values, while the
+recorded working-image hash remained unchanged during recovery.
+
+Objective 1 was achieved for the documented unencrypted laboratory image:
+partition geometry and MFT location were recorded and compared with Windows
+output. Objective 2 was achieved for all eight baseline-file names and lengths.
+The team also confirmed matching original and recovered SHA-256 hashes
+for all eight files on November 25. This later confirmation is recorded
+separately from the earlier machine-generated recovery results.
+
+Objectives 3 and 4 were achieved for the documented ADS and slack payloads.
+Their original expectations and selection identities were preserved, and
+later exports matched them. Objective 5 is supported by 68 passing release
+tests, seven acceptance checks, and the final synthetic campaign. The
+campaign recovered 50 unchanged payloads exactly and detected 50 deliberate
+single-bit mismatches against the original expectations. These outcomes
+demonstrate correctness on tested inputs, not immunity to every attack.
+
+A separate 100-image detection campaign measured 100\% ADS detection with
+40\% false positives and 0\% evasion, versus 60\% slack-marker detection with
+0\% false positives and 40\% evasion. These fixed-rule results expose the
+tradeoff between broad stream screening and a narrow plaintext signature.
+
+Objective 6 was achieved through the tagged source package, updated README,
+and small generated dataset. A fresh source copy ran without the separately
+retained 8 GB images. The final report adds its own reproducible campaign
+and raw results while preserving the identity of the earlier code release.
+The project can therefore be considered successful within its stated
+educational scope, with partial rather than universal validation.
+
+Filename, length, original-payload hash, and source-preservation checks
+support different conclusions. Each is reported separately.
+
+\section{Future Work}
+Three extensions would provide the most practical improvement:
+\begin{enumerate}
+\item Build a diverse Windows-created corpus with original hashes, several
+allocation patterns, and independent recovery comparisons. This would
+address the current concentration on one lab volume and one synthetic layout.
+\item Extend strict validation consistently to the metadata CLI and implement
+bounded fragmented-MFT and attribute-list handling. Each newly supported
+layout should have a positive case, malformed cases, and explicit limits.
+\item Extend robustness and discovery studies to independent Windows-created
+positive and negative volumes. Evaluate copying, filesystem writes, and payload
+removal separately from signature evasion, and compare broader detectors with
+the two measured screening baselines using defined denominators.
+\end{enumerate}
+
+These extensions preserve the existing emphasis on transparent evidence.
+They would broaden the tool's usefulness without requiring unsupported
+claims about covert security or operational forensic readiness.
+
+\section{Self Evaluation}
+\noindent\textbf{Jeff Perez self-assigned grade: B (85/100).}
+
+This assessment credits implementation of the parser, recovery support,
+controlled slack-copy tool, verification reporting, automated tests, and
+reproducible release package. Documented results demonstrate recovery of
+both hidden markers and protection of the source image. Deductions reflect
+limited independent real-volume validation, unsupported advanced NTFS
+layouts, and the need for broader robustness and discovery experiments.
+Completing the planned functionality is a substantial result, while the
+remaining evaluation gaps justify a B rather than full marks.
+
+\newpage
+\noindent\textbf{Lucas Curtis self-assigned grade: A (95/100).}
+
+This assessment credits preparation of the VirtualBox laboratory, image
+exports, known-file information, the manual ADS procedure, recovery-workflow
+documentation, evidence organization, and the initial final-report and
+evidence-log drafts. These contributions supplied the controlled environment
+and records needed to connect implementation with observed results.
+Deductions acknowledge limited test-volume diversity and incomplete
+historical environment details. The contribution record in Appendix C
+provides the supporting development history.

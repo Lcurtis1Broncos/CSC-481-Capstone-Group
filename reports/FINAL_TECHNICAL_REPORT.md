@@ -1,15 +1,19 @@
-# Final Technical Report — Review Draft
+# Final Technical Report Summary
 
 **Project:** NTFS Filesystem Steganography and Forensic MFT Parser  
 **Course:** CSC-481 Capstone  
 **Team:** Team 3  
 **Members:** Lucas Curtis and Jeff Perez  
 **Prepared:** November 17, 2026  
-**Status:** DRAFT (Jeff's Approval Pending)
+**Updated:** November 26, 2026
+
+**Status:** Complete supporting summary. The expanded, signed and dated
+[final report](NTFS_Filesystem_Steganography_and_Forensic_MFT_Parser_final_report.pdf)
+is the submission version.
 
 ## Abstract
 
-This capstone investigates forensic identification and recovery of data concealed in two NTFS storage locations: named Alternate Data Streams (ADS) and unused bytes in the final allocated cluster of a file (file slack). The team developed Python tooling to interpret raw NTFS images, locate partitions and Master File Table (MFT) records, decode file attributes and data runs, and export selected file contents and controlled hidden payloads. Validation used a dedicated VirtualBox NTFS disk, recorded manifests, image SHA-256 hashes, Windows filesystem comparisons, and automated regression tests. In the November 15, 2026 validation, 64 automated tests passed; eight baseline files matched expected names and byte lengths; and both the 36-byte ADS marker and 25-byte slack marker were recovered with SHA-256 matches to their original manifests. The working image hash did not change during recovery.
+This capstone investigates forensic identification and recovery of data concealed in two NTFS storage locations: named Alternate Data Streams (ADS) and unused bytes in the final allocated cluster of a file (file slack). The team developed Python tooling to interpret raw NTFS images, locate partitions and Master File Table (MFT) records, decode file attributes and data runs, and export selected file contents and controlled hidden payloads. Validation used a dedicated VirtualBox NTFS disk, recorded manifests, image SHA-256 hashes, Windows filesystem comparisons, and automated regression tests. In the November 15, 2026 validation, 64 automated tests passed; eight baseline files matched expected names and byte lengths; and both the 36-byte ADS marker and 25-byte slack marker were recovered with SHA-256 matches to their original manifests. The working image hash did not change during recovery. On November 25, the team also confirmed original/recovered SHA-256 matches for all eight baseline files.
 ## 1. Introduction
 
 NTFS organizes file metadata in the Master File Table and stores content in resident attributes or disk clusters referenced by nonresident data runs. Two locations can hold information that may not be apparent in a conventional file listing: a named `$DATA` stream attached to a host file and the unused tail of a file's last allocated cluster. Both are relevant to digital forensics because a filename-only examination may overlook them.
@@ -73,7 +77,7 @@ The parser identified the unencrypted NTFS partition, decoded volume geometry, c
 | `HTMLtestdoc.html` | 55 | 608 | PASS |
 | `JSON_test_File.json` | 56 | 579 | PASS |
 
-**Important:** The original file-content SHA-256 hashes were not available. Recovered hashes were recorded, but byte-for-byte equivalence to independently recorded originals is **NOT VERIFIED**.
+**November 25 update:** Jeff confirmed that the original SHA-256 hashes match the recorded recovered hashes for all eight baseline files. The [dated comparison record](../docs/baseline_hash_verification.md) records the confirmation and matching values. Original command output was not attached; the earlier November 15 JSON remains unchanged.
 
 ### 6.2 Alternate Data Stream recovery
 
@@ -98,7 +102,7 @@ These results apply to the controlled test images and tested cases. They do not 
 
 ## 8. Conclusion
 
-The team implemented and tested a Python-based NTFS forensic workflow that identifies partition and MFT structures, decodes file attributes and data runs, and recovers controlled named ADS and file-slack payloads from raw disk images. By November 15, 2026, the documented regression suite passed 64 tests, both hidden markers were recovered with matching original SHA-256 hashes, and the source working image remained unchanged during extraction. Eight known files were successfully identified and recovered at expected lengths, although exact content equivalence remains unverified without original hashes. The project demonstrates a useful foundation for reproducible, integrity-conscious NTFS forensic analysis and identifies clear next steps for broader validation.
+The team implemented and tested a Python-based NTFS forensic workflow that identifies partition and MFT structures, decodes file attributes and data runs, and recovers controlled named ADS and file-slack payloads from raw disk images. By November 15, 2026, the documented regression suite passed 64 tests, both hidden markers were recovered with matching original SHA-256 hashes, and the source working image remained unchanged during extraction. Eight known files were successfully identified and recovered at expected lengths, with matching original/recovered hashes subsequently confirmed by the team on November 25. The project demonstrates a useful foundation for reproducible, integrity-conscious NTFS forensic analysis and identifies clear next steps for broader validation.
 
 ## 9. References and evidence appendices
 
@@ -114,4 +118,22 @@ The team implemented and tested a Python-based NTFS forensic workflow that ident
 - `reports/weekly_report_13.md` — November 15 validation summary and screenshots.
 - `reports/FORENSIC_EVIDENCE_CATALOG.md` — consolidated screenshot, hexdump, and hash index.
 - `reports/evidence/week12/WEEK12_Slack_Space_Recovery_Test_Results.md` — slack workflow and supporting results.
+
+## November 25 Detection Evaluation Addendum
+
+The expanded thesis-format report now includes the previously missing
+detection-evasion experiment. On 100 labeled synthetic images, named-stream
+screening produced TP/FN/FP/TN = 25/0/10/15 (100% detection, 40% FPR,
+0% evasion); slack signature search produced 15/10/0/25 (60% detection,
+0% FPR, 40% evasion). Each rule had 80% accuracy. Legitimate named streams
+explain the ADS false positives; reversibly transformed markers explain
+the slack misses. These are fixed-rule results on known-record synthetic
+inputs, not general steganalysis or population estimates.
+
+Both known Windows positives were flagged and full-image hashes remained
+unchanged. All 100 synthetic images were also preserved. The expanded
+suite passed 73 tests in 9.567 seconds. See
+[complete evidence](evidence/final_detection/README.md) and
+[the signed final report](NTFS_Filesystem_Steganography_and_Forensic_MFT_Parser_final_report.pdf). Earlier logs and the
+`v1.0-final` release identity are unchanged.
 

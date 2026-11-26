@@ -1,0 +1,35 @@
+{
+  "dataset": "Deterministic synthetic submission fixture",
+  "scope": "Handcrafted NTFS-shaped structures; not original lab evidence or a mountable volume",
+  "image": "synthetic.dd",
+  "image_bytes": 32768,
+  "image_sha256": "8842A29E7C612AD174427821DEAC849FEE6EA75685529276728C52460152919D",
+  "items": [
+    {
+      "name": "host",
+      "record": 1,
+      "stream": "",
+      "length": 700,
+      "sha256": "02E9DE1F817F2E6A4E851701EAD0745531844CE1C9B533E660E1DB2F854B45CE",
+      "original": "host_original.bin"
+    },
+    {
+      "name": "ads",
+      "record": 2,
+      "stream": "CapstoneEvidence",
+      "length": 36,
+      "sha256": "E3CB29B996899849E804A8FD7DB33F7CCECBCB2569005353BD082D320D0D997E",
+      "original": "ads_original.bin"
+    },
+    {
+      "name": "slack",
+      "record": 1,
+      "stream": "",
+      "length": 25,
+      "sha256": "3BF8F582FF237AD7F739D39EDCF54CB35E0E6FDFD75AD47CA55F3598629390F2",
+      "original": "slack_original.bin",
+      "slack_length": 25,
+      "image_offset": 15548
+    }
+  ]
+}

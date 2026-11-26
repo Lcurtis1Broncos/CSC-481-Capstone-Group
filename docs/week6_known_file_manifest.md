@@ -54,3 +54,10 @@ All eight names and byte sizes match; this closes the exact-size follow-up.
 This independently checks names and logical sizes, not file-content hashes,
 timestamps, or complete image identity. Payload recovery/hash validation
 remains separate work.
+
+## Original-file hash follow-up — November 25
+
+Jeff confirmed that original SHA-256 hashes match the recorded recovered
+hashes for all eight baseline files. See the [dated comparison](baseline_hash_verification.md)
+for the values and confirmation basis. Earlier image acquisitions and test
+logs retain their original dates and recorded results.

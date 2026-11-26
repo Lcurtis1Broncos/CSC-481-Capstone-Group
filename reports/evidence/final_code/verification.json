@@ -1,0 +1,15 @@
+{
+  "overall_result": "PASS",
+  "dataset": "Deterministic synthetic submission fixture",
+  "checks": [
+    "Parser identifies synthetic file and named ADS",
+    "host: exact original bytes/hash and unchanged source",
+    "ads: exact original bytes/hash and unchanged source",
+    "slack: exact original bytes/hash and unchanged source",
+    "Wrong original hash gives FAIL and exit 1",
+    "Existing output and report remain unchanged",
+    "Out-of-range slack read creates no files"
+  ],
+  "source_image_unchanged": true,
+  "scope": "Synthetic acceptance checks; does not verify the eight original VirtualBox files"
+}

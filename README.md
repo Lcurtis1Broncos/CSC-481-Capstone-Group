@@ -20,6 +20,18 @@ recovery tool. It reports boot geometry, MFT metadata, and supported content
 locations, recovers ordinary file streams, and can save verification reports
 for controlled `.dd` images.
 
+## Final project materials
+
+- [Signed and dated final report](reports/NTFS_Filesystem_Steganography_and_Forensic_MFT_Parser_final_report.pdf)
+- [Project summary](reports/PROJECT_SUMMARY.md)
+- [Semester completion checklist](reports/SEMESTER_COMPLETION_CHECKLIST.md)
+- [Final presentation](presentation/CSC481_NTFS_Capstone_Final_Presentation.pptx)
+- [Demonstration guide](presentation/DEMO_GUIDE.md)
+
+The final written materials are complete. The joint speaking rehearsal, live
+presentation/demonstration and course-site submissions require confirmation
+before the semester plan is closed.
+
 ## Installation
 
 1. Install Git and Python 3.11 or later.
@@ -30,7 +42,41 @@ for controlled `.dd` images.
    cd CSC-481-Capstone-Group
    ```
 
-No external Python packages are required at this stage.
+No external Python packages are required.
+
+## Complete-code submission (`v1.0-final`)
+
+After cloning, select the submitted release with `git checkout v1.0-final`.
+Run these commands from the repository root (Windows uses `py`; on other
+systems use `python3`):
+
+```powershell
+py -m unittest discover -s tests -v
+py tests/verify_submission.py submission_check
+```
+
+The second command creates a **new** folder containing a deterministic 32 KB
+synthetic image, original payloads, recovery outputs, JSON reports, and
+`verification.json`. It checks fragmented file recovery, a resident ADS,
+bounded slack recovery, a deliberately wrong hash, overwrite protection,
+and an invalid slack range. Use a different folder name on subsequent runs.
+
+To generate only the dataset and its expected hashes:
+
+```powershell
+py tests/generate_submission_dataset.py generated_dataset
+py code/ntfs_image_reader.py generated_dataset/synthetic.dd --show-record 1 --show-record 2
+```
+
+This handcrafted parser fixture is not a mountable Windows filesystem or
+the original VirtualBox evidence. The repository includes its generation
+scripts and requires no downloaded test data for these checks. The original
+8 GB lab images are excluded from Git; the lab commands below require a
+separately retained team image. The team confirmed matching original and recovered SHA-256 hashes for all
+eight baseline files on November 25; see the
+[dated comparison record](docs/baseline_hash_verification.md).
+See [release verification](reports/COMPLETE_CODE_CHECKLIST.md) and
+[supported boundaries](docs/parser_design_and_limitations.md).
 
 ## Run the Current Tool
 
@@ -140,3 +186,10 @@ and father of three, and in my free time I enjoy early-morning runs around Fort
 Bragg while training for the Marine Corps Marathon and New York City Marathon
 in 2027. During my final two semesters, I plan to learn as much as possible to
 prepare for future opportunities in IT and cybersecurity.
+
+## Final report detection measurement
+
+The report branch adds a [100-image detection experiment](reports/evidence/final_detection/README.md)
+with measured accuracy, false-positive and evasion rates for two fixed rules.
+The November 25 suite passed 73 tests. These additions preserve the earlier
+`v1.0-final` code tag and its dated release checks.

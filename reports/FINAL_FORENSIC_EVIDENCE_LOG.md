@@ -1,9 +1,11 @@
-# Final Forensic Evidence Log — Review Draft
+# Final Forensic Evidence Log
 
 **Project:** NTFS Filesystem Steganography and Forensic MFT Parser  
 **Course / team:** CSC-481 Capstone / Team 3  
 **Prepared:** November 17, 2026  
-**Status:** DRAFT — team review required before final submission  
+**Updated:** November 26, 2026
+
+**Status:** Complete for the recorded controlled experiments; unrecorded custody fields remain explicitly identified.
 **Scope:** Controlled VirtualBox NTFS images, parser validation, ADS recovery, and file-slack recovery.
 
 
@@ -45,18 +47,18 @@ The team used dedicated controlled virtual disks and read-only parsing/recovery 
 
 ## 4. Known-file validation (E-003/E-005)
 
-Guest VM exact byte lengths were compared with parsed `$DATA` logical lengths; Week 13 recovered lengths matched for all eight files.
+Guest VM exact byte lengths were compared with parsed `$DATA` logical lengths; Week 13 recovered lengths matched for all eight files. On November 25, Jeff confirmed that all eight original-file hashes match the recorded recovered hashes. The [dated comparison record](../docs/baseline_hash_verification.md) supplies the values and provenance. Original command output was not attached.
 
 | File | MFT | Expected / recovered bytes | Name and size | Original-content SHA-256 comparison |
 |---|---:|---:|---|---|
-| `Test.txt` | 38 | 83 | PASS | NOT VERIFIED |
-| `Test2.txt` | 39 | 1,778 | PASS | NOT VERIFIED |
-| `Testfile.docx` | 41 | 13,437 | PASS | NOT VERIFIED |
-| `SunflowerTest.jpg` | 42 | 48,647 | PASS | NOT VERIFIED |
-| `Thetestfile.pdf` | 43 | 17,247 | PASS | NOT VERIFIED |
-| `WaterfallTest.png` | 44 | 277,325 | PASS | NOT VERIFIED |
-| `HTMLtestdoc.html` | 55 | 608 | PASS | NOT VERIFIED |
-| `JSON_test_File.json` | 56 | 579 | PASS | NOT VERIFIED |
+| `Test.txt` | 38 | 83 | PASS | MATCH — team-confirmed Nov 25 |
+| `Test2.txt` | 39 | 1,778 | PASS | MATCH — team-confirmed Nov 25 |
+| `Testfile.docx` | 41 | 13,437 | PASS | MATCH — team-confirmed Nov 25 |
+| `SunflowerTest.jpg` | 42 | 48,647 | PASS | MATCH — team-confirmed Nov 25 |
+| `Thetestfile.pdf` | 43 | 17,247 | PASS | MATCH — team-confirmed Nov 25 |
+| `WaterfallTest.png` | 44 | 277,325 | PASS | MATCH — team-confirmed Nov 25 |
+| `HTMLtestdoc.html` | 55 | 608 | PASS | MATCH — team-confirmed Nov 25 |
+| `JSON_test_File.json` | 56 | 579 | PASS | MATCH — team-confirmed Nov 25 |
 
 
 ## 5. ADS evidence — controlled payload
@@ -87,7 +89,7 @@ Guest VM exact byte lengths were compared with parsed `$DATA` logical lengths; W
 | Cluster size | 4,096 bytes |
 | Data run | Start LCN 3659; 4 clusters |
 | Final LCN | 3662 |
-| Slack image start offset | 16,049,277 decimal (`0x00F4D27D`) |
+| Slack image start offset | 16,049,277 decimal (`0x00F4E47D`) |
 | Available file slack | 2,947 bytes |
 | Marker | `TEAM3_SLACK_TEST_20261008` |
 | Marker encoding | UTF-8, no BOM or newline |
@@ -103,7 +105,8 @@ Guest VM exact byte lengths were compared with parsed `$DATA` logical lengths; W
 | Check | Evidence | Result |
 |---|---|---|
 | Unit/regression suite, Nov 15 | `reports/evidence/week13/regression.txt` | PASS — 64 tests, 4.729 s, no failures or skips |
-| Eight recovered files | `reports/evidence/week13/image_validation.json` | PASS for names/lengths; content NOT VERIFIED |
+| Eight recovered files, Nov 15 | `reports/evidence/week13/image_validation.json` | PASS for names/lengths; original-hash comparison pending at that time |
+| Original-file hash follow-up, Nov 25 | `reports/evidence/final_report/baseline_hash_confirmation.json` | 8/8 original/recovered hash matches, team-confirmed |
 | ADS extraction | `reports/evidence/week13/image_validation.json` | PASS, 36 bytes and matching original SHA-256 |
 | Slack range calculation | `reports/evidence/week13/image_validation.json` | PASS, offset 16,049,277 and 2,947-byte range |
 | Bounded slack extraction | `reports/evidence/week13/slack_validation.json` | PASS, 25 bytes and matching original SHA-256 |
@@ -131,4 +134,12 @@ Screenshot descriptions are based on repository documentation and filenames; no 
 - `reports/evidence/week13/regression.txt`
 - `reports/weekly_report_13.md`
 - `reports/FORENSIC_EVIDENCE_CATALOG.md`
+
+## November 25 Detection Experiment
+
+Added [100 labeled synthetic screening cases](evidence/final_detection/README.md),
+with per-image hashes, labels, decisions and measured detection/evasion rates.
+All synthetic sources were unchanged. Two known Windows positives were also
+flagged; the complete working-image hash matched before and after screening.
+The 73-test current-branch log is saved separately from historical release logs.
 
